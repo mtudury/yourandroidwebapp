@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">YourAndroidWebApp</string>
+    <string name="title_webapp_list">WebApps</string>
+    <string name="title_webapp_detail">WebApp Detail</string>
 </resources>
