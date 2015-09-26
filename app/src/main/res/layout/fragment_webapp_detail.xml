@@ -1,5 +1,27 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<!--TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/webapp_detail"
     style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
     android:layout_height="match_parent" android:padding="16dp" android:textIsSelectable="true"
-    tools:context="fr.coding.yourandroidwebapp.WebAppDetailFragment" />
+    tools:context="fr.coding.yourandroidwebapp.WebAppDetailFragment" /-->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:padding="16dp" android:orientation="vertical">
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:id="@+id/webapp_id"
+        />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:id="@+id/webapp_name"
+        />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"  android:id="@+id/webapp_url"
+        />
+</LinearLayout>
+</ScrollView>

@@ -9,4 +9,7 @@ public class WebApp {
     public String url;
     public String iconUrl;
 
+    public String toString() {
+        return name;
+    }
 }

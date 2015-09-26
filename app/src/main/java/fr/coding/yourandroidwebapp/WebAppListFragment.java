@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import fr.coding.yourandroidwebapp.dummy.DummyContent;
+import fr.coding.yourandroidwebapp.settings.WebApp;
 
 /**
  * A list fragment representing a list of WebApps. This fragment
@@ -71,7 +72,7 @@ public class WebAppListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+        setListAdapter(new ArrayAdapter<WebApp>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
