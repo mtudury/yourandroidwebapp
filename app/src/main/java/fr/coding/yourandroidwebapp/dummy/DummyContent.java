@@ -47,6 +47,13 @@ public class DummyContent {
         webApp.iconUrl = "htt://test/favicon.ico";
         webApp.name = "toto3";
         addItem(webApp);
+
+        webApp = new WebApp();
+        webApp.id = "toto4";
+        webApp.url = "http://test/";
+        webApp.iconUrl = "htt://test/favicon.ico";
+        webApp.name = "+new";
+        addItem(webApp);
     }
 
     private static void addItem(WebApp item) {

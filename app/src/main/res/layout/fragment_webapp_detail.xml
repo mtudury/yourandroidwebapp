@@ -23,10 +23,9 @@
         android:layout_height="wrap_content"  android:id="@+id/webapp_url"
         />
     <Button
-        android:id="@+id/ButtonSave"
+        android:id="@+id/webapp_save_button"
         android:layout_height="wrap_content"
         android:text="@string/webapp_save_button"
-        android:onClick="saveWebApp"
         android:layout_width="fill_parent">
     </Button>
 </LinearLayout>

@@ -44,7 +44,8 @@ public class WebAppSettings {
         WebApp webapp = new WebApp();
         webapp.id = jsonobj.getString("id");
         webapp.name = jsonobj.getString("name");
-        webapp.iconUrl = jsonobj.getString("iconUrl");
+        if (jsonobj.has("iconUrl"))
+            webapp.iconUrl = jsonobj.getString("iconUrl");
         webapp.url = jsonobj.getString("url");
         return webapp;
     }
@@ -81,4 +82,24 @@ public class WebAppSettings {
         }
     }
 
+    public static WebApp getWebAppById(Activity activity, String id) {
+        List<WebApp> webApps = getWebApps(activity);
+        for (WebApp webApp:
+             webApps) {
+            if (webApp.id.equals(id))
+                return webApp;
+        }
+        return null;
+    }
+
+
+    public static WebApp getWebAppByName(Activity activity, String name) {
+        List<WebApp> webApps = getWebApps(activity);
+        for (WebApp webApp:
+                webApps) {
+            if (webApp.name.equals(name))
+                return webApp;
+        }
+        return null;
+    }
 }

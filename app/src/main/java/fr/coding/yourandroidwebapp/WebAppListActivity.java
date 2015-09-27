@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import fr.coding.yourandroidwebapp.settings.WebAppSettings;
+
 
 /**
  * An activity representing a list of WebApps. This activity
@@ -32,6 +34,8 @@ public class WebAppListActivity extends FragmentActivity
      */
     private boolean mTwoPane;
 
+    public boolean startCreate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +58,15 @@ public class WebAppListActivity extends FragmentActivity
         // TODO: If exposing deep links into your app, handle intents here.
         String intentparam = this.getIntent().getDataString();
         if (intentparam != null) {
-            Toast.makeText(getApplicationContext(), intentparam, Toast.LENGTH_SHORT).show();
+            startCreate = true;
+
+
+            ((WebAppListFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.webapp_list)).setNewItemClicked();
+            onItemSelected("new");
+        }
+        else {
+            startCreate = false;
         }
 
     }
@@ -84,10 +96,5 @@ public class WebAppListActivity extends FragmentActivity
             detailIntent.putExtra(WebAppDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
-    }
-
-
-    public void saveWebApp(View view) {
-        Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
     }
 }

@@ -5,12 +5,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.coding.yourandroidwebapp.dummy.DummyContent;
 import fr.coding.yourandroidwebapp.settings.WebApp;
+import fr.coding.yourandroidwebapp.settings.WebAppSettings;
 
 /**
  * A fragment representing a single WebApp detail screen.
@@ -45,7 +48,9 @@ public class WebAppDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = WebAppSettings.getWebAppById(getActivity(), getArguments().getString(ARG_ITEM_ID));
+            if (mItem == null)
+                mItem = new WebApp();
         }
     }
 
@@ -59,9 +64,30 @@ public class WebAppDetailFragment extends Fragment {
 
             ((EditText)rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
             ((EditText)rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
+
+
         }
 
+        Button button = (Button) rootView.findViewById(R.id.webapp_save_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveWebApp(v);
+            }
+        });
+
+
         return rootView;
+    }
+
+
+    public void saveWebApp(View view) {
+        View rootView = view.getRootView();
+        mItem.name = ((EditText)rootView.findViewById(R.id.webapp_name)).getText().toString();
+        mItem.url = ((EditText)rootView.findViewById(R.id.webapp_url)).getText().toString();
+
+        WebAppSettings.InsertOrUpdate(getActivity(),mItem);
+        Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
     }
 
 

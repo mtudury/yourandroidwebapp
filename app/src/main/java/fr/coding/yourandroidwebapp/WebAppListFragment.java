@@ -7,8 +7,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.List;
+
 import fr.coding.yourandroidwebapp.dummy.DummyContent;
 import fr.coding.yourandroidwebapp.settings.WebApp;
+import fr.coding.yourandroidwebapp.settings.WebAppSettings;
 
 /**
  * A list fragment representing a list of WebApps. This fragment
@@ -26,30 +29,6 @@ public class WebAppListFragment extends ListFragment {
      * activated item position. Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-
-    /**
-     * The fragment's current callback object, which is notified of list item
-     * clicks.
-     */
-    private Callbacks mCallbacks = sDummyCallbacks;
-
-    /**
-     * The current activated item position. Only used on tablets.
-     */
-    private int mActivatedPosition = ListView.INVALID_POSITION;
-
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public interface Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
-        public void onItemSelected(String id);
-    }
-
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
@@ -59,6 +38,15 @@ public class WebAppListFragment extends ListFragment {
         public void onItemSelected(String id) {
         }
     };
+    /**
+     * The fragment's current callback object, which is notified of list item
+     * clicks.
+     */
+    private Callbacks mCallbacks = sDummyCallbacks;
+    /**
+     * The current activated item position. Only used on tablets.
+     */
+    private int mActivatedPosition = ListView.INVALID_POSITION;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -71,12 +59,17 @@ public class WebAppListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
+        List<WebApp> webapps = WebAppSettings.getWebApps(getActivity());
+
+        WebApp newWebApp = new WebApp();
+        newWebApp.name = "+new";
+        webapps.add(newWebApp);
+
         setListAdapter(new ArrayAdapter<WebApp>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                DummyContent.ITEMS));
+                webapps));
     }
 
     @Override
@@ -116,7 +109,14 @@ public class WebAppListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        List<WebApp> webapps = WebAppSettings.getWebApps(getActivity());
+        if (webapps.size() <= position)
+        {
+            mCallbacks.onItemSelected("new");
+        }
+        else {
+            mCallbacks.onItemSelected(webapps.get(position).id);
+        }
     }
 
     @Override
@@ -148,5 +148,22 @@ public class WebAppListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    public void setNewItemClicked() {
+            setActivatedPosition(getListView().getAdapter().getCount() - 1);
+    }
+
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callbacks {
+        /**
+         * Callback for when an item has been selected.
+         */
+        public void onItemSelected(String id);
     }
 }
