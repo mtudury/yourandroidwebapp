@@ -3,6 +3,8 @@ package fr.coding.yourandroidwebapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.Toast;
 
 
 /**
@@ -50,6 +52,8 @@ public class WebAppListActivity extends FragmentActivity
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
+        Toast.makeText(getApplicationContext(), this.getIntent().getDataString(), Toast.LENGTH_SHORT).show();
+
     }
 
     /**
@@ -77,5 +81,10 @@ public class WebAppListActivity extends FragmentActivity
             detailIntent.putExtra(WebAppDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
+    }
+
+
+    public void saveWebApp(View view) {
+        Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT);
     }
 }

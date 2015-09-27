@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import fr.coding.yourandroidwebapp.dummy.DummyContent;
 import fr.coding.yourandroidwebapp.settings.WebApp;
@@ -55,12 +56,13 @@ public class WebAppDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            //((TextView) rootView.findViewById(R.id.webapp_detail)).setText(mItem.url);
-            ((EditText)rootView.findViewById(R.id.webapp_id)).setText(mItem.id);
+
             ((EditText)rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
             ((EditText)rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
         }
 
         return rootView;
     }
+
+
 }

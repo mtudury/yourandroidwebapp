@@ -1,7 +1,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference android:title="@string/pref_title_create_webapp_settings">
-        <intent android:action="android.settings.SYNC_SETTINGS" />
+        <intent android:action="android.intent.action.VIEW"
+            android:targetPackage="fr.coding.yourandroidwebapp"
+            android:targetClass="fr.coding.yourandroidwebapp.WebAppListActivity" android:data="CREATE"/>
     </Preference>
     <Preference android:title="@string/pref_title_manage_webapps_settings">
         <intent android:action="android.intent.action.VIEW"

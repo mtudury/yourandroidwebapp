@@ -6,15 +6,14 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ScrollView01"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:scrollbars="vertical">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="16dp" android:orientation="vertical">
-    <EditText
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:padding="16dp" android:orientation="vertical" tools:context="fr.coding.yourandroidwebapp.WebAppDetailFragment">
+    <TextView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:id="@+id/webapp_id"
-        />
+        android:layout_height="wrap_content" android:text="@string/webapp_name" android:id="@+id/webapp_name_id"/>
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:id="@+id/webapp_name"
@@ -23,5 +22,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"  android:id="@+id/webapp_url"
         />
+    <Button
+        android:id="@+id/ButtonSave"
+        android:layout_height="wrap_content"
+        android:text="@string/webapp_save_button"
+        android:onClick="saveWebApp"
+        android:layout_width="fill_parent">
+    </Button>
 </LinearLayout>
 </ScrollView>
