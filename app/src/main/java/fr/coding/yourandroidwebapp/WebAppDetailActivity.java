@@ -66,4 +66,7 @@ public class WebAppDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void saveWebApp(View view) {
+        Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
+    }
 }

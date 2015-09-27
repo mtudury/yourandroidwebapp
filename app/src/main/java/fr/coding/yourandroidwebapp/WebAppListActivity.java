@@ -52,7 +52,10 @@ public class WebAppListActivity extends FragmentActivity
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
-        Toast.makeText(getApplicationContext(), this.getIntent().getDataString(), Toast.LENGTH_SHORT).show();
+        String intentparam = this.getIntent().getDataString();
+        if (intentparam != null) {
+            Toast.makeText(getApplicationContext(), intentparam, Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -85,6 +88,6 @@ public class WebAppListActivity extends FragmentActivity
 
 
     public void saveWebApp(View view) {
-        Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
     }
 }
