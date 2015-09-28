@@ -77,6 +77,15 @@ public class WebAppDetailFragment extends Fragment {
         });
 
 
+        button = (Button) rootView.findViewById(R.id.webapp_create_shortcut);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createShortcut(v);
+            }
+        });
+
+
         return rootView;
     }
 
@@ -87,8 +96,17 @@ public class WebAppDetailFragment extends Fragment {
         mItem.url = ((EditText)rootView.findViewById(R.id.webapp_url)).getText().toString();
 
         WebAppSettings.InsertOrUpdate(getActivity(),mItem);
-        Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.webapp_saved_toast, Toast.LENGTH_SHORT).show();
     }
 
+    public void createShortcut(View view) {
+        View rootView = view.getRootView();
+        mItem.name = ((EditText)rootView.findViewById(R.id.webapp_name)).getText().toString();
+        mItem.url = ((EditText)rootView.findViewById(R.id.webapp_url)).getText().toString();
+
+        WebAppSettings.InsertOrUpdate(getActivity(),mItem);
+        WebAppSettings.LauncherShortcut(getActivity().getApplicationContext(), mItem);
+        Toast.makeText(getActivity(), R.string.webapp_shortcutcreated_toast, Toast.LENGTH_SHORT).show();
+    }
 
 }

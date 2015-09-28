@@ -12,10 +12,14 @@ public class WebMainActivity extends Activity {
 
     private WebView mWebView;
 
+    private String url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_main);
+
+        url = "http://toutestquantique.fr/en/";
 
         mWebView = (WebView) findViewById(R.id.activity_main_webview);
 
@@ -26,6 +30,10 @@ public class WebMainActivity extends Activity {
         // Force links and redirects to open in the WebView instead of in a browser
         mWebView.setWebViewClient(new WebViewClient());
         //final Context context = getApplicationContext();
+
+        String opturi = getIntent().getStringExtra("url");
+        if ((opturi != null) && (!opturi.isEmpty()))
+            url = opturi;
 
         mWebView.postDelayed(new Runnable() {
             @Override
@@ -44,7 +52,7 @@ public class WebMainActivity extends Activity {
     }
 
     protected void LoadWebView() {
-        mWebView.loadUrl("http://toutestquantique.fr/en/");
+        mWebView.loadUrl(url);
     }
 
 }

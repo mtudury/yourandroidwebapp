@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.coding.yourandroidwebapp" >
+    package="fr.coding.yourandroidwebapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,16 +22,18 @@
         <activity
             android:name=".WebMainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.WEBMAIN" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".WebAppListActivity"
-            android:label="@string/title_webapp_list" >
-        </activity>
+            android:label="@string/title_webapp_list"></activity>
         <activity
             android:name=".WebAppDetailActivity"
             android:label="@string/title_webapp_detail"
-            android:parentActivityName=".WebAppListActivity" >
+            android:parentActivityName=".WebAppListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.coding.yourandroidwebapp.WebAppListActivity" />

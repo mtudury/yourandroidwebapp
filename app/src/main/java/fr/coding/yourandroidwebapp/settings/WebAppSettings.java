@@ -3,6 +3,7 @@ package fr.coding.yourandroidwebapp.settings;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
@@ -11,6 +12,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.coding.yourandroidwebapp.R;
+import fr.coding.yourandroidwebapp.WebMainActivity;
 
 /**
  * Created by Matthieu on 13/09/2015.
@@ -101,5 +105,23 @@ public class WebAppSettings {
                 return webApp;
         }
         return null;
+    }
+
+    public static void LauncherShortcut(Context appContext, WebApp app){
+
+        Intent shortcutIntent = new Intent(appContext, fr.coding.yourandroidwebapp.WebMainActivity.class);
+        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        shortcutIntent.setAction("android.intent.action.WEBMAIN");
+        shortcutIntent.putExtra("url", app.url);
+
+        Intent addIntent = new Intent();
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, app.name);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(appContext, R.mipmap.ic_launcher));
+        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        // requires android permission :
+        // <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+        appContext.sendBroadcast(addIntent);
     }
 }

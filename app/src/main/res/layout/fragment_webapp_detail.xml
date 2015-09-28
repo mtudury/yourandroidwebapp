@@ -18,6 +18,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:id="@+id/webapp_name"
         />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="@string/webapp_url" android:id="@+id/webapp_name_url"/>
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"  android:id="@+id/webapp_url"
@@ -26,6 +29,12 @@
         android:id="@+id/webapp_save_button"
         android:layout_height="wrap_content"
         android:text="@string/webapp_save_button"
+        android:layout_width="fill_parent">
+    </Button>
+    <Button
+        android:id="@+id/webapp_create_shortcut"
+        android:layout_height="wrap_content"
+        android:text="@string/webapp_create_shortcut"
         android:layout_width="fill_parent">
     </Button>
 </LinearLayout>

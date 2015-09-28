@@ -2,6 +2,10 @@
     <string name="app_name">YourAndroidWebApp</string>
     <string name="title_webapp_list">WebApps</string>
     <string name="title_webapp_detail">WebApp Detail</string>
-    <string name="webapp_name">WebApp Name</string>
+    <string name="webapp_name">WebApp Name :</string>
     <string name="webapp_save_button">Save</string>
+    <string name="webapp_create_shortcut">Create Shortcut</string>
+    <string name="webapp_url">Url :</string>
+    <string name="webapp_saved_toast">Saved !</string>
+    <string name="webapp_shortcutcreated_toast">Shortcut created !</string>
 </resources>
