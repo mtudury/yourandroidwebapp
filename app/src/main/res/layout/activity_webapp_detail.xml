@@ -3,13 +3,4 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="fr.coding.yourandroidwebapp.WebAppDetailActivity"
     tools:ignore="MergeRootFrame" >
-    <EditText
-        android:layout_width="@dimen/abc_text_size_display_2_material"
-        android:layout_height="@dimen/abc_text_size_display_2_material" android:id="@+id/webapp_id"/>
-    <EditText
-        android:layout_width="@dimen/abc_text_size_display_2_material"
-        android:layout_height="@dimen/abc_text_size_display_2_material" android:id="@+id/webapp_name"/>
-    <EditText
-        android:layout_width="@dimen/abc_text_size_display_2_material"
-        android:layout_height="@dimen/abc_text_size_display_2_material"  android:id="@+id/webapp_url"/>
 </FrameLayout>

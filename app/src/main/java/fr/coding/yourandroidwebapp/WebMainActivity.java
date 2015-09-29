@@ -41,7 +41,7 @@ public class WebMainActivity extends Activity {
 
                 LoadWebView();
             }
-        }, 100);
+        }, 5);
 
     }
 

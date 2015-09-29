@@ -23,7 +23,14 @@
         android:layout_height="wrap_content" android:text="@string/webapp_url" android:id="@+id/webapp_name_url"/>
     <EditText
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"  android:id="@+id/webapp_url"
+        android:layout_height="wrap_content"  android:id="@+id/webapp_url" android:inputType="textUri"
+        />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="@string/webapp_iconurl" android:id="@+id/webapp_name_iconurl"/>
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"  android:id="@+id/webapp_iconurl" android:inputType="textUri"
         />
     <Button
         android:id="@+id/webapp_save_button"
