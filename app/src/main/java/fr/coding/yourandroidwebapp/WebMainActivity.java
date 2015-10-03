@@ -7,6 +7,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import fr.coding.tools.AutoAuthSslWebView;
+
 
 public class WebMainActivity extends Activity {
 
@@ -28,7 +30,7 @@ public class WebMainActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
 
         // Force links and redirects to open in the WebView instead of in a browser
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new AutoAuthSslWebView());
         //final Context context = getApplicationContext();
 
         String opturi = getIntent().getStringExtra("url");

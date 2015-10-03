@@ -21,11 +21,13 @@ public class AutoAuthSslWebView extends SslWebView {
 
     @Override
     public void onReceivedHttpAuthRequest(WebView webView, HttpAuthHandler handler, String host, String realm) {
-        for (HostAuth ha :
-                allowedHosts) {
-            if (host.equals(ha.Host)) {
-                handler.proceed(ha.Login, ha.Password);
-                return;
+        if (allowedHosts != null) {
+            for (HostAuth ha :
+                    allowedHosts) {
+                if (host.equals(ha.Host)) {
+                    handler.proceed(ha.Login, ha.Password);
+                    return;
+                }
             }
         }
         super.onReceivedHttpAuthRequest(webView, handler, host, realm);
