@@ -24,7 +24,7 @@ public class WebAppSettings {
 
     public static List<WebApp> getWebApps(Activity activity)
     {
-        List<WebApp> webapps = new ArrayList<WebApp>();
+        List<WebApp> webapps = new ArrayList<>();
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         int count = prefs.getInt("count",0);
         if (count > 0) {
@@ -113,7 +113,7 @@ public class WebAppSettings {
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         shortcutIntent.setAction("android.intent.action.WEBMAIN");
-        shortcutIntent.putExtra("url", app.url);
+        shortcutIntent.putExtra("webappid", app.id);
 
         Intent addIntent = new Intent();
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
