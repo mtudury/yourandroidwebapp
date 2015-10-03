@@ -10,3 +10,4 @@ Roadmap :
 - SelfSigned SSL website supports
 - Authentication auto accepted
 - Alternate URLs if in office (WIFI based detection)
+- Store settings in google account (to share settings between devices)
