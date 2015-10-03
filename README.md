@@ -1,6 +1,7 @@
 # yourandroidwebapp
 Fast and easy website integration as an App in Android using this Application.
-[Available in Android PlayStore](https://play.google.com/store/apps/details?id=fr.coding.yourandroidwebapp)
+
+[![AndroidTreeView Demo on Google Play Store](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=fr.coding.yourandroidwebapp)
 
 Features :
 - Multiple Website in one application

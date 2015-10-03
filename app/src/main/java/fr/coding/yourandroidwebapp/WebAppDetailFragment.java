@@ -64,7 +64,7 @@ public class WebAppDetailFragment extends Fragment {
 
             ((EditText)rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
             ((EditText)rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
-
+            ((EditText)rootView.findViewById(R.id.webapp_iconurl)).setText(mItem.iconUrl);
 
         }
 
@@ -92,17 +92,21 @@ public class WebAppDetailFragment extends Fragment {
 
     public void saveWebApp(View view) {
         View rootView = view.getRootView();
-        mItem.name = ((EditText)rootView.findViewById(R.id.webapp_name)).getText().toString();
-        mItem.url = ((EditText)rootView.findViewById(R.id.webapp_url)).getText().toString();
+        getItem(rootView);
 
         WebAppSettings.InsertOrUpdate(getActivity(),mItem);
         Toast.makeText(getActivity(), R.string.webapp_saved_toast, Toast.LENGTH_SHORT).show();
     }
 
-    public void createShortcut(View view) {
-        View rootView = view.getRootView();
+    private void getItem(View rootView) {
         mItem.name = ((EditText)rootView.findViewById(R.id.webapp_name)).getText().toString();
         mItem.url = ((EditText)rootView.findViewById(R.id.webapp_url)).getText().toString();
+        mItem.iconUrl = ((EditText)rootView.findViewById(R.id.webapp_iconurl)).getText().toString();
+    }
+
+    public void createShortcut(View view) {
+        View rootView = view.getRootView();
+        getItem(rootView);
 
         WebAppSettings.InsertOrUpdate(getActivity(),mItem);
         WebAppSettings.LauncherShortcut(getActivity().getApplicationContext(), mItem);

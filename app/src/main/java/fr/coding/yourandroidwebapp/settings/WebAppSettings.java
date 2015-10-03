@@ -5,14 +5,26 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 
+import fr.coding.tools.RetrieveHttpFile;
 import fr.coding.yourandroidwebapp.R;
 import fr.coding.yourandroidwebapp.WebMainActivity;
 
@@ -22,15 +34,14 @@ import fr.coding.yourandroidwebapp.WebMainActivity;
 public class WebAppSettings {
     public static final String PREFS = "WebApps";
 
-    public static List<WebApp> getWebApps(Activity activity)
-    {
+    public static List<WebApp> getWebApps(Activity activity) {
         List<WebApp> webapps = new ArrayList<>();
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        int count = prefs.getInt("count",0);
+        int count = prefs.getInt("count", 0);
         if (count > 0) {
-            for(Integer i = 0; i < count; i++) {
+            for (Integer i = 0; i < count; i++) {
                 try {
-                    JSONObject jsonobj = new JSONObject(prefs.getString("webapp"+i.toString(), "{}"));
+                    JSONObject jsonobj = new JSONObject(prefs.getString("webapp" + i.toString(), "{}"));
                     WebApp webapp = JSONobjToWebApp(jsonobj);
                     webapps.add(webapp);
                 } catch (JSONException e) {
@@ -68,8 +79,8 @@ public class WebAppSettings {
             boolean added = false;
             int count = 0;
             SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-            if ((webApp.id==null)||(webApp.id.length()==0)) {
-                count = prefs.getInt("count",0);
+            if ((webApp.id == null) || (webApp.id.length() == 0)) {
+                count = prefs.getInt("count", 0);
                 webApp.id = Integer.toString(count);
                 added = true;
                 count++;
@@ -88,8 +99,8 @@ public class WebAppSettings {
 
     public static WebApp getWebAppById(Activity activity, String id) {
         List<WebApp> webApps = getWebApps(activity);
-        for (WebApp webApp:
-             webApps) {
+        for (WebApp webApp :
+                webApps) {
             if (webApp.id.equals(id))
                 return webApp;
         }
@@ -99,7 +110,7 @@ public class WebAppSettings {
 
     public static WebApp getWebAppByName(Activity activity, String name) {
         List<WebApp> webApps = getWebApps(activity);
-        for (WebApp webApp:
+        for (WebApp webApp :
                 webApps) {
             if (webApp.name.equals(name))
                 return webApp;
@@ -107,7 +118,7 @@ public class WebAppSettings {
         return null;
     }
 
-    public static void LauncherShortcut(Context appContext, WebApp app){
+    public static void LauncherShortcut(Context appContext, WebApp app) {
 
         Intent shortcutIntent = new Intent(appContext, fr.coding.yourandroidwebapp.WebMainActivity.class);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -118,7 +129,28 @@ public class WebAppSettings {
         Intent addIntent = new Intent();
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, app.name);
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(appContext, R.mipmap.ic_launcher));
+
+        if ((app.iconUrl != null) && (!app.iconUrl.isEmpty())) {
+            Bitmap theBitmap = null;
+            try {
+                byte[] img = new RetrieveHttpFile().execute(app.iconUrl).get();
+                theBitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+            }
+            catch(ExecutionException ee) {
+                ee.printStackTrace();
+            } catch(InterruptedException ee) {
+                ee.printStackTrace();
+            }
+            if (theBitmap == null) {
+                Toast.makeText(appContext, "Error loading icon, Url : " + app.iconUrl, Toast.LENGTH_LONG).show();
+                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(appContext, R.mipmap.ic_launcher));
+            } else {
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(theBitmap, 256, 256, true);
+                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, scaledBitmap);
+            }
+        } else {
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(appContext, R.mipmap.ic_launcher));
+        }
         addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
         // requires android permission :
         // <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
