@@ -44,5 +44,11 @@
         android:text="@string/webapp_create_shortcut"
         android:layout_width="fill_parent">
     </Button>
+    <Button
+        android:id="@+id/webapp_ssl_settings"
+        android:layout_height="wrap_content"
+        android:text="@string/webapp_ssl_settings"
+        android:layout_width="fill_parent">
+    </Button>
 </LinearLayout>
 </ScrollView>

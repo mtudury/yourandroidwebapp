@@ -60,8 +60,20 @@ public class WebAppDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, WebAppListActivity.class));
-            return true;
+            if (getSupportFragmentManager().getFragments().get(0) instanceof WebAppDetailFragment) {
+                navigateUpTo(new Intent(this, WebAppListActivity.class));
+               return true;
+            } else {
+                Bundle arguments = new Bundle();
+                arguments.putString(WebAppDetailFragment.ARG_ITEM_ID,
+                        getIntent().getStringExtra(WebAppDetailFragment.ARG_ITEM_ID));
+                WebAppDetailFragment fragment = new WebAppDetailFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.webapp_detail_container, fragment)
+                        .commit();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }

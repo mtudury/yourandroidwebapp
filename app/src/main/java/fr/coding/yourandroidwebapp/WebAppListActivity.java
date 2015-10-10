@@ -2,10 +2,12 @@ package fr.coding.yourandroidwebapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
+import java.util.List;
+
+import fr.coding.yourandroidwebapp.settings.WebApp;
 import fr.coding.yourandroidwebapp.settings.WebAppSettings;
 
 
@@ -25,7 +27,7 @@ import fr.coding.yourandroidwebapp.settings.WebAppSettings;
  * {@link WebAppListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class WebAppListActivity extends FragmentActivity
+public class WebAppListActivity extends AppCompatActivity
         implements WebAppListFragment.Callbacks {
 
     /**
@@ -35,6 +37,8 @@ public class WebAppListActivity extends FragmentActivity
     private boolean mTwoPane;
 
     public boolean startCreate;
+
+    private String lastId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,7 @@ public class WebAppListActivity extends FragmentActivity
                     .findFragmentById(R.id.webapp_list))
                     .setActivateOnItemClick(true);
         }
+        setTitle(R.string.pref_title_manage_webapps_settings);
 
         // TODO: If exposing deep links into your app, handle intents here.
         String intentparam = this.getIntent().getDataString();
@@ -77,6 +82,7 @@ public class WebAppListActivity extends FragmentActivity
      */
     @Override
     public void onItemSelected(String id) {
+        lastId = id;
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -96,5 +102,24 @@ public class WebAppListActivity extends FragmentActivity
             detailIntent.putExtra(WebAppDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            if (mTwoPane) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                onItemSelected(lastId);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

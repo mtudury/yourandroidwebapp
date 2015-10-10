@@ -9,4 +9,8 @@
     <string name="webapp_saved_toast">Saved !</string>
     <string name="webapp_shortcutcreated_toast">Shortcut created !</string>
     <string name="webapp_iconurl">Url d\'icone : </string>
+    <string name="webapp_ssl_settings">SSL Settings</string>
+    <string name="title_activity_ssl_settings">SslSettingsActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

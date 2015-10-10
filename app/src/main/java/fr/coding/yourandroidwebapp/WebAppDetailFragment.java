@@ -85,6 +85,13 @@ public class WebAppDetailFragment extends Fragment {
             }
         });
 
+        button = (Button) rootView.findViewById(R.id.webapp_ssl_settings);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sslSettings(v);
+            }
+        });
 
         return rootView;
     }
@@ -111,6 +118,14 @@ public class WebAppDetailFragment extends Fragment {
         WebAppSettings.InsertOrUpdate(getActivity(),mItem);
         WebAppSettings.LauncherShortcut(getActivity().getApplicationContext(), mItem);
         Toast.makeText(getActivity(), R.string.webapp_shortcutcreated_toast, Toast.LENGTH_SHORT).show();
+    }
+
+    public void sslSettings(View view) {
+        SslSettingsActivityFragment fragment = new SslSettingsActivityFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .remove(this)
+                .add(R.id.webapp_detail_container, fragment)
+                .commit();
     }
 
 }
