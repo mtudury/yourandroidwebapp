@@ -2,13 +2,12 @@ package fr.coding.yourandroidwebapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import java.util.List;
-
-import fr.coding.yourandroidwebapp.settings.WebApp;
-import fr.coding.yourandroidwebapp.settings.WebAppSettings;
+import fr.coding.tools.gdrive.GoogleDriveApiActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 
 /**
@@ -27,8 +26,8 @@ import fr.coding.yourandroidwebapp.settings.WebAppSettings;
  * {@link WebAppListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class WebAppListActivity extends AppCompatActivity
-        implements WebAppListFragment.Callbacks {
+public class WebAppListActivity extends GoogleDriveApiActivity
+        implements WebAppListFragment.Callbacks, AppSettingsCallback {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -40,11 +39,27 @@ public class WebAppListActivity extends AppCompatActivity
 
     private String lastId;
 
+    public AppSettings config;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webapp_list);
 
+
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        super.onConnected(connectionHint);
+
+        AppSettingsManager settingsManager = new AppSettingsManager();
+        settingsManager.LoadSettings(this.getGoogleApiClient(), this, this);
+    }
+
+    @Override
+    public void onAppSettingsReady(AppSettings settings) {
+        config = settings;
+        setContentView(R.layout.activity_webapp_list);
         if (findViewById(R.id.webapp_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
@@ -73,8 +88,8 @@ public class WebAppListActivity extends AppCompatActivity
         else {
             startCreate = false;
         }
-
     }
+
 
     /**
      * Callback method from {@link WebAppListFragment.Callbacks}

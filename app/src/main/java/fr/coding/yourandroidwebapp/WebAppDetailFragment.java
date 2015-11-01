@@ -5,15 +5,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import fr.coding.yourandroidwebapp.dummy.DummyContent;
+import java.util.UUID;
+
+import fr.coding.tools.gdrive.GoogleDriveApiActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
-import fr.coding.yourandroidwebapp.settings.WebAppSettings;
 
 /**
  * A fragment representing a single WebApp detail screen.
@@ -29,9 +30,14 @@ public class WebAppDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
 
     /**
-     * The dummy content this fragment is presenting.
+     * The item.
      */
     private WebApp mItem;
+
+    /*
+      Settings
+     */
+    private AppSettings settings;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -48,9 +54,13 @@ public class WebAppDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = WebAppSettings.getWebAppById(getActivity(), getArguments().getString(ARG_ITEM_ID));
-            if (mItem == null)
+            settings = ((WebAppListActivity)getActivity()).config;
+            mItem = settings.getWebAppById(getArguments().getString(ARG_ITEM_ID));
+            if (mItem == null) {
                 mItem = new WebApp();
+                mItem.id = UUID.randomUUID().toString();
+                settings.WebApps.add(mItem);
+            }
         }
     }
 
@@ -101,8 +111,8 @@ public class WebAppDetailFragment extends Fragment {
         View rootView = view.getRootView();
         getItem(rootView);
 
-        WebAppSettings.InsertOrUpdate(getActivity(),mItem);
-        Toast.makeText(getActivity(), R.string.webapp_saved_toast, Toast.LENGTH_SHORT).show();
+        AppSettingsManager asm = new AppSettingsManager();
+        asm.Save(getActivity(), settings, ((GoogleDriveApiActivity) getActivity()).getGoogleApiClient());
     }
 
     private void getItem(View rootView) {
@@ -115,8 +125,9 @@ public class WebAppDetailFragment extends Fragment {
         View rootView = view.getRootView();
         getItem(rootView);
 
-        WebAppSettings.InsertOrUpdate(getActivity(),mItem);
-        WebAppSettings.LauncherShortcut(getActivity().getApplicationContext(), mItem);
+        AppSettingsManager asm = new AppSettingsManager();
+        asm.Save(getActivity(), settings, ((GoogleDriveApiActivity) getActivity()).getGoogleApiClient());
+        mItem.LauncherShortcut(getActivity().getApplicationContext());
         Toast.makeText(getActivity(), R.string.webapp_shortcutcreated_toast, Toast.LENGTH_SHORT).show();
     }
 

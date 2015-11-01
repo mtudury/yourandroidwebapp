@@ -1,18 +1,19 @@
 package fr.coding.yourandroidwebapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import fr.coding.tools.AutoAuthSslWebView;
+import fr.coding.tools.gdrive.GoogleDriveApiActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
 import fr.coding.yourandroidwebapp.settings.WebApp;
-import fr.coding.yourandroidwebapp.settings.WebAppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 
-public class WebMainActivity extends Activity {
+public class WebMainActivity extends GoogleDriveApiActivity implements AppSettingsCallback {
 
     private WebView mWebView;
 
@@ -21,6 +22,18 @@ public class WebMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        super.onConnected(connectionHint);
+
+        AppSettingsManager settingsManager = new AppSettingsManager();
+        settingsManager.LoadSettings(this.getGoogleApiClient(), this, this);
+    }
+
+    @Override
+    public void onAppSettingsReady(AppSettings settings) {
         setContentView(R.layout.activity_web_main);
 
         url = "http://toutestquantique.fr/en/";
@@ -38,7 +51,7 @@ public class WebMainActivity extends Activity {
 
         String webappid = getIntent().getStringExtra("webappid");
         if ((webappid != null) && (!webappid.isEmpty())) {
-            WebApp wa = WebAppSettings.getWebAppById(this, webappid);
+            WebApp wa = settings.getWebAppById(webappid);
             if (wa != null) {
                 url = wa.url;
             }

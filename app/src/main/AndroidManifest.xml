@@ -38,7 +38,7 @@
             android:parentActivityName=".WebAppListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.coding.yourandroidwebapp.WebAppListActivity" />
+                android:value=".WebAppListActivity" />
         </activity>
     </application>
 

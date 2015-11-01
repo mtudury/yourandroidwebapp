@@ -7,11 +7,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import fr.coding.yourandroidwebapp.dummy.DummyContent;
+import fr.coding.tools.gdrive.GoogleDriveApiActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
-import fr.coding.yourandroidwebapp.settings.WebAppSettings;
 
 /**
  * A list fragment representing a list of WebApps. This fragment
@@ -59,7 +61,7 @@ public class WebAppListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<WebApp> webapps = WebAppSettings.getWebApps(getActivity());
+        List<WebApp> webapps = new ArrayList<>(((WebAppListActivity)getActivity()).config.WebApps);
 
         WebApp newWebApp = new WebApp();
         newWebApp.name = "+new";
@@ -109,7 +111,8 @@ public class WebAppListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        List<WebApp> webapps = WebAppSettings.getWebApps(getActivity());
+        AppSettings settings = ((WebAppListActivity)getActivity()).config;
+        List<WebApp> webapps = settings.WebApps;
         if (webapps.size() <= position)
         {
             mCallbacks.onItemSelected("new");
