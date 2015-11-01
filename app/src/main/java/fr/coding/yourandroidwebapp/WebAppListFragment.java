@@ -59,7 +59,7 @@ public class WebAppListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<WebApp> webapps = new ArrayList<>(((WebAppListAppCompatActivity)getActivity()).config.WebApps);
+        List<WebApp> webapps = new ArrayList<>(((WebAppListActivity)getActivity()).config.WebApps);
 
         WebApp newWebApp = new WebApp();
         newWebApp.name = "+new";
@@ -109,7 +109,7 @@ public class WebAppListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        AppSettings settings = ((WebAppListAppCompatActivity)getActivity()).config;
+        AppSettings settings = ((WebAppListActivity)getActivity()).config;
         List<WebApp> webapps = settings.WebApps;
         if (webapps.size() <= position)
         {

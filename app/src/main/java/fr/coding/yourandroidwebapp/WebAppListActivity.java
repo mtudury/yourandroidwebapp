@@ -26,7 +26,7 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
  * {@link WebAppListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class WebAppListAppCompatActivity extends GoogleDriveApiAppCompatActivity
+public class WebAppListActivity extends GoogleDriveApiAppCompatActivity
         implements WebAppListFragment.Callbacks, AppSettingsCallback {
 
     /**

@@ -3,5 +3,5 @@
     android:name="fr.coding.yourandroidwebapp.WebAppListFragment"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:layout_marginLeft="16dp" android:layout_marginRight="16dp"
-    tools:context="fr.coding.yourandroidwebapp.WebAppListAppCompatActivity"
+    tools:context="fr.coding.yourandroidwebapp.WebAppListActivity"
     tools:layout="@android:layout/list_content" />

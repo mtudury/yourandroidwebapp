@@ -18,7 +18,7 @@ import fr.coding.yourandroidwebapp.settings.WebApp;
 
 /**
  * A fragment representing a single WebApp detail screen.
- * This fragment is either contained in a {@link WebAppListAppCompatActivity}
+ * This fragment is either contained in a {@link WebAppListActivity}
  * in two-pane mode (on tablets) or a {@link WebAppDetailActivity}
  * on handsets.
  */
@@ -54,7 +54,7 @@ public class WebAppDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            settings = ((WebAppListAppCompatActivity)getActivity()).config;
+            settings = ((WebAppListActivity)getActivity()).config;
             mItem = settings.getWebAppById(getArguments().getString(ARG_ITEM_ID));
             if (mItem == null) {
                 mItem = new WebApp();
