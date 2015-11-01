@@ -113,6 +113,7 @@ public class GoogleDriveTools {
                                 OutputStream outputStream = driveContents.getOutputStream();
                                 Writer writer = new OutputStreamWriter(outputStream);
                                 writer.write(writeContents);
+                                writer.close();
                                 driveContents.commit(googleApiClient, null).await();
                                 if (writeCallback != null) {
                                     activity.runOnUiThread(new Runnable() {

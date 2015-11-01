@@ -74,6 +74,7 @@ public class AppSettingsManager {
                     } catch (JSONException e) {
                         e.printStackTrace();
                         new AlertDialog.Builder(activity).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                        res = new AppSettings();
                     }
 
 
