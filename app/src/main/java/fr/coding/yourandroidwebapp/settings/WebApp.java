@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 
 import fr.coding.tools.RetrieveHttpFile;
 import fr.coding.yourandroidwebapp.R;
+import fr.coding.yourandroidwebapp.WebMainActivity;
 
 /**
  * Created by Matthieu on 13/09/2015.
@@ -49,7 +50,7 @@ public class WebApp {
 
     public void LauncherShortcut(Context appContext) {
         WebApp app = this;
-        Intent shortcutIntent = new Intent(appContext, fr.coding.yourandroidwebapp.WebMainActivity.class);
+        Intent shortcutIntent = new Intent(appContext, WebMainActivity.class);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         shortcutIntent.setAction("android.intent.action.WEBMAIN");

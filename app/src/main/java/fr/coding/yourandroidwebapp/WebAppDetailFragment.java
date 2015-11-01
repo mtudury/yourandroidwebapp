@@ -11,14 +11,14 @@ import android.widget.Toast;
 
 import java.util.UUID;
 
-import fr.coding.tools.gdrive.GoogleDriveApiActivity;
+import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
 /**
  * A fragment representing a single WebApp detail screen.
- * This fragment is either contained in a {@link WebAppListActivity}
+ * This fragment is either contained in a {@link WebAppListAppCompatActivity}
  * in two-pane mode (on tablets) or a {@link WebAppDetailActivity}
  * on handsets.
  */
@@ -54,7 +54,7 @@ public class WebAppDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            settings = ((WebAppListActivity)getActivity()).config;
+            settings = ((WebAppListAppCompatActivity)getActivity()).config;
             mItem = settings.getWebAppById(getArguments().getString(ARG_ITEM_ID));
             if (mItem == null) {
                 mItem = new WebApp();
@@ -112,7 +112,7 @@ public class WebAppDetailFragment extends Fragment {
         getItem(rootView);
 
         AppSettingsManager asm = new AppSettingsManager();
-        asm.Save(getActivity(), settings, ((GoogleDriveApiActivity) getActivity()).getGoogleApiClient());
+        asm.Save(getActivity(), settings, ((GoogleDriveApiAppCompatActivity) getActivity()).getGoogleApiClient());
     }
 
     private void getItem(View rootView) {
@@ -126,7 +126,7 @@ public class WebAppDetailFragment extends Fragment {
         getItem(rootView);
 
         AppSettingsManager asm = new AppSettingsManager();
-        asm.Save(getActivity(), settings, ((GoogleDriveApiActivity) getActivity()).getGoogleApiClient());
+        asm.Save(getActivity(), settings, ((GoogleDriveApiAppCompatActivity) getActivity()).getGoogleApiClient());
         mItem.LauncherShortcut(getActivity().getApplicationContext());
         Toast.makeText(getActivity(), R.string.webapp_shortcutcreated_toast, Toast.LENGTH_SHORT).show();
     }

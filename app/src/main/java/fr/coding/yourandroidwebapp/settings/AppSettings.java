@@ -1,22 +1,11 @@
 package fr.coding.yourandroidwebapp.settings;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import fr.coding.tools.RetrieveHttpFile;
-import fr.coding.tools.gdrive.GoogleDriveApiActivity;
-import fr.coding.yourandroidwebapp.R;
 
 /**
  * Created by Matthieu on 31/10/2015.

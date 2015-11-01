@@ -21,8 +21,8 @@ public class SslSettingsActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         ActionBar ab = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        if (getActivity() instanceof WebAppListActivity) {
-            ((WebAppListActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getActivity() instanceof WebAppListAppCompatActivity) {
+            ((WebAppListAppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ab.setTitle(ab.getTitle() + " - SSL Settings");
         return inflater.inflate(R.layout.fragment_ssl_settings, container, false);

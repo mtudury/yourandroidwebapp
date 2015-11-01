@@ -1,7 +1,6 @@
 package fr.coding.tools.gdrive;
 
-
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ import com.google.android.gms.drive.query.*;
  *
  * Java doesn't support inheritence from generics <T>, would be usefull there, i need to duplicate code
  */
-public abstract class GoogleDriveApiActivity extends Activity implements
+public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -57,7 +56,7 @@ public abstract class GoogleDriveApiActivity extends Activity implements
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
-                    .addScope(Drive.SCOPE_APPFOLDER)
+                    .addScope(Drive.SCOPE_APPFOLDER) // required for App Folder sample
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build();

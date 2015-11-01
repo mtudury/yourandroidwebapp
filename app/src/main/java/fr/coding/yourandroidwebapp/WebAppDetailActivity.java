@@ -10,7 +10,7 @@ import android.view.MenuItem;
  * An activity representing a single WebApp detail screen. This
  * activity is only used on handset devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link WebAppListActivity}.
+ * in a {@link WebAppListAppCompatActivity}.
  * <p/>
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link WebAppDetailFragment}.
@@ -59,7 +59,7 @@ public class WebAppDetailActivity extends AppCompatActivity {
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
             if (getSupportFragmentManager().getFragments().get(0) instanceof WebAppDetailFragment) {
-                navigateUpTo(new Intent(this, WebAppListActivity.class));
+                navigateUpTo(new Intent(this, WebAppListAppCompatActivity.class));
                return true;
             } else {
                 Bundle arguments = new Bundle();

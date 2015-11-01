@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import fr.coding.tools.gdrive.GoogleDriveApiActivity;
+import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
@@ -26,7 +26,7 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
  * {@link WebAppListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class WebAppListActivity extends GoogleDriveApiActivity
+public class WebAppListAppCompatActivity extends GoogleDriveApiAppCompatActivity
         implements WebAppListFragment.Callbacks, AppSettingsCallback {
 
     /**

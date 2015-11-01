@@ -10,9 +10,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.coding.tools.gdrive.GoogleDriveApiActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
-import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
 /**
@@ -61,13 +59,13 @@ public class WebAppListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<WebApp> webapps = new ArrayList<>(((WebAppListActivity)getActivity()).config.WebApps);
+        List<WebApp> webapps = new ArrayList<>(((WebAppListAppCompatActivity)getActivity()).config.WebApps);
 
         WebApp newWebApp = new WebApp();
         newWebApp.name = "+new";
         webapps.add(newWebApp);
 
-        setListAdapter(new ArrayAdapter<WebApp>(
+        setListAdapter(new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
@@ -111,7 +109,7 @@ public class WebAppListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        AppSettings settings = ((WebAppListActivity)getActivity()).config;
+        AppSettings settings = ((WebAppListAppCompatActivity)getActivity()).config;
         List<WebApp> webapps = settings.WebApps;
         if (webapps.size() <= position)
         {
@@ -167,6 +165,6 @@ public class WebAppListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        void onItemSelected(String id);
     }
 }

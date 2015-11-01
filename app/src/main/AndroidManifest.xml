@@ -30,15 +30,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WebAppListActivity"
+            android:name=".WebAppListAppCompatActivity"
             android:label="@string/title_webapp_list" />
         <activity
             android:name=".WebAppDetailActivity"
             android:label="@string/title_webapp_detail"
-            android:parentActivityName=".WebAppListActivity" >
+            android:parentActivityName=".WebAppListAppCompatActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".WebAppListActivity" />
+                android:value=".WebAppListAppCompatActivity" />
         </activity>
     </application>
 
