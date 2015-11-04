@@ -6,6 +6,11 @@ import android.os.Bundle;
 
 import android.view.MenuItem;
 
+import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
+
 /**
  * An activity representing a single WebApp detail screen. This
  * activity is only used on handset devices. On tablet-size devices,
@@ -15,11 +20,29 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link WebAppDetailFragment}.
  */
-public class WebAppDetailActivity extends AppCompatActivity {
+public class WebAppDetailActivity extends GoogleDriveApiAppCompatActivity implements AppSettingsCallback {
+
+    public AppSettings config;
+
+    private Bundle savedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        super.onConnected(connectionHint);
+
+        AppSettingsManager settingsManager = new AppSettingsManager();
+        settingsManager.LoadSettings(this.getGoogleApiClient(), this, this);
+    }
+
+    @Override
+    public void onAppSettingsReady(AppSettings settings) {
+        config = settings;
         setContentView(R.layout.activity_webapp_detail);
 
         // Show the Up button in the action bar.
@@ -46,6 +69,7 @@ public class WebAppDetailActivity extends AppCompatActivity {
                     .add(R.id.webapp_detail_container, fragment)
                     .commit();
         }
+
     }
 
     @Override

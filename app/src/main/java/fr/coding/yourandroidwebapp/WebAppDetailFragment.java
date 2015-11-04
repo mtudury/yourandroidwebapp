@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.UUID;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
@@ -38,6 +40,8 @@ public class WebAppDetailFragment extends Fragment {
       Settings
      */
     private AppSettings settings;
+    /* google api client */
+    private GoogleApiClient gClient;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -54,8 +58,16 @@ public class WebAppDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            settings = ((WebAppListActivity)getActivity()).config;
-            mItem = settings.getWebAppById(getArguments().getString(ARG_ITEM_ID));
+            if (getActivity() instanceof WebAppListActivity) {
+                settings = ((WebAppListActivity) getActivity()).config;
+                gClient = ((WebAppListActivity) getActivity()).getGoogleApiClient();
+            } else if (getActivity() instanceof WebAppDetailActivity) {
+                settings = ((WebAppDetailActivity) getActivity()).config;
+                gClient = ((WebAppDetailActivity) getActivity()).getGoogleApiClient();
+            }
+            if (settings != null)
+                mItem = settings.getWebAppById(getArguments().getString(ARG_ITEM_ID));
+
             if (mItem == null) {
                 mItem = new WebApp();
                 mItem.id = UUID.randomUUID().toString();
@@ -112,7 +124,7 @@ public class WebAppDetailFragment extends Fragment {
         getItem(rootView);
 
         AppSettingsManager asm = new AppSettingsManager();
-        asm.Save(getActivity(), settings, ((GoogleDriveApiAppCompatActivity) getActivity()).getGoogleApiClient());
+        asm.Save(getActivity(), settings, gClient);
     }
 
     private void getItem(View rootView) {
@@ -126,7 +138,7 @@ public class WebAppDetailFragment extends Fragment {
         getItem(rootView);
 
         AppSettingsManager asm = new AppSettingsManager();
-        asm.Save(getActivity(), settings, ((GoogleDriveApiAppCompatActivity) getActivity()).getGoogleApiClient());
+        asm.Save(getActivity(), settings, gClient);
         mItem.LauncherShortcut(getActivity().getApplicationContext());
         Toast.makeText(getActivity(), R.string.webapp_shortcutcreated_toast, Toast.LENGTH_SHORT).show();
     }

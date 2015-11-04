@@ -20,6 +20,8 @@ public class WebMainActivity extends GoogleDriveApiActivity implements AppSettin
 
     private String webAppId;
 
+    private boolean needLoad = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +46,10 @@ public class WebMainActivity extends GoogleDriveApiActivity implements AppSettin
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
 
-        AppSettingsManager settingsManager = new AppSettingsManager();
-        settingsManager.LoadSettings(this.getGoogleApiClient(), this, this);
+        if (needLoad) {
+            AppSettingsManager settingsManager = new AppSettingsManager();
+            settingsManager.LoadSettings(this.getGoogleApiClient(), this, this);
+        }
     }
 
     @Override
@@ -63,6 +67,8 @@ public class WebMainActivity extends GoogleDriveApiActivity implements AppSettin
             public void run() {
 
                 LoadWebView();
+
+                needLoad = false;
             }
         }, 5);
 

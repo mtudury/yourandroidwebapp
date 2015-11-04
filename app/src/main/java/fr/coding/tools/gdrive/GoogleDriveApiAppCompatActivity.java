@@ -44,6 +44,10 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
     private GoogleApiClient mGoogleApiClient;
 
     /**
+     * InAuth */
+    private boolean mIsInAuth;
+
+    /**
      * Called when activity gets visible. A connection to Drive services need to
      * be initiated as soon as the activity is visible. Registers
      * {@code ConnectionCallbacks} and {@code OnConnectionFailedListener} on the
@@ -56,7 +60,7 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
-                    .addScope(Drive.SCOPE_APPFOLDER) // required for App Folder sample
+                    .addScope(Drive.SCOPE_APPFOLDER)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build();
@@ -113,15 +117,20 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.i(TAG, "GoogleApiClient connection failed: " + result.toString());
-        if (!result.hasResolution()) {
-            // show the localized error dialog.
+        if (!mIsInAuth) {
+            if (!result.hasResolution()) {
+                // show the localized error dialog.
+                GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
+                return;
+            }
+            try {
+                mIsInAuth = true;
+                result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
+            } catch (SendIntentException e) {
+                Log.e(TAG, "Exception while starting resolution activity", e);
+            }
+        } else {
             GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
-            return;
-        }
-        try {
-            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
-        } catch (SendIntentException e) {
-            Log.e(TAG, "Exception while starting resolution activity", e);
         }
     }
 

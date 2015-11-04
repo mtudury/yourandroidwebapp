@@ -6,9 +6,10 @@ Fast and easy website integration as an App in Android using this Application.
 Features :
 - Multiple Website in one application
 - Create shortcuts on desktop
+- Store settings in google account (to share settings between devices)
 
 Roadmap : 
 - SelfSigned SSL website supports
 - Authentication auto accepted
 - Alternate URLs if in office (WIFI based detection)
-- Store settings in google account (to share settings between devices)
+
