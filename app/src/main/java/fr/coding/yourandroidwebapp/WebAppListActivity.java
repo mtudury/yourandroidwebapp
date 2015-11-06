@@ -2,7 +2,14 @@ package fr.coding.yourandroidwebapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.internal.widget.ActivityChooserView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
@@ -45,7 +52,21 @@ public class WebAppListActivity extends GoogleDriveApiAppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_webapp_app_bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
 
+/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });*/
+        // Show the Up button in the action bar.
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -59,7 +80,8 @@ public class WebAppListActivity extends GoogleDriveApiAppCompatActivity
     @Override
     public void onAppSettingsReady(AppSettings settings) {
         config = settings;
-        setContentView(R.layout.activity_webapp_list);
+        FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
+        flayout.addView(getLayoutInflater().inflate(R.layout.activity_webapp_list, null));
         if (findViewById(R.id.webapp_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
@@ -124,16 +146,14 @@ public class WebAppListActivity extends GoogleDriveApiAppCompatActivity
         int id = item.getItemId();
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
             // more details, see the Navigation pattern on Android Design:
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            if (mTwoPane) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                onItemSelected(lastId);
-                return true;
-            }
+            supportNavigateUpTo(getIntent());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

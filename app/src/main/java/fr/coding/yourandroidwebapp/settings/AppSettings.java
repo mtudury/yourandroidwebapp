@@ -1,5 +1,9 @@
 package fr.coding.yourandroidwebapp.settings;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,11 +16,14 @@ import java.util.List;
  */
 public class AppSettings {
 
+
     public List<WebApp> WebApps;
+//    public boolean UseGdrive;
 
     public AppSettings()
     {
         WebApps = new ArrayList<>();
+//        UseGdrive = false;
     }
 
     public WebApp getWebAppById(String id) {
@@ -38,14 +45,14 @@ public class AppSettings {
         return null;
     }
 
-
-
     public static AppSettings JSONobjToAppSettings(JSONObject jsonobj) throws JSONException {
         AppSettings appSettings = new AppSettings();
         JSONArray arr = jsonobj.getJSONArray("WebApps");
         for (int i = 0; i < arr.length(); i++) {
             appSettings.WebApps.add(WebApp.JSONobjToWebApp(arr.getJSONObject(i)));
         }
+//        if (jsonobj.has("UseGdrive"))
+//            appSettings.UseGdrive = jsonobj.getBoolean("UseGdrive");
         return appSettings;
     }
 
@@ -56,6 +63,7 @@ public class AppSettings {
             webapps.put(wa.WebAppToJSONobj());
         }
         jsonobj.put("WebApps", webapps);
+//        jsonobj.put("UseGdrive", UseGdrive);
         return jsonobj;
     }
 

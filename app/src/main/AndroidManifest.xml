@@ -31,7 +31,12 @@
         </activity>
         <activity
             android:name=".WebAppListActivity"
-            android:label="@string/title_webapp_list" />
+            android:label="@string/title_webapp_list"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
         <activity
             android:name=".WebAppDetailActivity"
             android:label="@string/title_webapp_detail"
@@ -39,6 +44,24 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".WebAppListActivity" />
+        </activity>
+        <activity
+            android:name=".SSLSettingListActivity"
+            android:label="@string/title_sslsetting_list"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".SSLSettingDetailActivity"
+            android:label="@string/title_sslsetting_detail"
+            android:parentActivityName=".SSLSettingListActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.coding.yourandroidwebapp.SSLSettingListActivity" />
         </activity>
     </application>
 

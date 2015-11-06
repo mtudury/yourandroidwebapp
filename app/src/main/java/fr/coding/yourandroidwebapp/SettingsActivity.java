@@ -1,6 +1,7 @@
 package fr.coding.yourandroidwebapp;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.media.Ringtone;
@@ -8,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -20,7 +22,8 @@ import android.text.TextUtils;
 
 import java.util.List;
 
-import fr.coding.tools.gdrive.GoogleDriveApiPreferenceActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -33,7 +36,7 @@ import fr.coding.tools.gdrive.GoogleDriveApiPreferenceActivity;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends GoogleDriveApiPreferenceActivity {
+public class SettingsActivity extends PreferenceActivity {
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -62,16 +65,32 @@ public class SettingsActivity extends GoogleDriveApiPreferenceActivity {
 
         // In the simplified UI, fragments are not used at all and we instead
         // use the older PreferenceActivity APIs.
-
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_webapps);
 
         // Add 'general' preferences.
         // Add 'notifications' preferences, and a corresponding header.
-        PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_general);
-        getPreferenceScreen().addPreference(fakeHeader);
+
         addPreferencesFromResource(R.xml.pref_general);
+//
+//        final Activity act = this;
+//        CheckBoxPreference checkboxPref = (CheckBoxPreference) getPreferenceManager().findPreference("google_drive_usage");
+//        checkboxPref.setChecked(AppSettingsManager.IsSettingsInGdrive(this));
+//        checkboxPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//            public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                if (newValue == true)
+//                {
+//                    AppSettingsManager.SetUseOrNotGDrive(act, true);
+////                    finish();
+////                    startActivity(getIntent());
+//                }
+//                else {
+//                    AppSettingsManager.SetUseOrNotGDrive(act, false);
+//                }
+//
+//                return true;
+//            }
+//        });
 
         // Add 'notifications' preferences, and a corresponding header.
 //        PreferenceCategory fakeHeader = new PreferenceCategory(this);
