@@ -17,16 +17,17 @@ import fr.coding.tools.Callback;
  */
 public class GoogleDriveBaseTools {
 
-    protected static final String TAG = "GoogleDriveTools";
+    protected String TAG;
 
     protected GoogleApiClient googleApiClient;
 
     protected Activity activity;
 
-    public GoogleDriveBaseTools(GoogleApiClient gApiClient, Activity activity) {
+    public GoogleDriveBaseTools(GoogleApiClient gApiClient, Activity activity, String LogTAG) {
         googleApiClient = gApiClient;
         this.activity = activity;
+        this.TAG = LogTAG;
     }
 
-
+    public GoogleApiClient getGoogleApiClient() { return googleApiClient; }
 }

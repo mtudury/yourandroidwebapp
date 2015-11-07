@@ -18,34 +18,23 @@ import com.google.android.gms.drive.query.*;
 /**
  * Created by Matthieu on 31/10/2015.
  *
- * base is from https://raw.githubusercontent.com/googledrive/android-demos/master/app/src/main/java/com/google/android/gms/drive/sample/demo/BaseDemoActivity.java
- *
  * Java doesn't support inheritence from generics <T>, would be usefull there, i need to duplicate code
  */
 public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = "GoogleDriveApiActivity";
+    private static final String TAG = "GoogleDriveApiAppCompatActivity";
 
-    /**
-     * Request code for auto Google Play Services error resolution.
-     */
-    protected static final int REQUEST_CODE_RESOLUTION = 1;
 
-    /**
-     * Next available request code.
-     */
-    protected static final int NEXT_AVAILABLE_REQUEST_CODE = 2;
 
-    /**
-     * Google API client.
-     */
-    private GoogleApiClient mGoogleApiClient;
+    protected GoogleDriveCoreActivity coreActivity;
 
-    /**
-     * InAuth */
-    private boolean mIsInAuth;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        coreActivity = new GoogleDriveCoreActivity(this, TAG);
+    }
 
     /**
      * Called when activity gets visible. A connection to Drive services need to
@@ -56,16 +45,7 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Drive.API)
-                    .addScope(Drive.SCOPE_FILE)
-                    .addScope(Drive.SCOPE_APPFOLDER)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-        }
-        mGoogleApiClient.connect();
+
     }
 
     /**
@@ -75,9 +55,7 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
-            mGoogleApiClient.connect();
-        }
+
     }
 
     /**
@@ -86,9 +64,7 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
      */
     @Override
     protected void onPause() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
-        }
+        coreActivity.onPause();
         super.onPause();
     }
 
@@ -116,36 +92,16 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
      */
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Log.i(TAG, "GoogleApiClient connection failed: " + result.toString());
-        if (!mIsInAuth) {
-            if (!result.hasResolution()) {
-                // show the localized error dialog.
-                GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
-                return;
-            }
-            try {
-                mIsInAuth = true;
-                result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
-            } catch (SendIntentException e) {
-                Log.e(TAG, "Exception while starting resolution activity", e);
-            }
-        } else {
-            GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
-        }
+        coreActivity.onConnectionFailed(result);
     }
 
-    /**
-     * Shows a toast message.
-     */
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
+
 
     /**
      * Getter for the {@code GoogleApiClient}.
      */
     public GoogleApiClient getGoogleApiClient() {
-        return mGoogleApiClient;
+        return coreActivity.googleApiClient;
     }
 
 

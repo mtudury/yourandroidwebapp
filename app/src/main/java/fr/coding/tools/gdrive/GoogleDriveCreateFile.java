@@ -34,7 +34,7 @@ public class GoogleDriveCreateFile extends GoogleDriveBaseTools {
 
 
     public GoogleDriveCreateFile(GoogleApiClient gApiClient, Activity activity) {
-        super(gApiClient, activity);
+        super(gApiClient, activity, "GoogleDriveCreateFile");
     }
 
     public void CreateFile(String fileName, String mimetype, Callback<String> callback) {

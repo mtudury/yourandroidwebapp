@@ -17,7 +17,7 @@ import com.google.android.gms.drive.query.SearchableField;
 public class GoogleDriveFindFile extends GoogleDriveBaseTools {
 
     public GoogleDriveFindFile(GoogleApiClient gApiClient, Activity activity) {
-        super(gApiClient, activity);
+        super(gApiClient, activity, "GoogleDriveFindFile");
     }
 
     public void FindFileAppFolder(String filename, ResultCallback<DriveApi.MetadataBufferResult> callback) {

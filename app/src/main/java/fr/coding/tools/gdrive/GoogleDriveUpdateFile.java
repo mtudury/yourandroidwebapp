@@ -28,7 +28,7 @@ public class GoogleDriveUpdateFile extends GoogleDriveBaseTools {
 
 
     public GoogleDriveUpdateFile(GoogleApiClient gApiClient, Activity activity) {
-        super(gApiClient, activity);
+        super(gApiClient, activity, "GoogleDriveUpdateFile");
     }
 
 

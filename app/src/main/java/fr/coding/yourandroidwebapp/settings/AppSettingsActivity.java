@@ -1,29 +1,17 @@
-package fr.coding.tools.gdrive;
+package fr.coding.yourandroidwebapp.settings;
 
-
-import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-import java.io.*;
+import android.support.v7.app.AppCompatActivity;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.*;
-import com.google.android.gms.drive.DriveApi.*;
-import com.google.android.gms.drive.query.*;
+
+import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 
 /**
- * Created by Matthieu on 31/10/2015.
- *
- * base is from https://raw.githubusercontent.com/googledrive/android-demos/master/app/src/main/java/com/google/android/gms/drive/sample/demo/BaseDemoActivity.java
- *
- * Java doesn't support inheritence from generics <T>, would be usefull there, i need to duplicate code between Activity Types
+ * Created by Matthieu on 07/11/2015.
  */
-public abstract class GoogleDriveApiActivity extends Activity  {
+public class AppSettingsActivity extends AppCompatActivity {
 
     private static final String TAG = "GoogleDriveApiActivity";
 
@@ -73,8 +61,9 @@ public abstract class GoogleDriveApiActivity extends Activity  {
      * Getter for the {@code GoogleApiClient}.
      */
     public GoogleApiClient getGoogleApiClient() {
-        return coreActivity.googleApiClient;
+        return coreActivity.getGoogleApiClient();
     }
+
 
 
 }

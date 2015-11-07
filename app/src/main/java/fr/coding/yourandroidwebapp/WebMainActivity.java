@@ -42,9 +42,7 @@ public class WebMainActivity extends GoogleDriveApiActivity implements AppSettin
 
     }
 
-    @Override
     public void onConnected(Bundle connectionHint) {
-        super.onConnected(connectionHint);
 
         if (needLoad) {
             AppSettingsManager settingsManager = new AppSettingsManager();

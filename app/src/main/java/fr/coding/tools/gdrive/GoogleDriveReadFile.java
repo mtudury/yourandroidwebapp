@@ -24,7 +24,7 @@ public class GoogleDriveReadFile extends GoogleDriveBaseTools {
     private Callback<String> readCallback;
 
     public GoogleDriveReadFile(GoogleApiClient gApiClient, Activity activity) {
-        super(gApiClient, activity);
+        super(gApiClient, activity, "GoogleDriveReadFile");
     }
 
     /**
