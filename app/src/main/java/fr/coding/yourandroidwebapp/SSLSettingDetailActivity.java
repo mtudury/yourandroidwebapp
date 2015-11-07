@@ -9,6 +9,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.MenuItem;
 
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
+
 /**
  * An activity representing a single SSLSetting detail screen. This
  * activity is only used on handset devices. On tablet-size devices,
@@ -18,7 +20,7 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link SSLSettingDetailFragment}.
  */
-public class SSLSettingDetailActivity extends AppCompatActivity {
+public class SSLSettingDetailActivity extends AppSettingsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

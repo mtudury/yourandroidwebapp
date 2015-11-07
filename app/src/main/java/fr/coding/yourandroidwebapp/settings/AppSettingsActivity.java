@@ -11,16 +11,18 @@ import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 /**
  * Created by Matthieu on 07/11/2015.
  */
-public class AppSettingsActivity extends AppCompatActivity {
+public class AppSettingsActivity extends AppCompatActivity
+        implements AppSettingsCallback {
 
     private static final String TAG = "GoogleDriveApiActivity";
 
-    protected GoogleDriveCoreActivity coreActivity;
+    protected AppSettingsActivityHelper coreActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        coreActivity = new GoogleDriveCoreActivity(this, TAG);
+        coreActivity = new AppSettingsActivityHelper(this, this, TAG);
     }
 
     /**
@@ -33,6 +35,18 @@ public class AppSettingsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         coreActivity.onResume();
+    }
+
+    public void onAppSettingsReady(AppSettings settings) {
+
+    }
+
+    public AppSettings getAppSettings() {
+        return coreActivity.getAppSettings();
+    }
+
+    public AppSettingsManager getSettingManager() {
+        return coreActivity.getSettingManager();
     }
 
     /**
@@ -55,15 +69,8 @@ public class AppSettingsActivity extends AppCompatActivity {
         super.onPause();
     }
 
-
-
-    /**
-     * Getter for the {@code GoogleApiClient}.
-     */
-    public GoogleApiClient getGoogleApiClient() {
-        return coreActivity.getGoogleApiClient();
+    public void SaveSettings(AppSettings settings) {
+        coreActivity.Save(settings);
     }
-
-
 
 }

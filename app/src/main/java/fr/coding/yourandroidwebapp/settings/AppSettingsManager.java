@@ -43,10 +43,13 @@ public class AppSettingsManager {
 
     private String jsonval;
 
-    public void LoadSettings(GoogleApiClient apiClient, AppSettingsCallback handler, Activity act) {
+    public AppSettingsManager(Activity act) {
+        activity = act;
+    }
+
+    public void LoadSettings(GoogleApiClient apiClient, AppSettingsCallback handler) {
         googleApiClient = apiClient;
         resulthandler = handler;
-        activity = act;
 
         Drive.DriveApi.getAppFolder(googleApiClient)
                 .queryChildren(googleApiClient, new Query.Builder()
@@ -66,13 +69,19 @@ public class AppSettingsManager {
             new GoogleDriveReadFile(googleApiClient, activity).GetDriveFileContent(df, new Callback<String>() {
                 @Override
                 public void onCallback(String restxt) {
-                    AppSettings res;
+                    AppSettings res = null;
                     try {
                         res = AppSettings.JSONobjToAppSettings(new JSONObject(restxt));
+                        SaveLocally();
                     } catch (JSONException e) {
                         e.printStackTrace();
                         new AlertDialog.Builder(activity).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
-                        res = new AppSettings();
+                        if (res == null)
+                            res = new AppSettings();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        if (res == null)
+                            res = new AppSettings();
                     }
 
 
@@ -84,14 +93,13 @@ public class AppSettingsManager {
         }
     }
 
-    public void Save(Activity act, AppSettings apps, GoogleApiClient apiClient) {
+    public void Save(AppSettings apps, GoogleApiClient apiClient) {
         googleApiClient = apiClient;
-        activity = act;
         try {
             jsonval = apps.AppSettingsToJSONobj().toString();
             SaveLocally();
 
-            if ((apiClient != null)&&(IsSettingsInGdrive(act))) {
+            if ((apiClient != null)&&(IsSettingsInGdrive(activity))) {
                 Drive.DriveApi.getAppFolder(googleApiClient)
                         .queryChildren(googleApiClient, new Query.Builder()
                                 .addFilter(Filters.eq(SearchableField.TITLE, PREFSFILE))
@@ -117,9 +125,17 @@ public class AppSettingsManager {
         outputWriter.close();
     }
 
+    public void SaveSettingsLocally(AppSettings apps) {
+        try {
+            jsonval = apps.AppSettingsToJSONobj().toString();
+            SaveLocally();
+        } catch (IOException|JSONException e) {
+            e.printStackTrace();
+            new AlertDialog.Builder(activity).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+        }
+    }
 
     private AppSettings LoadLocally() throws IOException, JSONException {
-        // add-write text into file
         FileInputStream fileIn=activity.openFileInput(PREFSFILE);
         BufferedReader InputRead= new BufferedReader(new InputStreamReader(fileIn));
         StringBuilder builder = new StringBuilder();
@@ -128,6 +144,22 @@ public class AppSettingsManager {
             builder.append(line);
         }
         return AppSettings.JSONobjToAppSettings(new JSONObject(builder.toString()));
+    }
+
+    public AppSettings LoadSettingsLocally() {
+        try {
+            return LoadLocally();
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException|JSONException e)
+        {
+            e.printStackTrace();
+            new AlertDialog.Builder(activity).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+        }
+        return new AppSettings();
     }
 
     public void QueryResultsCallbackSave(MetadataBufferResult result) {

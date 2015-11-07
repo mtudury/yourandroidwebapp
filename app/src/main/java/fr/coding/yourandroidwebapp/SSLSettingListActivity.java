@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.MenuItem;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 
 /**
  * An activity representing a list of SSLSettings. This activity
@@ -28,7 +29,7 @@ import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
  * {@link SSLSettingListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class SSLSettingListActivity extends GoogleDriveApiAppCompatActivity
+public class SSLSettingListActivity extends AppSettingsActivity
         implements SSLSettingListFragment.Callbacks {
 
     /**

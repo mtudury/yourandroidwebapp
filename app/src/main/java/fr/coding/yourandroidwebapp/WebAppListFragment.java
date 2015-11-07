@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
 /**
@@ -59,7 +60,7 @@ public class WebAppListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<WebApp> webapps = new ArrayList<>(((WebAppListActivity)getActivity()).config.WebApps);
+        List<WebApp> webapps = new ArrayList<>(((AppSettingsActivity)getActivity()).getAppSettings().WebApps);
 
         WebApp newWebApp = new WebApp();
         newWebApp.name = "+new";
@@ -109,7 +110,7 @@ public class WebAppListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        AppSettings settings = ((WebAppListActivity)getActivity()).config;
+        AppSettings settings = ((AppSettingsActivity)getActivity()).getAppSettings();
         List<WebApp> webapps = settings.WebApps;
         if (webapps.size() <= position)
         {

@@ -1,5 +1,6 @@
 package fr.coding.yourandroidwebapp;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -12,7 +13,7 @@ import fr.coding.yourandroidwebapp.settings.WebApp;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 
-public class WebMainActivity extends GoogleDriveApiActivity implements AppSettingsCallback {
+public class WebMainActivity extends Activity {
 
     private WebView mWebView;
 
@@ -40,18 +41,9 @@ public class WebMainActivity extends GoogleDriveApiActivity implements AppSettin
         AutoAuthSslWebView wvc = new AutoAuthSslWebView();
         mWebView.setWebViewClient(wvc);
 
-    }
 
-    public void onConnected(Bundle connectionHint) {
-
-        if (needLoad) {
-            AppSettingsManager settingsManager = new AppSettingsManager();
-            settingsManager.LoadSettings(this.getGoogleApiClient(), this, this);
-        }
-    }
-
-    @Override
-    public void onAppSettingsReady(AppSettings settings) {
+        AppSettingsManager settingsManager = new AppSettingsManager(this);
+        AppSettings settings = settingsManager.LoadSettingsLocally();
 
         if ((webAppId != null) && (!webAppId.isEmpty())) {
             WebApp wa = settings.getWebAppById(webAppId);
@@ -75,7 +67,7 @@ public class WebMainActivity extends GoogleDriveApiActivity implements AppSettin
     @Override
     protected void onResume() {
         super.onResume();
-
+        //todo: add wifi/mobile test here
     }
 
     protected void LoadWebView() {

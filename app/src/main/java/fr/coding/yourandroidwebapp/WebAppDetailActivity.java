@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
@@ -20,9 +21,8 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link WebAppDetailFragment}.
  */
-public class WebAppDetailActivity extends GoogleDriveApiAppCompatActivity implements AppSettingsCallback {
-
-    public AppSettings config;
+public class WebAppDetailActivity extends AppSettingsActivity
+        implements AppSettingsCallback {
 
     private Bundle savedInstanceState;
 
@@ -33,16 +33,7 @@ public class WebAppDetailActivity extends GoogleDriveApiAppCompatActivity implem
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
-        super.onConnected(connectionHint);
-
-        AppSettingsManager settingsManager = new AppSettingsManager();
-        settingsManager.LoadSettings(this.getGoogleApiClient(), this, this);
-    }
-
-    @Override
     public void onAppSettingsReady(AppSettings settings) {
-        config = settings;
         setContentView(R.layout.activity_webapp_detail);
 
         // Show the Up button in the action bar.

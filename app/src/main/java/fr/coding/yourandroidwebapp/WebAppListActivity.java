@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
@@ -33,7 +34,7 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
  * {@link WebAppListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class WebAppListActivity extends GoogleDriveApiAppCompatActivity
+public class WebAppListActivity extends AppSettingsActivity
         implements WebAppListFragment.Callbacks, AppSettingsCallback {
 
     /**
@@ -45,8 +46,6 @@ public class WebAppListActivity extends GoogleDriveApiAppCompatActivity
     public boolean startCreate;
 
     private String lastId;
-
-    public AppSettings config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +69,7 @@ public class WebAppListActivity extends GoogleDriveApiAppCompatActivity
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
-        super.onConnected(connectionHint);
-
-        AppSettingsManager settingsManager = new AppSettingsManager();
-        settingsManager.LoadSettings(this.getGoogleApiClient(), this, this);
-    }
-
-    @Override
     public void onAppSettingsReady(AppSettings settings) {
-        config = settings;
         FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
         flayout.addView(getLayoutInflater().inflate(R.layout.activity_webapp_list, null));
         if (findViewById(R.id.webapp_detail_container) != null) {

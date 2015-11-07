@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
@@ -39,9 +40,8 @@ public class WebAppDetailFragment extends Fragment {
     /*
       Settings
      */
+    private AppSettingsActivity activity;
     private AppSettings settings;
-    /* google api client */
-    private GoogleApiClient gClient;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,18 +53,13 @@ public class WebAppDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = ((AppSettingsActivity) getActivity());
+        settings = activity.getAppSettings();
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            if (getActivity() instanceof WebAppListActivity) {
-                settings = ((WebAppListActivity) getActivity()).config;
-                gClient = ((WebAppListActivity) getActivity()).getGoogleApiClient();
-            } else if (getActivity() instanceof WebAppDetailActivity) {
-                settings = ((WebAppDetailActivity) getActivity()).config;
-                gClient = ((WebAppDetailActivity) getActivity()).getGoogleApiClient();
-            }
             if (settings != null)
                 mItem = settings.getWebAppById(getArguments().getString(ARG_ITEM_ID));
 
@@ -115,8 +110,7 @@ public class WebAppDetailFragment extends Fragment {
         View rootView = view.getRootView();
         getItem(rootView);
 
-        AppSettingsManager asm = new AppSettingsManager();
-        asm.Save(getActivity(), settings, gClient);
+        activity.SaveSettings(settings);
     }
 
     private void getItem(View rootView) {
@@ -129,8 +123,7 @@ public class WebAppDetailFragment extends Fragment {
         View rootView = view.getRootView();
         getItem(rootView);
 
-        AppSettingsManager asm = new AppSettingsManager();
-        asm.Save(getActivity(), settings, gClient);
+        activity.SaveSettings(settings);
         mItem.LauncherShortcut(getActivity().getApplicationContext());
         Toast.makeText(getActivity(), R.string.webapp_shortcutcreated_toast, Toast.LENGTH_SHORT).show();
     }

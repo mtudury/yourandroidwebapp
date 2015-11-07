@@ -61,8 +61,10 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
      * Handles resolution callbacks.
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == activity.RESULT_OK) {
-            mGoogleApiClient.connect();
+        if (mGoogleApiClient != null) {
+            if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == activity.RESULT_OK) {
+                mGoogleApiClient.connect();
+            }
         }
     }
 
