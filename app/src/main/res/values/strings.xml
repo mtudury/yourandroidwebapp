@@ -5,14 +5,15 @@
     <string name="webapp_name">WebApp Name :</string>
     <string name="webapp_save_button">Save</string>
     <string name="webapp_create_shortcut">Create Shortcut</string>
-    <string name="webapp_url">Url :</string>
+    <string name="webapp_url">Url : (need to be full : http://url/)</string>
     <string name="webapp_saved_toast">Saved !</string>
     <string name="webapp_shortcutcreated_toast">Shortcut created !</string>
-    <string name="webapp_iconurl">Url d\'icone : </string>
+    <string name="webapp_iconurl">Icon Url : </string>
     <string name="webapp_ssl_settings">SSL Settings</string>
     <string name="title_activity_ssl_settings">SslSettingsActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_sslsetting_list">SSLSettings</string>
     <string name="title_sslsetting_detail">SSLSetting Detail</string>
+    <string name="webapp_url_hint">http://www.google.com</string>
 </resources>

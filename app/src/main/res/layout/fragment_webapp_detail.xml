@@ -23,7 +23,7 @@
         android:layout_height="wrap_content" android:text="@string/webapp_url" android:id="@+id/webapp_name_url"/>
     <EditText
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"  android:id="@+id/webapp_url" android:inputType="textUri"
+        android:layout_height="wrap_content"  android:id="@+id/webapp_url" android:inputType="textUri" android:hint="@string/webapp_url_hint"
         />
     <TextView
         android:layout_width="fill_parent"
