@@ -32,11 +32,6 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
     protected static final int NEXT_AVAILABLE_REQUEST_CODE = 2;
 
     /**
-     * Google API client.
-     */
-    private GoogleApiClient mGoogleApiClient;
-
-    /**
      * InAuth */
     private boolean mIsInAuth;
 
@@ -45,8 +40,8 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
     }
 
     public void onResume() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(activity)
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(activity)
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
                     .addScope(Drive.SCOPE_APPFOLDER)
@@ -54,28 +49,28 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
                     .addOnConnectionFailedListener(this)
                     .build();
         }
-        mGoogleApiClient.connect();
+        googleApiClient.connect();
     }
 
     /**
      * Handles resolution callbacks.
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mGoogleApiClient != null) {
+        if (googleApiClient != null) {
             if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == activity.RESULT_OK) {
-                mGoogleApiClient.connect();
+                googleApiClient.connect();
             }
         }
     }
 
     public void onPause() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
+        if (googleApiClient != null) {
+            googleApiClient.disconnect();
         }
     }
 
     /**
-     * Called when {@code mGoogleApiClient} is connected.
+     * Called when {@code googleApiClient} is connected.
      */
     @Override
     public void onConnected(Bundle connectionHint) {
@@ -104,7 +99,7 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
 
 
     /**
-     * Called when {@code mGoogleApiClient} is disconnected.
+     * Called when {@code googleApiClient} is disconnected.
      */
     @Override
     public void onConnectionSuspended(int cause) {

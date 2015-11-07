@@ -40,6 +40,7 @@ public class AppSettingsActivityHelper extends GoogleDriveCoreActivity implement
 
     @Override
     public void onConnected(Bundle connectionHint) {
+
         appSettingsManager.LoadSettings(googleApiClient, this);
     }
 

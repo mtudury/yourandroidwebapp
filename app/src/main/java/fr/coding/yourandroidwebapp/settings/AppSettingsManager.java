@@ -32,7 +32,7 @@ public class AppSettingsManager {
 
     public static final String PREFSFILE = "appconfig.json";
 
-    private static final String PREFS = "general_settings";
+    private static final String PREFS = "fr.coding.yourandroidwebapp_preferences";
     private static final String UseGDrive = "google_drive_usage";
 
     private GoogleApiClient googleApiClient;
@@ -72,6 +72,7 @@ public class AppSettingsManager {
                     AppSettings res = null;
                     try {
                         res = AppSettings.JSONobjToAppSettings(new JSONObject(restxt));
+                        jsonval = restxt;
                         SaveLocally();
                     } catch (JSONException e) {
                         e.printStackTrace();
