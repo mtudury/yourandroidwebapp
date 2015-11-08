@@ -45,6 +45,16 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getIntent().getBooleanExtra("EXIT", false))
+        {
+            finish();
+        }
+    }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

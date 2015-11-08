@@ -1,6 +1,8 @@
 package fr.coding.yourandroidwebapp;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -72,6 +74,19 @@ public class WebMainActivity extends Activity {
 
     protected void LoadWebView() {
         mWebView.loadUrl(url);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
+            startActivity(intent);
+            finish();
+        }
     }
 
 }
