@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.audiofx.BassBoost;
 import android.os.Bundle;
+import android.view.Window;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -27,8 +29,12 @@ public class WebMainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_PROGRESS);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_main);
+
+        final Activity webactivity = this;
 
         url = "http://toutestquantique.fr/en/";
         webAppId = getIntent().getStringExtra("webappid");
@@ -38,6 +44,14 @@ public class WebMainActivity extends Activity {
         // Enable Javascript
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                // Activities and WebViews measure progress with different scales.
+                // The progress meter will automatically disappear when we reach 100%
+                webactivity.setProgress(progress * 1000);
+            }
+        });
 
         // Force links and redirects to open in the WebView instead of in a browser
         AutoAuthSslWebView wvc = new AutoAuthSslWebView();
