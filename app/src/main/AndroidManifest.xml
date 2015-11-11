@@ -40,7 +40,8 @@
         <activity
             android:name=".WebAppDetailActivity"
             android:label="@string/title_webapp_detail"
-            android:parentActivityName=".WebAppListActivity" >
+            android:parentActivityName=".WebAppListActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".WebAppListActivity" />

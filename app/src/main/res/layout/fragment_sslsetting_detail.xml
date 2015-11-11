@@ -1,5 +1,40 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/sslsetting_detail"
-    style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="16dp" android:textIsSelectable="true"
-    tools:context="fr.coding.yourandroidwebapp.SSLSettingDetailFragment" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context="fr.coding.yourandroidwebapp.SSLSettingDetailFragment">
+
+        <TextView
+            android:id="@+id/sslsetting_detail"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textIsSelectable="true"
+            tools:context="fr.coding.yourandroidwebapp.SSLSettingDetailFragment" />
+
+        <CheckBox
+            android:id="@+id/sslsetting_detail_activated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/sslsetting_detail_activated"
+            tools:context="fr.coding.yourandroidwebapp.SSLSettingDetailFragment"/>
+
+        <Button
+            android:id="@+id/sslsetting_save_button"
+            android:layout_height="wrap_content"
+            android:text="@string/sslsetting_save_button"
+            android:layout_width="fill_parent"
+            android:visibility="invisible">
+        </Button>
+    </LinearLayout>
+</ScrollView>

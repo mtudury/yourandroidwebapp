@@ -7,7 +7,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import fr.coding.yourandroidwebapp.dummy.DummyContent;
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.coding.tools.model.SslByPass;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 
 /**
  * A list fragment representing a list of SSLSettings. This fragment
@@ -46,7 +50,7 @@ public class SSLSettingListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(int id);
     }
 
     /**
@@ -55,7 +59,7 @@ public class SSLSettingListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(int id) {
         }
     };
 
@@ -70,12 +74,12 @@ public class SSLSettingListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+        List<SslByPass> sslByPasses = new ArrayList<>(((AppSettingsActivity)getActivity()).getAppSettings().SslByPasses);
+        setListAdapter(new ArrayAdapter<SslByPass>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                DummyContent.ITEMS));
+                sslByPasses ));
     }
 
     @Override
@@ -115,7 +119,7 @@ public class SSLSettingListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(position);
     }
 
     @Override

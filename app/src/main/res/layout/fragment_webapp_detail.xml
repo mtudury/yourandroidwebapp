@@ -3,8 +3,8 @@
     style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
     android:layout_height="match_parent" android:padding="16dp" android:textIsSelectable="true"
     tools:context="fr.coding.yourandroidwebapp.WebAppDetailFragment" /-->
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ScrollView01"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -32,11 +32,33 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"  android:id="@+id/webapp_iconurl" android:inputType="textUri"
         />
+    <CheckBox
+        android:id="@+id/webapp_sslall_activated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/webapp_sslall_activated"
+        tools:context="fr.coding.yourandroidwebapp.SSLSettingDetailFragment"/>
+    <CheckBox
+        android:id="@+id/webapp_ssl_activated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/webapp_ssl_activated"
+        tools:context="fr.coding.yourandroidwebapp.SSLSettingDetailFragment"/>
+    <CheckBox
+        android:id="@+id/webapp_autoauth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/webapp_autoauth"
+        tools:context="fr.coding.yourandroidwebapp.SSLSettingDetailFragment"/>
     <Button
         android:id="@+id/webapp_save_button"
         android:layout_height="wrap_content"
         android:text="@string/webapp_save_button"
-        android:layout_width="fill_parent">
+        android:layout_width="fill_parent"
+        android:visibility="invisible">
     </Button>
     <Button
         android:id="@+id/webapp_create_shortcut"

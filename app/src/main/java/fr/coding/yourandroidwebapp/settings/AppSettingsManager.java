@@ -90,7 +90,18 @@ public class AppSettingsManager {
                 }
             });
         } else {
-            resulthandler.onAppSettingsReady(new AppSettings());
+            AppSettings res = new AppSettings();
+            try {
+                res = LoadLocally();
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            catch (JSONException|IOException e) {
+                e.printStackTrace();
+                new AlertDialog.Builder(activity).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+            }
+            resulthandler.onAppSettingsReady(res);
         }
     }
 

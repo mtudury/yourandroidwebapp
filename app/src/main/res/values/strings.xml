@@ -16,4 +16,9 @@
     <string name="title_sslsetting_list">SSLSettings</string>
     <string name="title_sslsetting_detail">SSLSetting Detail</string>
     <string name="webapp_url_hint">http://www.google.com</string>
+    <string name="sslsetting_detail_activated">Allowed</string>
+    <string name="sslsetting_save_button">Save</string>
+    <string name="webapp_sslall_activated">All invalid certificates accepted (security warning)</string>
+    <string name="webapp_ssl_activated">Valid personal certificates accepted</string>
+    <string name="webapp_autoauth">Allow to try auto Auth</string>
 </resources>

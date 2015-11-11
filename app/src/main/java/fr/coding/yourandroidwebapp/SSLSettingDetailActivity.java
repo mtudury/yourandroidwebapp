@@ -9,7 +9,9 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.MenuItem;
 
+import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
 
 /**
  * An activity representing a single SSLSetting detail screen. This
@@ -20,23 +22,25 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link SSLSettingDetailFragment}.
  */
-public class SSLSettingDetailActivity extends AppSettingsActivity {
+public class SSLSettingDetailActivity extends AppSettingsActivity implements AppSettingsCallback {
+
+    private Bundle savedInstanceState;
+
+    public FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
+    }
+
+    @Override
+    public void onAppSettingsReady(AppSettings settings) {
         setContentView(R.layout.activity_sslsetting_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -54,8 +58,8 @@ public class SSLSettingDetailActivity extends AppSettingsActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(SSLSettingDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(SSLSettingDetailFragment.ARG_ITEM_ID));
+            arguments.putInt(SSLSettingDetailFragment.ARG_ITEM_ID,
+                    getIntent().getIntExtra(SSLSettingDetailFragment.ARG_ITEM_ID, 0));
             SSLSettingDetailFragment fragment = new SSLSettingDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

@@ -23,6 +23,11 @@ public class WebApp {
     public String name;
     public String url;
     public String iconUrl;
+    // ssl
+    public boolean allCertsByPass;
+    public boolean allowedSSlActivated;
+    // auth
+    public boolean autoAuth;
 
     public String toString() {
         return name;
@@ -33,18 +38,30 @@ public class WebApp {
         WebApp webapp = new WebApp();
         webapp.id = jsonobj.getString("id");
         webapp.name = jsonobj.getString("name");
+        webapp.url = jsonobj.getString("url");
+
         if (jsonobj.has("iconUrl"))
             webapp.iconUrl = jsonobj.getString("iconUrl");
-        webapp.url = jsonobj.getString("url");
+        if (jsonobj.has("allCertsByPass"))
+            webapp.allCertsByPass = jsonobj.getBoolean("allCertsByPass");
+        if (jsonobj.has("allowedSSlActivated"))
+            webapp.allowedSSlActivated = jsonobj.getBoolean("allowedSSlActivated");
+
+        if (jsonobj.has("autoAuth"))
+            webapp.autoAuth = jsonobj.getBoolean("autoAuth");
+
         return webapp;
     }
 
-    public JSONObject WebAppToJSONobj() throws JSONException {
+    public JSONObject toJSONobj() throws JSONException {
         JSONObject jsonobj = new JSONObject();
         jsonobj.put("id", id);
         jsonobj.put("name", name);
-        jsonobj.put("iconUrl", iconUrl);
         jsonobj.put("url", url);
+        jsonobj.put("iconUrl", iconUrl);
+        jsonobj.put("allCertsByPass", allCertsByPass);
+        jsonobj.put("allowedSSlActivated", allowedSSlActivated);
+        jsonobj.put("autoAuth", autoAuth);
         return jsonobj;
     }
 

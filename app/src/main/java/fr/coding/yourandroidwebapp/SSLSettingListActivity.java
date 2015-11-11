@@ -9,8 +9,10 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 
 /**
@@ -57,6 +59,12 @@ public class SSLSettingListActivity extends AppSettingsActivity
         });*/
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onAppSettingsReady(AppSettings settings) {
+        FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
+        flayout.addView(getLayoutInflater().inflate(R.layout.activity_sslsetting_list, null));
 
         if (findViewById(R.id.sslsetting_detail_container) != null) {
             // The detail container view will be present only in the
@@ -97,13 +105,13 @@ public class SSLSettingListActivity extends AppSettingsActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(int id) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(SSLSettingDetailFragment.ARG_ITEM_ID, id);
+            arguments.putInt(SSLSettingDetailFragment.ARG_ITEM_ID, id);
             SSLSettingDetailFragment fragment = new SSLSettingDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

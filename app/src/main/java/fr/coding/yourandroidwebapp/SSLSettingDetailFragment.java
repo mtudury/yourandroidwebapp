@@ -7,9 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
-import fr.coding.yourandroidwebapp.dummy.DummyContent;
+import fr.coding.tools.model.SslByPass;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 
 /**
  * A fragment representing a single SSLSetting detail screen.
@@ -27,7 +31,11 @@ public class SSLSettingDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private SslByPass mItem;
+
+    private AppSettingsActivity activity;
+    private AppSettings settings;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,19 +47,21 @@ public class SSLSettingDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        activity = ((AppSettingsActivity) getActivity());
+        settings = activity.getAppSettings();
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = settings.SslByPasses.get(getArguments().getInt(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(mItem.CName);
             }
         }
+
     }
 
     @Override
@@ -61,9 +71,40 @@ public class SSLSettingDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.sslsetting_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.sslsetting_detail)).setText("Cname : " + mItem.CName + "\nHost : " + mItem.Host);
+            ((CheckBox) rootView.findViewById(R.id.sslsetting_detail_activated)).setChecked(mItem.activated);
         }
 
+        if (getActivity() instanceof SSLSettingListActivity)
+        {
+            Button button = (Button) rootView.findViewById(R.id.sslsetting_save_button);
+            button.setVisibility(View.VISIBLE);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveSslSetting(v);
+                }
+            });
+        }
+        else {
+            ((SSLSettingDetailActivity)getActivity()).fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveSslSetting(v);
+                }
+            });
+        }
         return rootView;
+    }
+
+    public void saveSslSetting(View view) {
+        View rootView = view.getRootView();
+        getItem(rootView);
+
+        activity.SaveSettings(settings);
+    }
+
+    private void getItem(View rootView) {
+        mItem.activated = ((CheckBox)rootView.findViewById(R.id.sslsetting_detail_activated)).isChecked();
     }
 }

@@ -19,7 +19,7 @@
     <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" android:id="@+id/frameLayout">
 
-        <include layout="@layout/activity_sslsetting_list" />
+        <!--<include layout="@layout/activity_sslsetting_list" />-->
     </FrameLayout>
 
 <!--    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
