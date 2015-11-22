@@ -15,6 +15,9 @@ public class HostAuth {
     public Date dtCreated;
     public boolean activated;
 
+    public HostAuth() {
+        dtCreated = new Date();
+    }
 
     public String toString() {
         return Host + (activated?"":" (NotAllowed)");

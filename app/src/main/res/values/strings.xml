@@ -23,4 +23,7 @@
     <string name="webapp_autoauth">Allow to try auto Auth</string>
     <string name="title_hostauth_list">HostAuths</string>
     <string name="title_hostauth_detail">HostAuth Detail</string>
+    <string name="loginform_login">Login</string>
+    <string name="loginform_password">Password</string>
+    <string name="loginform_save">Save</string>
 </resources>

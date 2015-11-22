@@ -1,18 +1,24 @@
 package fr.coding.yourandroidwebapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import fr.coding.tools.AutoAuthSslWebView;
 import fr.coding.tools.Callback;
+import fr.coding.tools.CallbackResult;
 import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
@@ -25,6 +31,7 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 public class WebMainActivity extends Activity {
 
     private WebView mWebView;
+    private AutoAuthSslWebView wvc;
 
     private String url;
 
@@ -38,6 +45,10 @@ public class WebMainActivity extends Activity {
 
     protected AppSettingsActivityHelper coreActivity = null;
 
+    private WebApp wa;
+
+    private HostAuth hostAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +57,7 @@ public class WebMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_main);
 
-        final Activity webActivity = this;
+        final WebMainActivity webActivity = this;
 
         url = "http://toutestquantique.fr/en/";
         webAppId = getIntent().getStringExtra("webappid");
@@ -66,7 +77,7 @@ public class WebMainActivity extends Activity {
         });
 
         // Force links and redirects to open in the WebView instead of in a browser
-        AutoAuthSslWebView wvc = new AutoAuthSslWebView();
+        wvc = new AutoAuthSslWebView();
         mWebView.setWebViewClient(wvc);
 
 
@@ -76,48 +87,91 @@ public class WebMainActivity extends Activity {
         wvc.sslUnknownManager = new Callback<SslByPass>() {
             @Override
             public void onCallback(final SslByPass arg) {
-                if (coreActivity == null) {
-                    coreActivity = new AppSettingsActivityHelper(webActivity, new AppSettingsCallback() {
-                        @Override
-                        public void onAppSettingsReady(AppSettings settings) {
-                            boolean found = false;
-                            for(SslByPass ssl : settings.SslByPasses) {
-                                if ((ssl.Host.equals(arg.Host))
-                                &&(ssl.CName.equals(arg.CName))
-                                &&(ssl.ValidNotAfter == arg.ValidNotAfter))
-                                    found = true;
-                            }
-                            if (!found) {
-                                settings.SslByPasses.add(arg);
-                                coreActivity.Save(settings);
-                            }
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                webActivity.SaveAcceptedSSlChoice(arg);
+                                break;
 
-                            mWebView.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent(webActivity, SSLSettingListActivity.class);
-                                    startActivity(intent);
-                                }
-                            }, 2000);
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                needLoad = true;
+                                break;
                         }
-                    }, TAG);
-                    coreActivity.onResume();
-                }
-                else
-                {
-                    coreActivity.getSettings();
-                }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(webActivity);
+                builder.setMessage("Allow this SSl Cert : "+arg.CName + ", "+arg.Host).setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
+
             }
         };
 
+        wvc.AuthAsked = new CallbackResult<HostAuth, HostAuth>() {
+            @Override
+            public HostAuth onCallback(final HostAuth arg) {
+                if (webActivity.hostAuth != null) {
+                    HostAuth auth = webActivity.hostAuth;
+                    webActivity.hostAuth = null;
+                    return auth;
+                }
+
+
+                final Dialog login = new Dialog(webActivity);
+                login.setContentView(R.layout.login_dialog);
+                login.setTitle("Login to "+arg.Host);
+
+                Button btnLogin = (Button) login.findViewById(R.id.btnLogin);
+                Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
+
+                btnLogin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        arg.Login = ((EditText)login.findViewById(R.id.txtUsername)).getText().toString();
+                        arg.Password = ((EditText)login.findViewById(R.id.txtPassword)).getText().toString();
+                        webActivity.hostAuth = arg;
+                        login.dismiss();
+                        LoadWebView();
+
+                        Toast.makeText(webActivity,
+                                "Try Login", Toast.LENGTH_LONG).show();
+
+                        if (((CheckBox)login.findViewById(R.id.savePassword)).isChecked()) {
+                            webActivity.SaveAcceptedHostAuth(arg);
+                        }
+                    }
+                });
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        login.dismiss();
+                    }
+                });
+
+                login.show();
+
+                return null;
+            }
+        };
+
+
+        LoadWebViewSettings(settings);
+    }
+
+    protected void LoadWebViewSettings(AppSettings settings) {
         if ((webAppId != null) && (!webAppId.isEmpty())) {
-            WebApp wa = settings.getWebAppById(webAppId);
+            wa = settings.getWebAppById(webAppId);
             wvc.setCompleteByPass(wa.allCertsByPass);
             if (wa.allowedSSlActivated) {
                 wvc.setSSLAllowed(settings.SslByPasses);
             }
-            if (wa.autoAuth) {
-                //wvc.setAllowedHosts(settings.Auths);
+            if (wa.autoAuth)
+            {
+                wvc.setAllowedHosts(settings.HostAuths);
             }
 
             if (wa != null) {
@@ -134,7 +188,6 @@ public class WebMainActivity extends Activity {
                 needLoad = false;
             }
         }, 5);
-
     }
 
     @Override
@@ -180,6 +233,69 @@ public class WebMainActivity extends Activity {
             intent.putExtra("EXIT", true);
             startActivity(intent);
             finish();
+        }
+    }
+
+    protected void SaveAcceptedSSlChoice(final SslByPass arg) {
+        final WebMainActivity webActivity = this;
+        arg.activated = true;
+
+        if (coreActivity == null) {
+            coreActivity = new AppSettingsActivityHelper(this, new AppSettingsCallback() {
+                @Override
+                public void onAppSettingsReady(AppSettings settings) {
+                    boolean found = false;
+                    for(SslByPass ssl : settings.SslByPasses) {
+                        if ((ssl.Host.equals(arg.Host))
+                                &&(ssl.CName.equals(arg.CName))
+                                &&(ssl.ValidNotAfter == arg.ValidNotAfter)) {
+                            found = true;
+                            ssl.activated = true;
+                        }
+                    }
+                    if (!found) {
+                        settings.SslByPasses.add(arg);
+                    }
+                    settings.getWebAppById(webAppId).allowedSSlActivated = true;
+                    coreActivity.Save(settings);
+
+                    LoadWebViewSettings(settings);
+                }
+            }, TAG);
+            coreActivity.onResume();
+        }
+        else
+        {
+            coreActivity.getSettings();
+        }
+    }
+
+    protected void SaveAcceptedHostAuth(final HostAuth arg) {
+        final WebMainActivity webActivity = this;
+        arg.activated = true;
+
+        if (coreActivity == null) {
+            coreActivity = new AppSettingsActivityHelper(webActivity, new AppSettingsCallback() {
+                @Override
+                public void onAppSettingsReady(AppSettings settings) {
+                    boolean found = false;
+                    for (HostAuth hostAuth : settings.HostAuths) {
+                        if (hostAuth.Host.equals(arg.Host)) {
+                            found = true;
+                            hostAuth.Login = arg.Login;
+                            hostAuth.Password = arg.Password;
+                        }
+                    }
+                    if (!found) {
+                        settings.HostAuths.add(arg);
+                    }
+                    settings.getWebAppById(webAppId).autoAuth = true;
+                    coreActivity.Save(settings);
+                }
+            }, TAG);
+            coreActivity.onResume();
+        } else {
+            coreActivity.getSettings();
         }
     }
 
