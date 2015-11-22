@@ -33,10 +33,12 @@
             android:name=".WebAppListActivity"
             android:label="@string/title_webapp_list"
             android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
+
         <activity
             android:name=".WebAppDetailActivity"
             android:label="@string/title_webapp_detail"
@@ -63,6 +65,24 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.coding.yourandroidwebapp.SSLSettingListActivity" />
+        </activity>
+        <activity
+            android:name=".HostAuthSettingsListActivity"
+            android:label="@string/title_hostauth_list"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".HostAuthSettingsDetailActivity"
+            android:label="@string/title_hostauth_detail"
+            android:parentActivityName=".HostAuthSettingsListActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HostAuthSettingsListActivity" />
         </activity>
     </application>
 

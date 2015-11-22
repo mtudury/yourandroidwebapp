@@ -21,4 +21,6 @@
     <string name="webapp_sslall_activated">All invalid certificates accepted (security warning)</string>
     <string name="webapp_ssl_activated">Valid personal certificates accepted</string>
     <string name="webapp_autoauth">Allow to try auto Auth</string>
+    <string name="title_hostauth_list">HostAuths</string>
+    <string name="title_hostauth_detail">HostAuth Detail</string>
 </resources>

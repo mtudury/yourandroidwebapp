@@ -23,5 +23,12 @@
                 android:targetClass="fr.coding.yourandroidwebapp.SSLSettingListActivity"
                 android:targetPackage="fr.coding.yourandroidwebapp" />
         </Preference>
+        <Preference android:title="@string/pref_title_hostauth_settings">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="CREATE"
+                android:targetClass="fr.coding.yourandroidwebapp.HostAuthSettingsListActivity"
+                android:targetPackage="fr.coding.yourandroidwebapp" />
+        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -67,4 +67,7 @@
 
     <string name="pref_title_use_google_drive">Settings in google drive</string>
     <string name="pref_description_use_google_drive">Allow settings to be synched between your devices (tablet/phone) and allow backup of settings with google drive</string>
+
+    <string name="pref_title_hostauth_settings">Authentication Settings</string>
+
 </resources>

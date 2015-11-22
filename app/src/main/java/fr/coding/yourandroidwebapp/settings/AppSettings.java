@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
 
 /**
@@ -17,11 +18,13 @@ public class AppSettings {
 
     public List<WebApp> WebApps;
     public List<SslByPass> SslByPasses;
+    public List<HostAuth> HostAuths;
 
     public AppSettings()
     {
         WebApps = new ArrayList<>();
         SslByPasses = new ArrayList<>();
+        HostAuths = new ArrayList<>();
     }
 
     public WebApp getWebAppById(String id) {
@@ -55,6 +58,12 @@ public class AppSettings {
                 appSettings.SslByPasses.add(SslByPass.JSONobjToSslByPass(arr.getJSONObject(i)));
             }
         }
+        if (jsonobj.has("HostAuths")) {
+            arr = jsonobj.getJSONArray("HostAuths");
+            for (int i = 0; i < arr.length(); i++) {
+                appSettings.HostAuths.add(HostAuth.JSONobjToSslByPass(arr.getJSONObject(i)));
+            }
+        }
 
         return appSettings;
     }
@@ -72,6 +81,12 @@ public class AppSettings {
             sslByPasses.put(ssl.toJSONobj());
         }
         jsonobj.put("SslByPasses", sslByPasses);
+
+        JSONArray hostAuths = new JSONArray();
+        for(HostAuth hostAuth : HostAuths) {
+            hostAuths.put(hostAuth.toJSONobj());
+        }
+        jsonobj.put("HostAuths", hostAuths);
 
         return jsonobj;
     }
