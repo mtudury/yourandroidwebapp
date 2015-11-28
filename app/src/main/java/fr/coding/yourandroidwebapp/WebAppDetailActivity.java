@@ -36,10 +36,7 @@ public class WebAppDetailActivity extends AppSettingsActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
-    }
 
-    @Override
-    public void onAppSettingsReady(AppSettings settings) {
         setContentView(R.layout.activity_webapp_detail);
 
         // Show the Up button in the action bar.
@@ -70,6 +67,14 @@ public class WebAppDetailActivity extends AppSettingsActivity
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.webapp_detail_container, fragment)
                     .commit();
+        }
+    }
+
+    @Override
+    public void onAppSettingsReady(AppSettings settings) {
+        WebAppDetailFragment frag = (WebAppDetailFragment)getSupportFragmentManager().findFragmentById(R.id.webapp_detail_container);
+        if (frag != null) {
+            frag.onSettingsReceived(settings);
         }
 
     }

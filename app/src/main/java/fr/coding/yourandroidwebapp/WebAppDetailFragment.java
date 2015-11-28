@@ -36,6 +36,9 @@ public class WebAppDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
+
+    public String item_id;
+
     /**
      * The item.
      */
@@ -54,18 +57,15 @@ public class WebAppDetailFragment extends Fragment {
     public WebAppDetailFragment() {
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        activity = ((AppSettingsActivity) getActivity());
-        settings = activity.getAppSettings();
+    public void onSettingsReceived(AppSettings appSettings) {
+        settings = appSettings;
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (item_id != null) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             if (settings != null)
-                mItem = settings.getWebAppById(getArguments().getString(ARG_ITEM_ID));
+                mItem = settings.getWebAppById(item_id);
 
             if (mItem == null) {
                 mItem = new WebApp();
@@ -75,14 +75,36 @@ public class WebAppDetailFragment extends Fragment {
                 settings.WebApps.add(mItem);
             }
 
-            Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 String name = mItem.name;
-                if ((name == null)||(name == ""))
+                if ((name == null) || (name == ""))
                     name = "+new";
                 appBarLayout.setTitle(name);
+
             }
+
+            // Show the dummy content as text in a TextView.
+            if (mItem != null) {
+                View rootView = getView();
+                ((EditText)rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
+                ((EditText)rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
+                ((EditText)rootView.findViewById(R.id.webapp_iconurl)).setText(mItem.iconUrl);
+                ((CheckBox)rootView.findViewById(R.id.webapp_sslall_activated)).setChecked(mItem.allCertsByPass);
+                ((CheckBox)rootView.findViewById(R.id.webapp_ssl_activated)).setChecked(mItem.allowedSSlActivated);
+                ((CheckBox)rootView.findViewById(R.id.webapp_autoauth)).setChecked(mItem.autoAuth);
+
+
+            }
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity = ((AppSettingsActivity) getActivity());
+        if (getArguments().containsKey(ARG_ITEM_ID)) {
+            item_id = getArguments().getString(ARG_ITEM_ID);
         }
     }
 
@@ -91,35 +113,25 @@ public class WebAppDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_webapp_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
 
-            ((EditText)rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
-            ((EditText)rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
-            ((EditText)rootView.findViewById(R.id.webapp_iconurl)).setText(mItem.iconUrl);
-            ((CheckBox)rootView.findViewById(R.id.webapp_sslall_activated)).setChecked(mItem.allCertsByPass);
-            ((CheckBox)rootView.findViewById(R.id.webapp_ssl_activated)).setChecked(mItem.allowedSSlActivated);
-            ((CheckBox)rootView.findViewById(R.id.webapp_autoauth)).setChecked(mItem.autoAuth);
-
-
-        }
-        if (getActivity() instanceof WebAppListActivity)
-        {
-            Button button = (Button) rootView.findViewById(R.id.webapp_save_button);
-            button.setVisibility(View.VISIBLE);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveWebApp(v);
-                }
-            });
-        } else {
-            ((WebAppDetailActivity)getActivity()).fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveWebApp(v);
-                }
-            });
+        if (activity != null) {
+            if (activity instanceof WebAppListActivity) {
+                Button button = (Button) rootView.findViewById(R.id.webapp_save_button);
+                button.setVisibility(View.VISIBLE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        saveWebApp(v);
+                    }
+                });
+            } else {
+                ((WebAppDetailActivity) activity).fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        saveWebApp(v);
+                    }
+                });
+            }
         }
 
 
