@@ -32,7 +32,9 @@ public class HostAuthSettingsDetailFragment extends Fragment {
      */
     private HostAuth mItem;
     private AppSettingsActivity activity;
-    private AppSettings settings;
+    public AppSettings settings;
+
+    private View rootView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -42,11 +44,15 @@ public class HostAuthSettingsDetailFragment extends Fragment {
     }
 
     public void onSettingsReceived(AppSettings appSettings) {
-        settings = activity.getAppSettings();
+        settings = appSettings;
 
         mItem = settings.HostAuths.get(getArguments().getInt(ARG_ITEM_ID));
-        if (mItem != null) {
-            ((TextView) getView().findViewById(R.id.hostauth_detail)).setText("Host: "+mItem.Host+"\nLogin: "+mItem.Login);
+        FillView();
+    }
+
+    private void FillView() {
+        if ((mItem != null)&&(rootView != null)) {
+            ((TextView) rootView.findViewById(R.id.hostauth_detail)).setText("Host: "+mItem.Host+"\nLogin: "+mItem.Login);
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.Host);
@@ -67,10 +73,13 @@ public class HostAuthSettingsDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_hostauth_detail, container, false);
+        rootView = inflater.inflate(R.layout.fragment_hostauth_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-
+        if (settings != null)
+        {
+            onSettingsReceived(settings);
+        }
 
         return rootView;
     }

@@ -50,7 +50,9 @@ public class WebAppDetailFragment extends Fragment {
       Settings
      */
     private AppSettingsActivity activity;
-    private AppSettings settings;
+    public AppSettings settings;
+
+    private View rootView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -77,26 +79,23 @@ public class WebAppDetailFragment extends Fragment {
                 settings.WebApps.add(mItem);
             }
 
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                String name = mItem.name;
-                if ((name == null) || (name == ""))
-                    name = "+new";
-                appBarLayout.setTitle(name);
-
-            }
-
             // Show the dummy content as text in a TextView.
-            if (mItem != null) {
-                View rootView = getView();
-                ((EditText)rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
-                ((EditText)rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
-                ((EditText)rootView.findViewById(R.id.webapp_iconurl)).setText(mItem.iconUrl);
-                ((CheckBox)rootView.findViewById(R.id.webapp_sslall_activated)).setChecked(mItem.allCertsByPass);
-                ((CheckBox)rootView.findViewById(R.id.webapp_ssl_activated)).setChecked(mItem.allowedSSlActivated);
-                ((CheckBox)rootView.findViewById(R.id.webapp_autoauth)).setChecked(mItem.autoAuth);
+            if ((mItem != null) && (rootView != null)) {
+                ((EditText) rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
+                ((EditText) rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
+                ((EditText) rootView.findViewById(R.id.webapp_iconurl)).setText(mItem.iconUrl);
+                ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).setChecked(mItem.allCertsByPass);
+                ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).setChecked(mItem.allowedSSlActivated);
+                ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).setChecked(mItem.autoAuth);
 
+                CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+                if (appBarLayout != null) {
+                    String name = mItem.name;
+                    if ((name == null) || (name == ""))
+                        name = "+new";
+                    appBarLayout.setTitle(name);
 
+                }
             }
         }
     }
@@ -108,12 +107,13 @@ public class WebAppDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             item_id = getArguments().getString(ARG_ITEM_ID);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_webapp_detail, container, false);
+        rootView = inflater.inflate(R.layout.fragment_webapp_detail, container, false);
 
 
         if (activity != null) {
@@ -153,17 +153,19 @@ public class WebAppDetailFragment extends Fragment {
                 getItem(rootView);
 
                 activity.SaveSettings(settings, new Callback<String>() {
-                @Override
-                public void onCallback(String res) {
-                    Intent detailIntent = new Intent(activity, WebMainActivity.class);
-                    detailIntent.putExtra("webappid", mItem.id);
-                    startActivity(detailIntent);
-                }
+                    @Override
+                    public void onCallback(String res) {
+                        Intent detailIntent = new Intent(activity, WebMainActivity.class);
+                        detailIntent.putExtra("webappid", mItem.id);
+                        startActivity(detailIntent);
+                    }
                 });
             }
         });
 
-
+        if (settings != null) {
+            onSettingsReceived(settings);
+        }
 
         return rootView;
     }
@@ -177,12 +179,12 @@ public class WebAppDetailFragment extends Fragment {
     }
 
     private void getItem(View rootView) {
-        mItem.name = ((EditText)rootView.findViewById(R.id.webapp_name)).getText().toString();
-        mItem.url = ((EditText)rootView.findViewById(R.id.webapp_url)).getText().toString();
-        mItem.iconUrl = ((EditText)rootView.findViewById(R.id.webapp_iconurl)).getText().toString();
-        mItem.allCertsByPass = ((CheckBox)rootView.findViewById(R.id.webapp_sslall_activated)).isChecked();
-        mItem.allowedSSlActivated = ((CheckBox)rootView.findViewById(R.id.webapp_ssl_activated)).isChecked();
-        mItem.autoAuth = ((CheckBox)rootView.findViewById(R.id.webapp_autoauth)).isChecked();
+        mItem.name = ((EditText) rootView.findViewById(R.id.webapp_name)).getText().toString();
+        mItem.url = ((EditText) rootView.findViewById(R.id.webapp_url)).getText().toString();
+        mItem.iconUrl = ((EditText) rootView.findViewById(R.id.webapp_iconurl)).getText().toString();
+        mItem.allCertsByPass = ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).isChecked();
+        mItem.allowedSSlActivated = ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).isChecked();
+        mItem.autoAuth = ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).isChecked();
     }
 
     public void createShortcut(View view) {

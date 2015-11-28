@@ -126,7 +126,7 @@ public class WebAppListActivity extends AppSettingsActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.webapp_detail_container, fragment)
                     .commit();
-            fragment.onSettingsReceived(getAppSettings());
+            fragment.settings = getAppSettings();
 
         } else {
             // In single-pane mode, simply start the detail activity

@@ -36,8 +36,9 @@ public class SSLSettingDetailFragment extends Fragment {
     private SslByPass mItem;
 
     private AppSettingsActivity activity;
-    private AppSettings settings;
+    public AppSettings settings;
 
+    private View rootView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -54,8 +55,7 @@ public class SSLSettingDetailFragment extends Fragment {
         // to load content from a content provider.
         mItem = settings.SslByPasses.get(item_id);
 
-        if (mItem != null) {
-            View rootView = getView();
+        if ((mItem != null)&&(rootView != null)) {
             ((TextView) rootView.findViewById(R.id.sslsetting_detail)).setText("Cname : " + mItem.CName + "\nHost : " + mItem.Host);
             ((CheckBox) rootView.findViewById(R.id.sslsetting_detail_activated)).setChecked(mItem.activated);
 
@@ -74,15 +74,17 @@ public class SSLSettingDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             item_id = getArguments().getInt(ARG_ITEM_ID);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_sslsetting_detail, container, false);
+        rootView = inflater.inflate(R.layout.fragment_sslsetting_detail, container, false);
 
-
+        if (settings != null)
+        {
+            onSettingsReceived(settings);
+        }
         if (getActivity() instanceof SSLSettingListActivity) {
             Button button = (Button) rootView.findViewById(R.id.sslsetting_save_button);
             button.setVisibility(View.VISIBLE);

@@ -122,7 +122,7 @@ public class SSLSettingListActivity extends AppSettingsActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.sslsetting_detail_container, fragment)
                     .commit();
-            fragment.onSettingsReceived(getAppSettings());
+            fragment.settings = getAppSettings();
 
         } else {
             // In single-pane mode, simply start the detail activity
