@@ -35,6 +35,8 @@ public class HostAuthSettingsListActivity extends AppSettingsActivity
      */
     private boolean mTwoPane;
 
+    private boolean allreadyInit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,23 +53,25 @@ public class HostAuthSettingsListActivity extends AppSettingsActivity
 
     @Override
     public void onAppSettingsReady(AppSettings settings) {
-        FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
-        flayout.addView(getLayoutInflater().inflate(R.layout.activity_hostauth_list, null));
+        if (!allreadyInit) {
+            FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
+            flayout.addView(getLayoutInflater().inflate(R.layout.activity_hostauth_list, null));
 
-        if (findViewById(R.id.hostauth_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-large and
-            // res/values-sw600dp). If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
+            if (findViewById(R.id.hostauth_detail_container) != null) {
+                // The detail container view will be present only in the
+                // large-screen layouts (res/values-large and
+                // res/values-sw600dp). If this view is present, then the
+                // activity should be in two-pane mode.
+                mTwoPane = true;
 
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-            ((HostAuthSettingsListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.hostauth_list))
-                    .setActivateOnItemClick(true);
+                // In two-pane mode, list items should be given the
+                // 'activated' state when touched.
+                ((HostAuthSettingsListFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.hostauth_list))
+                        .setActivateOnItemClick(true);
+            }
+            allreadyInit = true;
         }
-
         // TODO: If exposing deep links into your app, handle intents here.
     }
 

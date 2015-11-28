@@ -43,6 +43,8 @@ public class WebAppListActivity extends AppSettingsActivity
      */
     private boolean mTwoPane;
 
+    private boolean allreadyInit;
+
     public boolean startCreate;
 
     private String lastId;
@@ -70,35 +72,38 @@ public class WebAppListActivity extends AppSettingsActivity
 
     @Override
     public void onAppSettingsReady(AppSettings settings) {
-        FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
-        flayout.addView(getLayoutInflater().inflate(R.layout.activity_webapp_list, null));
-        if (findViewById(R.id.webapp_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-large and
-            // res/values-sw600dp). If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
+        if (!allreadyInit) {
+            FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
+            flayout.addView(getLayoutInflater().inflate(R.layout.activity_webapp_list, null));
+            if (findViewById(R.id.webapp_detail_container) != null) {
+                // The detail container view will be present only in the
+                // large-screen layouts (res/values-large and
+                // res/values-sw600dp). If this view is present, then the
+                // activity should be in two-pane mode.
+                mTwoPane = true;
 
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-            ((WebAppListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.webapp_list))
-                    .setActivateOnItemClick(true);
-        }
-        setTitle(R.string.pref_title_manage_webapps_settings);
+                // In two-pane mode, list items should be given the
+                // 'activated' state when touched.
+                ((WebAppListFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.webapp_list))
+                        .setActivateOnItemClick(true);
+            }
+            setTitle(R.string.pref_title_manage_webapps_settings);
 
-        // TODO: If exposing deep links into your app, handle intents here.
-        String intentparam = this.getIntent().getDataString();
-        if (intentparam != null) {
-            startCreate = true;
+            // TODO: If exposing deep links into your app, handle intents here.
+            String intentparam = this.getIntent().getDataString();
+            if (intentparam != null) {
+                startCreate = true;
 
 
-            ((WebAppListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.webapp_list)).setNewItemClicked();
-            onItemSelected("new");
-        }
-        else {
-            startCreate = false;
+                ((WebAppListFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.webapp_list)).setNewItemClicked();
+                onItemSelected("new");
+            } else {
+                startCreate = false;
+            }
+
+            allreadyInit = true;
         }
     }
 
@@ -121,6 +126,7 @@ public class WebAppListActivity extends AppSettingsActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.webapp_detail_container, fragment)
                     .commit();
+            fragment.onSettingsReceived(getAppSettings());
 
         } else {
             // In single-pane mode, simply start the detail activity

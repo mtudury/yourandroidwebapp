@@ -32,10 +32,7 @@ public class SSLSettingDetailActivity extends AppSettingsActivity implements App
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
-    }
 
-    @Override
-    public void onAppSettingsReady(AppSettings settings) {
         setContentView(R.layout.activity_sslsetting_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
@@ -66,6 +63,16 @@ public class SSLSettingDetailActivity extends AppSettingsActivity implements App
                     .add(R.id.sslsetting_detail_container, fragment)
                     .commit();
         }
+
+    }
+
+    @Override
+    public void onAppSettingsReady(AppSettings settings) {
+        SSLSettingDetailFragment frag = (SSLSettingDetailFragment)getSupportFragmentManager().findFragmentById(R.id.sslsetting_detail_container);
+        if (frag != null) {
+            frag.onSettingsReceived(settings);
+        }
+
     }
 
     @Override
