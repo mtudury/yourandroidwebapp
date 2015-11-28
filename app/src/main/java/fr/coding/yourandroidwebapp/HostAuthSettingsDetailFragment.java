@@ -26,12 +26,14 @@ public class HostAuthSettingsDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
+    public int item_id;
     /**
      * The dummy content this fragment is presenting.
      */
     private HostAuth mItem;
     private AppSettingsActivity activity;
     private AppSettings settings;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -39,18 +41,12 @@ public class HostAuthSettingsDetailFragment extends Fragment {
     public HostAuthSettingsDetailFragment() {
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        activity = ((AppSettingsActivity) getActivity());
+    public void onSettingsReceived(AppSettings appSettings) {
         settings = activity.getAppSettings();
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = settings.HostAuths.get(getArguments().getInt(ARG_ITEM_ID));
 
-            Activity activity = this.getActivity();
+        mItem = settings.HostAuths.get(getArguments().getInt(ARG_ITEM_ID));
+        if (mItem != null) {
+            ((TextView) getView().findViewById(R.id.hostauth_detail)).setText("Host: "+mItem.Host+"\nLogin: "+mItem.Login);
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.Host);
@@ -59,14 +55,22 @@ public class HostAuthSettingsDetailFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity = ((AppSettingsActivity) getActivity());
+        if (getArguments().containsKey(ARG_ITEM_ID)) {
+            item_id = getArguments().getInt(ARG_ITEM_ID);
+        }
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hostauth_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.hostauth_detail)).setText(mItem.Host);
-        }
+
 
         return rootView;
     }

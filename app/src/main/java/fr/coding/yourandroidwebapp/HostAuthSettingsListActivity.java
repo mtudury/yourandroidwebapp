@@ -110,6 +110,7 @@ public class HostAuthSettingsListActivity extends AppSettingsActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.hostauth_detail_container, fragment)
                     .commit();
+            fragment.onSettingsReceived(getAppSettings());
 
         } else {
             // In single-pane mode, simply start the detail activity

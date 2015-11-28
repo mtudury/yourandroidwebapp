@@ -9,6 +9,10 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.MenuItem;
 
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
+import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
+
 /**
  * An activity representing a single HostAuth detail screen. This
  * activity is only used on handset devices. On tablet-size devices,
@@ -18,7 +22,7 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HostAuthSettingsDetailFragment}.
  */
-public class HostAuthSettingsDetailActivity extends AppCompatActivity {
+public class HostAuthSettingsDetailActivity extends AppSettingsActivity implements AppSettingsCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +30,6 @@ public class HostAuthSettingsDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hostauth_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -62,6 +57,14 @@ public class HostAuthSettingsDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onAppSettingsReady(AppSettings settings) {
+        HostAuthSettingsDetailFragment frag = (HostAuthSettingsDetailFragment)getSupportFragmentManager().findFragmentById(R.id.hostauth_detail_container);
+        if (frag != null) {
+            frag.onSettingsReceived(settings);
+        }
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
