@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 
+import fr.coding.tools.Callback;
 import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 
 /**
@@ -55,12 +56,19 @@ public class AppSettingsActivityHelper extends GoogleDriveCoreActivity implement
         return appSettingsManager;
     }
 
-    public void Save(AppSettings settings) {
+    public void Save(AppSettings settings, Callback<String> saveHandler) {
         this.appSettings = settings;
         if (UseGDrive)
-            appSettingsManager.Save(settings, getGoogleApiClient());
-        else
-            appSettingsManager.SaveSettingsLocally(settings);
+            appSettingsManager.Save(settings, getGoogleApiClient(), saveHandler);
+        else {
+            String res = appSettingsManager.SaveSettingsLocally(settings);
+            if (saveHandler != null)
+                saveHandler.onCallback(res);
+        }
+    }
+
+    public void Save(AppSettings settings) {
+        Save(settings, null);
     }
 
     @Override

@@ -11,6 +11,12 @@
     android:scrollbars="vertical">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="wrap_content" android:padding="16dp" android:orientation="vertical" tools:context="fr.coding.yourandroidwebapp.WebAppDetailFragment">
+    <Button
+        android:id="@+id/webapp_launch_webapp"
+        android:layout_height="wrap_content"
+        android:text="@string/webapp_launch_shortcut"
+        android:layout_width="fill_parent">
+    </Button>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:text="@string/webapp_name" android:id="@+id/webapp_name_id"/>

@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.*;
 import com.google.android.gms.drive.*;
 import com.google.android.gms.drive.DriveApi.*;
-import com.google.android.gms.drive.DriveFolder.*;
 import com.google.android.gms.drive.query.*;
 
 import org.json.JSONException;
@@ -19,7 +17,6 @@ import org.json.JSONObject;
 import java.io.*;
 
 import fr.coding.tools.*;
-import fr.coding.tools.gdrive.GoogleDriveBaseTools;
 import fr.coding.tools.gdrive.GoogleDriveCreateFile;
 import fr.coding.tools.gdrive.GoogleDriveReadFile;
 import fr.coding.tools.gdrive.GoogleDriveUpdateFile;
@@ -37,7 +34,9 @@ public class AppSettingsManager {
 
     private GoogleApiClient googleApiClient;
 
-    private AppSettingsCallback resulthandler;
+    private AppSettingsCallback getResultHandler;
+
+    private Callback<String> saveResultHandler;
 
     private Activity activity;
 
@@ -49,7 +48,7 @@ public class AppSettingsManager {
 
     public void LoadSettings(GoogleApiClient apiClient, AppSettingsCallback handler) {
         googleApiClient = apiClient;
-        resulthandler = handler;
+        getResultHandler = handler;
 
         Drive.DriveApi.getAppFolder(googleApiClient)
                 .queryChildren(googleApiClient, new Query.Builder()
@@ -86,7 +85,7 @@ public class AppSettingsManager {
                     }
 
 
-                    resulthandler.onAppSettingsReady(res);
+                    getResultHandler.onAppSettingsReady(res);
                 }
             });
         } else {
@@ -101,12 +100,13 @@ public class AppSettingsManager {
                 e.printStackTrace();
                 new AlertDialog.Builder(activity).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
             }
-            resulthandler.onAppSettingsReady(res);
+            getResultHandler.onAppSettingsReady(res);
         }
     }
 
-    public void Save(AppSettings apps, GoogleApiClient apiClient) {
+    public void Save(AppSettings apps, GoogleApiClient apiClient, Callback<String> saveHandler) {
         googleApiClient = apiClient;
+        saveResultHandler = saveHandler;
         try {
             jsonval = apps.AppSettingsToJSONobj().toString();
             SaveLocally();
@@ -137,7 +137,7 @@ public class AppSettingsManager {
         outputWriter.close();
     }
 
-    public void SaveSettingsLocally(AppSettings apps) {
+    public String SaveSettingsLocally(AppSettings apps) {
         try {
             jsonval = apps.AppSettingsToJSONobj().toString();
             SaveLocally();
@@ -145,6 +145,7 @@ public class AppSettingsManager {
             e.printStackTrace();
             new AlertDialog.Builder(activity).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
         }
+        return jsonval;
     }
 
     private AppSettings LoadLocally() throws IOException, JSONException {
@@ -189,7 +190,12 @@ public class AppSettingsManager {
     final private Callback<String> successSavedCallBack = new Callback<String>() {
         @Override
         public void onCallback(String restxt) {
-            Toast.makeText(activity, R.string.webapp_saved_toast, Toast.LENGTH_SHORT).show();
+            if (saveResultHandler != null) {
+                saveResultHandler.onCallback(restxt);
+            }
+            else {
+                Toast.makeText(activity, R.string.webapp_saved_toast, Toast.LENGTH_SHORT).show();
+            }
         }
     };
 

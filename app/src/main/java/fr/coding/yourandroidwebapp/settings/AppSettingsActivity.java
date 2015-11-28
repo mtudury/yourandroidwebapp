@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import fr.coding.tools.Callback;
 import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 
 /**
@@ -71,6 +72,10 @@ public class AppSettingsActivity extends AppCompatActivity
 
     public void SaveSettings(AppSettings settings) {
         coreActivity.Save(settings);
+    }
+
+    public void SaveSettings(AppSettings settings, Callback<String> saveHandler) {
+        coreActivity.Save(settings, saveHandler);
     }
 
 }

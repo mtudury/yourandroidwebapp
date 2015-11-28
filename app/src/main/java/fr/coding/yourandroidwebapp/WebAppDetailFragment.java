@@ -1,6 +1,7 @@
 package fr.coding.yourandroidwebapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.UUID;
 
+import fr.coding.tools.Callback;
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
@@ -135,13 +137,33 @@ public class WebAppDetailFragment extends Fragment {
         }
 
 
-        Button button = (Button) rootView.findViewById(R.id.webapp_create_shortcut);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button buttonCreateShortcut = (Button) rootView.findViewById(R.id.webapp_create_shortcut);
+        buttonCreateShortcut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createShortcut(v);
             }
         });
+
+        Button buttonLaunchWebApp = (Button) rootView.findViewById(R.id.webapp_launch_webapp);
+        buttonLaunchWebApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View rootView = getView();
+                getItem(rootView);
+
+                activity.SaveSettings(settings, new Callback<String>() {
+                @Override
+                public void onCallback(String res) {
+                    Intent detailIntent = new Intent(activity, WebMainActivity.class);
+                    detailIntent.putExtra("webappid", mItem.id);
+                    startActivity(detailIntent);
+                }
+                });
+            }
+        });
+
+
 
         return rootView;
     }
