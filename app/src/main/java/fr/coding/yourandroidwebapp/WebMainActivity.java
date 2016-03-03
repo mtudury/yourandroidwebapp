@@ -195,8 +195,10 @@ public class WebMainActivity extends Activity {
         super.onResume();
         if (coreActivity != null)
             coreActivity.onResume();
-        if (mWebView != null)
+        if (mWebView != null) {
             mWebView.onResume();
+            mWebView.resumeTimers();
+        }
     }
 
     /**
@@ -218,8 +220,10 @@ public class WebMainActivity extends Activity {
     protected void onPause() {
         if (coreActivity != null)
             coreActivity.onPause();
-        if (mWebView != null)
+        if (mWebView != null) {
             mWebView.onPause();
+            mWebView.pauseTimers();
+        }
         super.onPause();
     }
 
