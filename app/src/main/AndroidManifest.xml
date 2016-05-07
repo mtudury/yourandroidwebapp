@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.coding.yourandroidwebapp" >
+    package="fr.coding.yourandroidwebapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -11,10 +11,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +24,7 @@
         <activity
             android:name=".WebMainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.WEBMAIN" />
             </intent-filter>
@@ -43,7 +43,7 @@
             android:name=".WebAppDetailActivity"
             android:label="@string/title_webapp_detail"
             android:parentActivityName=".WebAppListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".WebAppListActivity" />
@@ -52,7 +52,7 @@
             android:name=".SSLSettingListActivity"
             android:label="@string/title_sslsetting_list"
             android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
@@ -61,7 +61,7 @@
             android:name=".SSLSettingDetailActivity"
             android:label="@string/title_sslsetting_detail"
             android:parentActivityName=".SSLSettingListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.coding.yourandroidwebapp.SSLSettingListActivity" />
@@ -70,7 +70,7 @@
             android:name=".HostAuthSettingsListActivity"
             android:label="@string/title_hostauth_list"
             android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
@@ -79,10 +79,18 @@
             android:name=".HostAuthSettingsDetailActivity"
             android:label="@string/title_hostauth_detail"
             android:parentActivityName=".HostAuthSettingsListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HostAuthSettingsListActivity" />
+        </activity>
+        <activity
+            android:name=".GoogleDriveSettingsActivity"
+            android:label="@string/title_activity_google_drive_settings"
+            android:parentActivityName=".SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
         </activity>
     </application>
 

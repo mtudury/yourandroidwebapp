@@ -27,4 +27,5 @@
     <string name="loginform_password">Password</string>
     <string name="loginform_save">Save</string>
     <string name="webapp_launch_shortcut">Launch WebApp</string>
+    <string name="title_activity_google_drive_settings">Google Drive Settings</string>
 </resources>
