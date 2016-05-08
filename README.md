@@ -8,7 +8,7 @@ Features :
 - Create shortcuts on desktop
 - Store settings in google account (to share settings between devices)
 - SelfSigned SSL website supports
-- Authentication auto accepted
+- Authentication auto accepted (for HTTP basic authentication only)
 
 Roadmap : 
 - Alternate URLs if in office (WIFI based detection)

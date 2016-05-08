@@ -96,6 +96,14 @@ public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
                 & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+
+        addPreferencesFromResource(R.xml.pref_googledrivesettings);
+
+        super.onPostCreate(savedInstanceState);
+    }
+
     /**
      * Binds a preference's summary to its value. More specifically, when the
      * preference's value is changed, its summary (line of text below the
@@ -160,7 +168,7 @@ public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
+        //loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
     /**
@@ -183,7 +191,7 @@ public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
+            addPreferencesFromResource(R.xml.pref_googledrivesettings);
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
