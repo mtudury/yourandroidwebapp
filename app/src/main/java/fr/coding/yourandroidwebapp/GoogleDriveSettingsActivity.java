@@ -4,12 +4,14 @@ package fr.coding.yourandroidwebapp;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -100,6 +102,13 @@ public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
 
         addPreferencesFromResource(R.xml.pref_googledrivesettings);
+
+        EditTextPreference pref = (EditTextPreference)findPreference("google_drive_path_custom");
+        if (pref != null) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            String syncConnPref = sharedPref.getString("google_drive_path_custom", "");
+            pref.setTitle(getString(R.string.pref_title_google_drive_path_custom_original) + syncConnPref);
+        }
 
         super.onPostCreate(savedInstanceState);
     }

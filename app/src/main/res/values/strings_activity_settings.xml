@@ -70,9 +70,10 @@
 
     <string name="pref_title_hostauth_settings">Authentication Settings</string>
 
-    <string name="pref_title_use_custom_google_drive">Do not use Application folder</string>
+    <string name="pref_title_use_custom_google_drive">Use custom path</string>
     <string name="pref_description_use_custom_google_drive">Activating this feature will allow you to save your settings in the folder you choose (not the hidden appfolder)</string>
-    <string name="pref_title_google_drive_path_custom">Path in your google drive account for storing settings</string>
+    <string name="pref_title_google_drive_path_custom">Custom path : </string>
+    <string name="pref_title_google_drive_path_custom_original">Custom path : </string>
     <string name="pref_default_google_drive_path_custom">/Android/Apps/YourAndroidWebApp/appconfig.json</string>
 
 </resources>
