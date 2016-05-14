@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.*;
 
 import java.util.List;
@@ -153,13 +154,34 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 if (resultCode == RESULT_OK) {
                     DriveId driveId = (DriveId) data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+                    localdriveId = driveId;
                     //showMessage("Selected folder's ID: " + driveId);
                 }
-                finish();
+
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
+        }
+    }
+
+    private DriveId localdriveId;
+
+    //Toast.makeText(this, Drive.DriveApi.getFolder(getGoogleApiClient(), driveId).toString(), Toast.LENGTH_LONG).show();
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        super.onConnected(connectionHint);
+        if (localdriveId != null) {
+            final Context act = this;
+            Drive.DriveApi.getFolder(getGoogleApiClient(), localdriveId).getMetadata(getGoogleApiClient()).setResultCallback(new ResultCallback<DriveResource.MetadataResult>() {
+                @Override
+                public void onResult(DriveResource.MetadataResult mdRslt) {
+                    if (mdRslt != null && mdRslt.getStatus().isSuccess()) {
+                        Toast.makeText(act, mdRslt.getMetadata().getTitle(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
         }
     }
     /**

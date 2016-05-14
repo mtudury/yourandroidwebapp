@@ -74,7 +74,10 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
      */
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i(TAG, "GoogleApiClient connected");
+        if (activity instanceof GoogleApiClient.ConnectionCallbacks)
+            ((GoogleApiClient.ConnectionCallbacks)activity).onConnected(connectionHint);
+        else
+            Log.i(TAG, "GoogleApiClient connected");
     }
 
     @Override
