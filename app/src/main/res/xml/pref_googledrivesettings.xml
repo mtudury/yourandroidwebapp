@@ -45,7 +45,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_header_general"
+        android:title="@string/pref_header_export"
         android:key="general_settings"
         >
         <Preference

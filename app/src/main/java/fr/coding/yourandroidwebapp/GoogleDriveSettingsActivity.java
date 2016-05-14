@@ -4,7 +4,7 @@ package fr.coding.yourandroidwebapp;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -22,6 +22,9 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.Toast;
+
+import com.google.android.gms.drive.*;
 
 import java.util.List;
 
@@ -36,11 +39,15 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
+public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity {
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
+
+    private static final int REQUEST_CODE_OPENER = 1;
+
+
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -108,10 +115,53 @@ public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(pref);
         }
 
+        Preference pref2 = findPreference("google_drive_usage");
+        if (pref2 != null) {
+            pref2.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (getGoogleApiClient() != null) {
+                        IntentSender intentSender = Drive.DriveApi
+                                .newOpenFileActivityBuilder()
+                                .setMimeType(new String[]{DriveFolder.MIME_TYPE})
+                                .build(getGoogleApiClient());
+                        try {
+                            startIntentSenderForResult(
+                                    intentSender, REQUEST_CODE_OPENER, null, 0, 0, 0);
+                        } catch (IntentSender.SendIntentException e) {
+                            //Log.w(TAG, "Unable to send intent", e);
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(preference.getContext(), "Currently connecting, retry in seconds", Toast.LENGTH_LONG).show();
+                    }
+                    return true;
+                }
+
+
+            });
+        }
         super.onPostCreate(savedInstanceState);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case REQUEST_CODE_OPENER:
+                if (resultCode == RESULT_OK) {
+                    DriveId driveId = (DriveId) data.getParcelableExtra(
+                            OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+                    //showMessage("Selected folder's ID: " + driveId);
+                }
+                finish();
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
     /**
      * Binds a preference's summary to its value. More specifically, when the
      * preference's value is changed, its summary (line of text below the

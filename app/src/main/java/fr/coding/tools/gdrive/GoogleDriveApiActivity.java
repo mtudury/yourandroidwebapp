@@ -73,7 +73,7 @@ public abstract class GoogleDriveApiActivity extends Activity  {
      * Getter for the {@code GoogleApiClient}.
      */
     public GoogleApiClient getGoogleApiClient() {
-        return coreActivity.googleApiClient;
+        return coreActivity.getGoogleApiClient();
     }
 
 
