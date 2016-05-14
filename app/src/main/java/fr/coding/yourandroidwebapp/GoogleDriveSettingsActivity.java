@@ -105,10 +105,9 @@ public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
 
         EditTextPreference pref = (EditTextPreference)findPreference("google_drive_path_custom");
         if (pref != null) {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            String syncConnPref = sharedPref.getString("google_drive_path_custom", "");
-            pref.setTitle(getString(R.string.pref_title_google_drive_path_custom_original) + syncConnPref);
+            bindPreferenceSummaryToValue(pref);
         }
+
 
         super.onPostCreate(savedInstanceState);
     }
