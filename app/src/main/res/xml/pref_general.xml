@@ -3,12 +3,7 @@
         android:title="@string/pref_header_general"
         android:key="general_settings"
         >
-    <CheckBoxPreference
-        android:key="google_drive_usage"
-        android:title="@string/pref_title_use_google_drive"
-        android:summary="@string/pref_description_use_google_drive"
-        android:defaultValue="false"
-         />
+
     <Preference android:title="@string/title_activity_google_drive_settings">
         <intent
             android:action="android.intent.action.VIEW"
