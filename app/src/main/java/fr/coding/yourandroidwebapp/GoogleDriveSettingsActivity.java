@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -24,8 +25,13 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.*;
+import com.google.android.gms.plus.People;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.PersonBuffer;
 
 import java.util.List;
 
@@ -111,12 +117,12 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
         addPreferencesFromResource(R.xml.pref_googledrivesettings);
 
-        EditTextPreference pref = (EditTextPreference)findPreference("google_drive_path_custom");
+/*        EditTextPreference pref = (EditTextPreference)findPreference("google_drive_path_custom");
         if (pref != null) {
             bindPreferenceSummaryToValue(pref);
-        }
+        }*/
 
-        Preference pref2 = findPreference("google_drive_usage");
+        Preference pref2 = findPreference("google_drive_path_custom");
         if (pref2 != null) {
             pref2.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -139,6 +145,24 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                         Toast.makeText(preference.getContext(), "Currently connecting, retry in seconds", Toast.LENGTH_LONG).show();
                     }
                     return true;
+                }
+
+
+            });
+        }
+
+        Preference pref3 = findPreference("google_drive_account");
+        if (pref3 != null) {
+            pref3.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (getGoogleApiClient() != null) {
+                        // avant d'activer ça backuper le webapps.json
+                        //Plus.AccountApi.clearDefaultAccount(getGoogleApiClient());
+                        return true;
+                    }
+                    return false;
                 }
 
 
@@ -171,6 +195,19 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
     @Override
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
+        //todo renseigner le google account dans la pref : google_drive_account
+        Preference pref = findPreference("google_drive_account");
+        if (pref != null) {
+            Person currentPerson = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
+            if (currentPerson!=null) {
+                String DisplayName = currentPerson.getDisplayName();
+                pref.setSummary(DisplayName + " (" + Plus.AccountApi.getAccountName(getGoogleApiClient()) + ")");
+            }
+            else {
+                pref.setSummary(Plus.AccountApi.getAccountName(getGoogleApiClient()));
+            }
+        }
+
         if (localdriveId != null) {
             final Context act = this;
             Drive.DriveApi.getFolder(getGoogleApiClient(), localdriveId).getMetadata(getGoogleApiClient()).setResultCallback(new ResultCallback<DriveResource.MetadataResult>() {

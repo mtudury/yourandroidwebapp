@@ -1,8 +1,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="@string/pref_header_general"
+        android:title="@string/pref_header_googledrivesync"
         android:key="general_settings"
         >
+        <Preference
+            android:key="google_drive_account"
+            android:title="@string/pref_title_linked_gdrive_account"
+            />
         <CheckBoxPreference
             android:key="google_drive_usage"
             android:title="@string/pref_title_use_google_drive"
@@ -15,15 +19,9 @@
             android:summary="@string/pref_description_use_custom_google_drive"
             android:defaultValue="false"
             />
-        <EditTextPreference
+        <Preference
                     android:key="google_drive_path_custom"
-                    android:title="@string/pref_title_google_drive_path_custom"
-                    android:defaultValue="@string/pref_default_google_drive_path_custom"
-                    android:selectAllOnFocus="true"
-                    android:inputType="textUri"
-                    android:capitalize="none"
-                    android:singleLine="true"
-                    android:maxLines="1" />
+                    android:title="@string/pref_title_google_drive_path_custom" />
 
         <!-- NOTE: EditTextPreference accepts EditText attributes. -->
         <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
