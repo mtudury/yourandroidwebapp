@@ -7,6 +7,7 @@
     <string name="webapp_create_shortcut">Create Shortcut</string>
     <string name="webapp_url">Url : (need to be full : http://url/)</string>
     <string name="webapp_saved_toast">Saved !</string>
+    <string name="webapp_imported_toast">Settings imported !</string>
     <string name="webapp_shortcutcreated_toast">Shortcut created !</string>
     <string name="webapp_iconurl">Icon Url : </string>
     <string name="webapp_ssl_settings">SSL Settings</string>

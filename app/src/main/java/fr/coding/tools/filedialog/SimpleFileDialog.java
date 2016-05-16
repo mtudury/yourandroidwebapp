@@ -117,6 +117,7 @@ public class SimpleFileDialog
     ////////////////////////////////////////////////////////////////////////////////
     public void chooseFile_or_Dir(String dir)
     {
+        Selected_File_Name = Default_File_Name;
         File dirFile = new File(dir);
         if (! dirFile.exists() || ! dirFile.isDirectory())
         {
@@ -287,6 +288,8 @@ public class SimpleFileDialog
                                                 public void onClick(View v)
                                                 {
                                                     final EditText input = new EditText(m_context);
+                                                    input.setSingleLine();
+                                                    input.setInputType(0x11);
 
                                                     // Show new folder name input dialog
                                                     new AlertDialog.Builder(m_context).
@@ -335,6 +338,8 @@ public class SimpleFileDialog
         if (Select_type == FileOpen || Select_type == FileSave)
         {
             input_text = new EditText(m_context);
+            input_text.setSingleLine();
+            input_text.setInputType(0x11);
             input_text.setText(Default_File_Name);
             titleLayout.addView(input_text);
         }

@@ -37,7 +37,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import fr.coding.tools.Callback;
 import fr.coding.tools.filedialog.SimpleFileDialog;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 /**
@@ -193,12 +195,45 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                                     // The code in this function will be executed when the dialog OK button is pushed
                                     AppSettingsManager manager = new AppSettingsManager(ctx);
                                     manager.ExportSettingsLocally(manager.LoadSettingsLocally(), chosenDir);
-
+                                    Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
                                 }
                             });
 
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     FolderChooseDialog.Default_File_Name = "appsettings_backup_"+ format.format(new Date())+".json";
+                    FolderChooseDialog.chooseFile_or_Dir();
+                    return false;
+                }
+
+
+            });
+        }
+
+        Preference preflocalimport = findPreference("local_import");
+        if (preflocalimport != null) {
+            final GoogleDriveSettingsActivity ctx = this;
+            preflocalimport.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    SimpleFileDialog FolderChooseDialog =  new SimpleFileDialog(ctx, "FileOpen",
+                            new SimpleFileDialog.SimpleFileDialogListener()
+                            {
+                                @Override
+                                public void onChosenDir(String chosenDir)
+                                {
+                                    // The code in this function will be executed when the dialog OK button is pushed
+                                    AppSettingsManager manager = new AppSettingsManager(ctx);
+                                    AppSettings settings = manager.ImportSettingsLocally(chosenDir);
+                                    manager.Save(settings, getGoogleApiClient(), new Callback<String>() {
+                                        @Override
+                                        public void onCallback(String arg) {
+                                            Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            });
+
                     FolderChooseDialog.chooseFile_or_Dir();
                     return false;
                 }
