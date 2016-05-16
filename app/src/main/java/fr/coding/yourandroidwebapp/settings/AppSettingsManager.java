@@ -54,44 +54,29 @@ public class AppSettingsManager {
         googleApiClient = apiClient;
         getResultHandler = handler;
 
-        Drive.DriveApi.getAppFolder(googleApiClient)
-                .queryChildren(googleApiClient, new Query.Builder()
-                        .addFilter(Filters.eq(SearchableField.TITLE, PREFSFILE))
-                        .build())
-                .setResultCallback(new ResultCallback<MetadataBufferResult>() {
-                    @Override
-                    public void onResult(MetadataBufferResult metadataBufferResult) {
-                        QueryResultsCallback(metadataBufferResult);
-                    }
-                });
+        String driveid = LoadFromUserGdrive(activity);
+        if (driveid != null) {
+            DriveFile df = DriveId.decodeFromString(driveid).asDriveFile();
+            getDriveAppSettings(df);
+        }
+        else {
+            Drive.DriveApi.getAppFolder(googleApiClient)
+                    .queryChildren(googleApiClient, new Query.Builder()
+                            .addFilter(Filters.eq(SearchableField.TITLE, PREFSFILE))
+                            .build())
+                    .setResultCallback(new ResultCallback<MetadataBufferResult>() {
+                        @Override
+                        public void onResult(MetadataBufferResult metadataBufferResult) {
+                            QueryResultsCallback(metadataBufferResult);
+                        }
+                    });
+        }
     }
 
     public void QueryResultsCallback(MetadataBufferResult result) {
         if (result.getMetadataBuffer().getCount() > 0) {
             DriveFile df = result.getMetadataBuffer().get(0).getDriveId().asDriveFile();
-            new GoogleDriveReadFile(googleApiClient, activity).GetDriveFileContent(df, new Callback<String>() {
-                @Override
-                public void onCallback(String restxt) {
-                    AppSettings res = null;
-                    try {
-                        res = AppSettings.JSONobjToAppSettings(new JSONObject(restxt));
-                        jsonval = restxt;
-                        SaveLocally();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        new AlertDialog.Builder(activity).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
-                        if (res == null)
-                            res = new AppSettings();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        if (res == null)
-                            res = new AppSettings();
-                    }
-
-
-                    getResultHandler.onAppSettingsReady(res);
-                }
-            });
+            getDriveAppSettings(df);
         } else {
             AppSettings res = new AppSettings();
             try {
@@ -108,6 +93,32 @@ public class AppSettingsManager {
         }
     }
 
+    private void getDriveAppSettings(DriveFile df) {
+        new GoogleDriveReadFile(googleApiClient, activity).GetDriveFileContent(df, new Callback<String>() {
+            @Override
+            public void onCallback(String restxt) {
+                AppSettings res = null;
+                try {
+                    res = AppSettings.JSONobjToAppSettings(new JSONObject(restxt));
+                    jsonval = restxt;
+                    SaveLocally();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    new AlertDialog.Builder(activity).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                    if (res == null)
+                        res = new AppSettings();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    if (res == null)
+                        res = new AppSettings();
+                }
+
+
+                getResultHandler.onAppSettingsReady(res);
+            }
+        });
+    }
+
     public void Save(AppSettings apps, GoogleApiClient apiClient, Callback<String> saveHandler) {
         googleApiClient = apiClient;
         saveResultHandler = saveHandler;
@@ -116,16 +127,23 @@ public class AppSettingsManager {
             SaveLocally();
 
             if ((apiClient != null)&&(IsSettingsInGdrive(activity))) {
-                Drive.DriveApi.getAppFolder(googleApiClient)
-                        .queryChildren(googleApiClient, new Query.Builder()
-                                .addFilter(Filters.eq(SearchableField.TITLE, PREFSFILE))
-                                .build())
-                        .setResultCallback(new ResultCallback<MetadataBufferResult>() {
-                            @Override
-                            public void onResult(MetadataBufferResult metadataBufferResult) {
-                                QueryResultsCallbackSave(metadataBufferResult);
-                            }
-                        });
+                String driveid = LoadFromUserGdrive(activity);
+                if (driveid != null) {
+                    DriveFile df = DriveId.decodeFromString(driveid).asDriveFile();
+                    new GoogleDriveUpdateFile(googleApiClient, activity).SetDriveFileContent(df, jsonval, successSavedCallBack);
+                }
+                else {
+                    Drive.DriveApi.getAppFolder(googleApiClient)
+                            .queryChildren(googleApiClient, new Query.Builder()
+                                    .addFilter(Filters.eq(SearchableField.TITLE, PREFSFILE))
+                                    .build())
+                            .setResultCallback(new ResultCallback<MetadataBufferResult>() {
+                                @Override
+                                public void onResult(MetadataBufferResult metadataBufferResult) {
+                                    QueryResultsCallbackSave(metadataBufferResult);
+                                }
+                            });
+                }
             }
         } catch (IOException|JSONException e) {
             e.printStackTrace();
@@ -251,6 +269,14 @@ public class AppSettingsManager {
     public static boolean IsSettingsInGdrive(Activity activity) {
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         return prefs.getBoolean(UseGDrive, false);
+    }
+
+    public static String LoadFromUserGdrive(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        if (prefs.getBoolean(PREFS_USECUSTOMDRIVEID, false)) {
+            return prefs.getString(PREFS_CUSTOMDRIVEID, null);
+        }
+        return null;
     }
 //
 //    public static void SetUseOrNotGDrive(Activity activity, boolean useGDrive) {
