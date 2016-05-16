@@ -129,6 +129,12 @@ public class AppSettingsManager {
         }
     }
 
+    private void SaveExternaly(String path) throws IOException {
+        FileOutputStream fileout = new FileOutputStream (new File(path));
+        OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
+        outputWriter.write(jsonval);
+        outputWriter.close();
+    }
     private void SaveLocally() throws IOException {
         // add-write text into file
         FileOutputStream fileout = activity.openFileOutput(PREFSFILE, Context.MODE_PRIVATE);
@@ -148,6 +154,28 @@ public class AppSettingsManager {
         return jsonval;
     }
 
+    public String ExportSettingsLocally(AppSettings apps, String path) {
+        try {
+            jsonval = apps.AppSettingsToJSONobj().toString();
+            SaveExternaly(path);
+        } catch (IOException|JSONException e) {
+            e.printStackTrace();
+            new AlertDialog.Builder(activity).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+        }
+        return jsonval;
+    }
+
+    private AppSettings LoadExternaly(String path) throws IOException, JSONException {
+        FileInputStream fileIn=new FileInputStream (new File(path));
+        BufferedReader InputRead= new BufferedReader(new InputStreamReader(fileIn));
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while ((line = InputRead.readLine()) != null) {
+            builder.append(line);
+        }
+        return AppSettings.JSONobjToAppSettings(new JSONObject(builder.toString()));
+    }
+
     private AppSettings LoadLocally() throws IOException, JSONException {
         FileInputStream fileIn=activity.openFileInput(PREFSFILE);
         BufferedReader InputRead= new BufferedReader(new InputStreamReader(fileIn));
@@ -162,6 +190,22 @@ public class AppSettingsManager {
     public AppSettings LoadSettingsLocally() {
         try {
             return LoadLocally();
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException|JSONException e)
+        {
+            e.printStackTrace();
+            new AlertDialog.Builder(activity).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+        }
+        return new AppSettings();
+    }
+
+    public AppSettings ImportSettingsLocally(String path) {
+        try {
+            return LoadExternaly(path);
         }
         catch (FileNotFoundException e)
         {

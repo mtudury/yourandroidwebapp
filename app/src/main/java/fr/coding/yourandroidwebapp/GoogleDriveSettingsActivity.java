@@ -33,7 +33,12 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import fr.coding.tools.filedialog.SimpleFileDialog;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -128,7 +133,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if (getGoogleApiClient() != null) {
+                    if ((getGoogleApiClient() != null)&&(getGoogleApiClient().isConnected())) {
                         IntentSender intentSender = Drive.DriveApi
                                 .newOpenFileActivityBuilder()
                                 .setMimeType(new String[]{DriveFolder.MIME_TYPE})
@@ -157,11 +162,44 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if (getGoogleApiClient() != null) {
-                        // avant d'activer ça backuper le webapps.json
-                        //Plus.AccountApi.clearDefaultAccount(getGoogleApiClient());
+                    if ((getGoogleApiClient() != null)&&(getGoogleApiClient().isConnected())) {
+                        Plus.AccountApi.clearDefaultAccount(getGoogleApiClient());
                         return true;
                     }
+                    else
+                    {
+                        Toast.makeText(preference.getContext(), "Currently connecting, retry in seconds", Toast.LENGTH_LONG).show();
+                    }
+                    return false;
+                }
+
+
+            });
+        }
+
+        Preference pref4 = findPreference("local_export");
+        if (pref4 != null) {
+            final GoogleDriveSettingsActivity ctx = this;
+            pref4.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    SimpleFileDialog FolderChooseDialog =  new SimpleFileDialog(ctx, "FileSave",
+                            new SimpleFileDialog.SimpleFileDialogListener()
+                            {
+                                @Override
+                                public void onChosenDir(String chosenDir)
+                                {
+                                    // The code in this function will be executed when the dialog OK button is pushed
+                                    AppSettingsManager manager = new AppSettingsManager(ctx);
+                                    manager.ExportSettingsLocally(manager.LoadSettingsLocally(), chosenDir);
+
+                                }
+                            });
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    FolderChooseDialog.Default_File_Name = "appsettings_backup_"+ format.format(new Date())+".json";
+                    FolderChooseDialog.chooseFile_or_Dir();
                     return false;
                 }
 
