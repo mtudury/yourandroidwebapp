@@ -29,7 +29,11 @@ public class AppSettingsManager {
 
     public static final String PREFSFILE = "appconfig.json";
 
-    private static final String PREFS = "fr.coding.yourandroidwebapp_preferences";
+    public static final String PREFS = "fr.coding.yourandroidwebapp_preferences";
+
+    public static final String PREFS_CUSTOMDRIVEID = "google_drive_customid";
+    public static final String PREFS_USECUSTOMDRIVEID = "google_drive_use_custom";
+    public static final String PREFS_CUSTOMDRIVEIDDESC = "google_drive_customiddesc";
     private static final String UseGDrive = "google_drive_usage";
 
     private GoogleApiClient googleApiClient;

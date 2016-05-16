@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -39,6 +40,7 @@ import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +51,7 @@ import java.util.List;
 
 import fr.coding.tools.Callback;
 import fr.coding.tools.filedialog.SimpleFileDialog;
+import fr.coding.tools.gdrive.GoogleDriveReadFile;
 import fr.coding.tools.gdrive.GoogleDriveUpdateFile;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
@@ -72,6 +75,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
     protected static final int REQUEST_CODE_OPENER = 1;
     protected static final int REQUEST_CODE_CREATOR = 2;
+    protected static final int REQUEST_CODE_IMPORT = 3;
 
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
@@ -150,7 +154,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                     if ((getGoogleApiClient() != null)&&(getGoogleApiClient().isConnected())) {
                         IntentSender intentSender = Drive.DriveApi
                                 .newOpenFileActivityBuilder()
-                                .setMimeType(new String[]{DriveFolder.MIME_TYPE})
+                                //.setMimeType(new String[]{DriveFolder.MIME_TYPE})
                                 .build(getGoogleApiClient());
                         try {
                             startIntentSenderForResult(
@@ -168,6 +172,10 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
 
             });
+
+            SharedPreferences prefs = this.getSharedPreferences(AppSettingsManager.PREFS, Context.MODE_PRIVATE);
+            pref2.setSummary(prefs.getString(AppSettingsManager.PREFS_CUSTOMDRIVEIDDESC, ""));
+
         }
 
         Preference pref3 = findPreference("google_drive_account");
@@ -270,7 +278,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                                         String filename = "appsettings_backup_"+ format.format(new Date())+".json";
                                         MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
                                                 .setTitle(filename)
-                                                .setMimeType("application/json").build();
+                                                .setMimeType("text/plain").build();
                                         IntentSender intentSender = Drive.DriveApi
                                                 .newCreateFileActivityBuilder()
                                                 .setInitialMetadata(metadataChangeSet)
@@ -296,6 +304,36 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
             });
         }
+
+        Preference prefimportgdrive = findPreference("google_drive_import");
+        if (prefimportgdrive != null) {
+            final GoogleDriveSettingsActivity ctx = this;
+            prefimportgdrive.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if ((getGoogleApiClient() != null)&&(getGoogleApiClient().isConnected())) {
+                        IntentSender intentSender = Drive.DriveApi
+                                .newOpenFileActivityBuilder()
+                                //.setMimeType(new String[]{DriveFolder.MIME_TYPE})
+                                .build(getGoogleApiClient());
+                        try {
+                            startIntentSenderForResult(
+                                    intentSender, REQUEST_CODE_IMPORT, null, 0, 0, 0);
+                        } catch (IntentSender.SendIntentException e) {
+                            //Log.w(TAG, "Unable to send intent", e);
+                        }                    }
+                    else
+                    {
+                        Toast.makeText(preference.getContext(), "Currently connecting, retry in seconds", Toast.LENGTH_LONG).show();
+                    }
+                    return true;
+                }
+
+
+            });
+        }
+
         super.onPostCreate(savedInstanceState);
     }
 
@@ -307,6 +345,11 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                     DriveId driveId = (DriveId) data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
                     localdriveId = driveId;
+
+                    SharedPreferences prefs = this.getSharedPreferences(AppSettingsManager.PREFS, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(AppSettingsManager.PREFS_CUSTOMDRIVEID, driveId.encodeToString());
+                    editor.commit();
                     //showMessage("Selected folder's ID: " + driveId);
                 }
 
@@ -334,6 +377,36 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 }
                 break;
+            case REQUEST_CODE_IMPORT: {
+                if (resultCode == RESULT_OK) {
+                    DriveId driveId = (DriveId) data.getParcelableExtra(
+                            OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+                    final GoogleDriveSettingsActivity ctx = this;
+                    DriveFile df = driveId.asDriveFile();
+                    new GoogleDriveReadFile(getGoogleApiClient(), ctx).GetDriveFileContent(df, new Callback<String>() {
+                        @Override
+                        public void onCallback(String restxt) {
+                            AppSettings res = null;
+                            try {
+                                res = AppSettings.JSONobjToAppSettings(new JSONObject(restxt));
+                                AppSettingsManager manager = new AppSettingsManager(ctx);
+                                manager.Save(res, getGoogleApiClient(), new Callback<String>() {
+                                    @Override
+                                    public void onCallback(String arg) {
+                                        Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                new AlertDialog.Builder(ctx).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                                if (res == null)
+                                    res = new AppSettings();
+                            }
+                        }
+                    });
+                }
+            }
             default:
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
@@ -365,7 +438,20 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 @Override
                 public void onResult(DriveResource.MetadataResult mdRslt) {
                     if (mdRslt != null && mdRslt.getStatus().isSuccess()) {
-                        Toast.makeText(act, mdRslt.getMetadata().getTitle(), Toast.LENGTH_LONG).show();
+
+                        SharedPreferences prefs = act.getSharedPreferences(AppSettingsManager.PREFS, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(AppSettingsManager.PREFS_CUSTOMDRIVEIDDESC, mdRslt.getMetadata().getTitle());
+                        editor.commit();
+
+                        Preference pref2 = findPreference("google_drive_path_custom");
+                        if (pref2 != null) {
+                            pref2.setSummary(mdRslt.getMetadata().getTitle());
+                        }
+
+                            //Toast.makeText(act, mdRslt.getMetadata().getTitle(), Toast.LENGTH_LONG).show();
+
+                        localdriveId = null;
                     }
                 }
             });
