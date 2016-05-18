@@ -29,4 +29,6 @@
     <string name="loginform_save">Save</string>
     <string name="webapp_launch_shortcut">Launch WebApp</string>
     <string name="title_activity_google_drive_settings">Google Drive Settings</string>
+    <string name="dialog_title_disconnect_gdrive_account">Disconnect ?</string>
+    <string name="dialog_message_disconnect_gdrive_account">Disconnect from account : </string>
 </resources>
