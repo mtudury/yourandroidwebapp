@@ -32,7 +32,7 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
     /**
      * Next available request code.
      */
-    protected static final int NEXT_AVAILABLE_REQUEST_CODE = 2;
+    public static final int NEXT_AVAILABLE_REQUEST_CODE = 2;
 
     /**
      * InAuth */

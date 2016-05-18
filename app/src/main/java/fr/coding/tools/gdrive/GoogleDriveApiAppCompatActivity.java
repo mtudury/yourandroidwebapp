@@ -55,7 +55,7 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        coreActivity.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

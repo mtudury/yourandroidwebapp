@@ -21,7 +21,7 @@ public abstract class GoogleDriveApiAppCompatPreferenceActivity extends AppCompa
 
     private static final String TAG = "GoogleDriveApiAppCompatPreferenceActivity";
 
-
+    protected static final int NEXT_AVAILABLE_REQUEST_CODE = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE;
 
     protected GoogleDriveCoreActivity coreActivity;
 
@@ -50,7 +50,7 @@ public abstract class GoogleDriveApiAppCompatPreferenceActivity extends AppCompa
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        coreActivity.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

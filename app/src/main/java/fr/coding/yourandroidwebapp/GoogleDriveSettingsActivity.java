@@ -51,6 +51,7 @@ import java.util.List;
 
 import fr.coding.tools.Callback;
 import fr.coding.tools.filedialog.SimpleFileDialog;
+import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 import fr.coding.tools.gdrive.GoogleDriveReadFile;
 import fr.coding.tools.gdrive.GoogleDriveUpdateFile;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
@@ -73,9 +74,9 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
      * to reflect its new value.
      */
 
-    protected static final int REQUEST_CODE_OPENER = 1;
-    protected static final int REQUEST_CODE_CREATOR = 2;
-    protected static final int REQUEST_CODE_IMPORT = 3;
+    protected static final int REQUEST_CODE_OPENER = NEXT_AVAILABLE_REQUEST_CODE;
+    protected static final int REQUEST_CODE_CREATOR = NEXT_AVAILABLE_REQUEST_CODE+1;
+    protected static final int REQUEST_CODE_IMPORT = NEXT_AVAILABLE_REQUEST_CODE+2;
 
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
