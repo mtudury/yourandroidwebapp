@@ -176,7 +176,7 @@ public class AppSettingsManager {
         return jsonval;
     }
 
-    public String ExportSettingsLocally(AppSettings apps, String path) {
+    public String ExportSettingsToExternalStorage(AppSettings apps, String path) {
         try {
             jsonval = apps.AppSettingsToJSONobj().toString();
             SaveExternaly(path);
@@ -225,7 +225,7 @@ public class AppSettingsManager {
         return new AppSettings();
     }
 
-    public AppSettings ImportSettingsLocally(String path) {
+    public AppSettings LoadSettingsFromExternalStorage(String path) {
         try {
             return LoadExternaly(path);
         }

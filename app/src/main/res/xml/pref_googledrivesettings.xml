@@ -65,23 +65,6 @@
             android:defaultValue="false"
             />
         </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/pref_header_import_export_local"
-        android:key="general_settings"
-        >
-        <Preference
-            android:key="local_import"
-            android:title="@string/pref_title_local_import"
-            android:summary="@string/pref_description_local_import"
-            android:defaultValue="false"
-            />
-        <Preference
-            android:key="local_export"
-            android:title="@string/pref_title_local_export"
-            android:summary="@string/pref_description_local_export"
-            android:defaultValue="false"
-            />
 
-    </PreferenceCategory>
 
 </PreferenceScreen>

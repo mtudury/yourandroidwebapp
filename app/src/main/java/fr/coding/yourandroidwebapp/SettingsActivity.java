@@ -1,27 +1,34 @@
 package fr.coding.yourandroidwebapp;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.media.browse.MediaBrowser;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import fr.coding.tools.Callback;
+import fr.coding.tools.filedialog.SimpleFileDialog;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
@@ -36,7 +43,7 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity {
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -44,6 +51,8 @@ public class SettingsActivity extends PreferenceActivity {
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+
+    private GoogleApiClient.ConnectionCallbacks saveOnConnect = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,7 @@ public class SettingsActivity extends PreferenceActivity {
         {
             finish();
         }
+        autoConnect = false;
     }
 
 
@@ -121,6 +131,95 @@ public class SettingsActivity extends PreferenceActivity {
 //        bindPreferenceSummaryToValue(findPreference("example_list"));
 //        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
 //        bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+
+
+        Preference pref4 = findPreference("local_export");
+        if (pref4 != null) {
+            final SettingsActivity ctx = this;
+            pref4.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    SimpleFileDialog FolderChooseDialog = new SimpleFileDialog(ctx, "FileSave",
+                            new SimpleFileDialog.SimpleFileDialogListener() {
+                                @Override
+                                public void onChosenDir(String chosenDir) {
+                                    // The code in this function will be executed when the dialog OK button is pushed
+                                    AppSettingsManager manager = new AppSettingsManager(ctx);
+                                    manager.ExportSettingsToExternalStorage(manager.LoadSettingsLocally(), chosenDir);
+                                    Toast.makeText(ctx, R.string.webapp_exported_toast, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    FolderChooseDialog.Default_File_Name = "appsettings_backup_" + format.format(new Date()) + ".json";
+                    FolderChooseDialog.chooseFile_or_Dir();
+                    return false;
+                }
+
+
+            });
+        }
+
+        Preference preflocalimport = findPreference("local_import");
+        if (preflocalimport != null) {
+            final SettingsActivity ctx = this;
+            preflocalimport.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    SimpleFileDialog FolderChooseDialog = new SimpleFileDialog(ctx, "FileOpen",
+                            new SimpleFileDialog.SimpleFileDialogListener() {
+                                @Override
+                                public void onChosenDir(String chosenDir) {
+                                    final AppSettingsManager manager = new AppSettingsManager(ctx);
+                                    final AppSettings settings = manager.LoadSettingsFromExternalStorage(chosenDir);
+
+                                    if (AppSettingsManager.IsSettingsInGdrive(ctx)) {
+                                        // The code in this function will be executed when the dialog OK button is pushed
+                                        saveOnConnect = new GoogleApiClient.ConnectionCallbacks() {
+                                            @Override
+                                            public void onConnected(@Nullable Bundle bundle) {
+                                                manager.Save(settings, getGoogleApiClient(), new Callback<String>() {
+                                                    @Override
+                                                    public void onCallback(String arg) {
+                                                        Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+                                            }
+
+                                            @Override
+                                            public void onConnectionSuspended(int a) {
+
+                                            }
+                                        };
+                                        manualConnect();
+                                    }
+                                    else
+                                    {
+                                        manager.SaveSettingsLocally(settings);
+                                        Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+                    FolderChooseDialog.chooseFile_or_Dir();
+                    return false;
+                }
+
+
+            });
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        super.onConnected(connectionHint);
+        if (saveOnConnect != null) {
+            saveOnConnect.onConnected(connectionHint);
+            saveOnConnect = null;
+        }
     }
 
     /**

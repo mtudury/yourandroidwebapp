@@ -25,6 +25,8 @@ public abstract class GoogleDriveApiAppCompatPreferenceActivity extends AppCompa
 
     protected GoogleDriveCoreActivity coreActivity;
 
+    protected boolean autoConnect = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,17 @@ public abstract class GoogleDriveApiAppCompatPreferenceActivity extends AppCompa
     @Override
     protected void onResume() {
         super.onResume();
+        if (autoConnect)
+            coreActivity.onResume();
+    }
+
+    /*
+    Do not connect automatically on startup, but once needed,
+    Connect and enter back in normal cycle (autoconnect) :
+    suspend when going to another activity, restore connection...
+     */
+    protected void manualConnect() {
+        autoConnect = true;
         coreActivity.onResume();
     }
 

@@ -213,65 +213,6 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
             });
         }
 
-        Preference pref4 = findPreference("local_export");
-        if (pref4 != null) {
-            final GoogleDriveSettingsActivity ctx = this;
-            pref4.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    SimpleFileDialog FolderChooseDialog = new SimpleFileDialog(ctx, "FileSave",
-                            new SimpleFileDialog.SimpleFileDialogListener() {
-                                @Override
-                                public void onChosenDir(String chosenDir) {
-                                    // The code in this function will be executed when the dialog OK button is pushed
-                                    AppSettingsManager manager = new AppSettingsManager(ctx);
-                                    manager.ExportSettingsLocally(manager.LoadSettingsLocally(), chosenDir);
-                                    Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    FolderChooseDialog.Default_File_Name = "appsettings_backup_" + format.format(new Date()) + ".json";
-                    FolderChooseDialog.chooseFile_or_Dir();
-                    return false;
-                }
-
-
-            });
-        }
-
-        Preference preflocalimport = findPreference("local_import");
-        if (preflocalimport != null) {
-            final GoogleDriveSettingsActivity ctx = this;
-            preflocalimport.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    SimpleFileDialog FolderChooseDialog = new SimpleFileDialog(ctx, "FileOpen",
-                            new SimpleFileDialog.SimpleFileDialogListener() {
-                                @Override
-                                public void onChosenDir(String chosenDir) {
-                                    // The code in this function will be executed when the dialog OK button is pushed
-                                    AppSettingsManager manager = new AppSettingsManager(ctx);
-                                    AppSettings settings = manager.ImportSettingsLocally(chosenDir);
-                                    manager.Save(settings, getGoogleApiClient(), new Callback<String>() {
-                                        @Override
-                                        public void onCallback(String arg) {
-                                            Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            });
-
-                    FolderChooseDialog.chooseFile_or_Dir();
-                    return false;
-                }
-
-
-            });
-        }
-
         Preference prefexportgdrive = findPreference("google_drive_export");
         if (prefexportgdrive != null) {
             final GoogleDriveSettingsActivity ctx = this;
@@ -373,7 +314,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                         new GoogleDriveUpdateFile(getGoogleApiClient(), this).SetDriveFileContent(driveId.asDriveFile(), jsonval, new Callback<String>() {
                             @Override
                             public void onCallback(String restxt) {
-                                Toast.makeText(ctx, R.string.webapp_saved_toast, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ctx, R.string.webapp_exported_toast, Toast.LENGTH_SHORT).show();
                             }
                         });
                     } catch (JSONException e) {
