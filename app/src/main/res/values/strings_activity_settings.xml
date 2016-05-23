@@ -91,5 +91,6 @@
     <string name="pref_title_local_export">Export your current settings to a local folder</string>
     <string name="pref_description_local_export">Export once a file to a local folder on your device</string>
 
+    <string name="title_activity_clear_cache">Clear WebView Cache</string>
     <string name="pref_title_linked_gdrive_account">Change your google drive account</string>
 </resources>

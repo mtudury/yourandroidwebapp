@@ -90,7 +90,7 @@ public class WebMainActivity extends Activity {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 webActivity.SaveAcceptedSSlChoice(arg);
                                 break;
@@ -104,7 +104,7 @@ public class WebMainActivity extends Activity {
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(webActivity);
-                builder.setMessage("Allow this SSl Cert : "+arg.CName + ", "+arg.Host).setPositiveButton("Yes", dialogClickListener)
+                builder.setMessage("Allow this SSl Cert : " + arg.CName + ", " + arg.Host).setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
 
 
@@ -123,7 +123,7 @@ public class WebMainActivity extends Activity {
 
                 final Dialog login = new Dialog(webActivity);
                 login.setContentView(R.layout.login_dialog);
-                login.setTitle("Login to "+arg.Host);
+                login.setTitle("Login to " + arg.Host);
 
                 Button btnLogin = (Button) login.findViewById(R.id.btnLogin);
                 Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
@@ -131,8 +131,8 @@ public class WebMainActivity extends Activity {
                 btnLogin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        arg.Login = ((EditText)login.findViewById(R.id.txtUsername)).getText().toString();
-                        arg.Password = ((EditText)login.findViewById(R.id.txtPassword)).getText().toString();
+                        arg.Login = ((EditText) login.findViewById(R.id.txtUsername)).getText().toString();
+                        arg.Password = ((EditText) login.findViewById(R.id.txtPassword)).getText().toString();
                         webActivity.hostAuth = arg;
                         login.dismiss();
                         LoadWebView();
@@ -140,7 +140,7 @@ public class WebMainActivity extends Activity {
                         Toast.makeText(webActivity,
                                 "Try Login", Toast.LENGTH_LONG).show();
 
-                        if (((CheckBox)login.findViewById(R.id.savePassword)).isChecked()) {
+                        if (((CheckBox) login.findViewById(R.id.savePassword)).isChecked()) {
                             webActivity.SaveAcceptedHostAuth(arg);
                         }
                     }
@@ -158,24 +158,29 @@ public class WebMainActivity extends Activity {
             }
         };
 
-
-        LoadWebViewSettings(settings);
+        if (webAppId.equals( "CLEAR_CACHE")) {
+            mWebView.clearCache(true);
+            Toast.makeText(this, "Cache Cleared", Toast.LENGTH_LONG).show();
+            finish();
+        } else {
+            LoadWebViewSettings(settings);
+        }
     }
 
     protected void LoadWebViewSettings(AppSettings settings) {
         if ((webAppId != null) && (!webAppId.isEmpty())) {
             wa = settings.getWebAppById(webAppId);
-            wvc.setCompleteByPass(wa.allCertsByPass);
-            if (wa.allowedSSlActivated) {
-                wvc.setSSLAllowed(settings.SslByPasses);
-            }
-            if (wa.autoAuth)
-            {
-                wvc.setAllowedHosts(settings.HostAuths);
-            }
-
             if (wa != null) {
+                wvc.setCompleteByPass(wa.allCertsByPass);
+                if (wa.allowedSSlActivated) {
+                    wvc.setSSLAllowed(settings.SslByPasses);
+                }
+                if (wa.autoAuth) {
+                    wvc.setAllowedHosts(settings.HostAuths);
+                }
                 url = wa.url;
+            } else {
+                Toast.makeText(this, "This WebAppId does not exist", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -253,10 +258,10 @@ public class WebMainActivity extends Activity {
                 @Override
                 public void onAppSettingsReady(AppSettings settings) {
                     boolean found = false;
-                    for(SslByPass ssl : settings.SslByPasses) {
+                    for (SslByPass ssl : settings.SslByPasses) {
                         if ((ssl.Host.equals(arg.Host))
-                                &&(ssl.CName.equals(arg.CName))
-                                &&(ssl.ValidNotAfter == arg.ValidNotAfter)) {
+                                && (ssl.CName.equals(arg.CName))
+                                && (ssl.ValidNotAfter == arg.ValidNotAfter)) {
                             found = true;
                             ssl.activated = true;
                         }
@@ -271,9 +276,7 @@ public class WebMainActivity extends Activity {
                 }
             }, TAG);
             coreActivity.onResume();
-        }
-        else
-        {
+        } else {
             coreActivity.getSettings();
         }
     }

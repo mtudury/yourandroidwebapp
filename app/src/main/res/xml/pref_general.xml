@@ -3,7 +3,14 @@
         android:title="@string/pref_header_general"
         android:key="general_settings"
         >
-
+        <Preference android:title="@string/title_activity_clear_cache">
+            <intent
+                android:action="android.intent.action.WEBMAIN"
+                android:targetClass="fr.coding.yourandroidwebapp.WebMainActivity"
+                android:targetPackage="fr.coding.yourandroidwebapp">
+                <extra android:name="webappid" android:value="CLEAR_CACHE" />
+            </intent>
+        </Preference>
     <Preference android:title="@string/title_activity_google_drive_settings">
         <intent
             android:action="android.intent.action.VIEW"
