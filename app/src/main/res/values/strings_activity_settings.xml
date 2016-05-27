@@ -4,9 +4,10 @@
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
-    <string name="pref_header_googledrivesync">Google Drive Settings Sync</string>
-    <string name="pref_header_import_export">Import/Export to Google Drive</string>
-    <string name="pref_header_import_export_local">Import/Export locally</string>
+    <string name="pref_header_googledrivesync">Google Drive settings Sync</string>
+    <string name="pref_header_import_export">Import/Export settings to Google Drive</string>
+    <string name="pref_header_import_export_local">Import/Export settings to local storage</string>
+    <string name="pref_header_dev">Developper Features</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
@@ -93,4 +94,10 @@
 
     <string name="title_activity_clear_cache">Clear WebView Cache</string>
     <string name="pref_title_linked_gdrive_account">Change your google drive account</string>
+
+    <string name="pref_title_webview_debug_mode">Allow Chrome remote debugging</string>
+    <string name="pref_description_webview_debug_mode">See https://developer.chrome.com/devtools/docs/remote-debugging#debugging-webviews</string>
+
+    <string name="pref_title_disable_playback_require_gesture">Disable medias playback require gesture</string>
+    <string name="pref_description_disable_playback_require_gesture">See https://developer.android.com/reference/android/webkit/WebSettings.html#setMediaPlaybackRequiresUserGesture(boolean) and http://chromium-bugs.chromium.narkive.com/cW5IXVgj/issue-178297-in-chromium-android-chrome-does-not-allow-applications-to-play-html5-audio-without-an</string>
 </resources>

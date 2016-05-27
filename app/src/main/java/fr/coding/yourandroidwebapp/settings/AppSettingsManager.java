@@ -35,6 +35,8 @@ public class AppSettingsManager {
     public static final String PREFS_USECUSTOMDRIVEID = "google_drive_use_custom";
     public static final String PREFS_CUSTOMDRIVEIDDESC = "google_drive_customiddesc";
     private static final String UseGDrive = "google_drive_usage";
+    private static  final String RemoteDebugging = "webview_debug_mode";
+    private static  final String DisablePlaybackRequireGesture = "webview_disable_playback_require_gesture";
 
     private GoogleApiClient googleApiClient;
 
@@ -277,6 +279,16 @@ public class AppSettingsManager {
             return prefs.getString(PREFS_CUSTOMDRIVEID, null);
         }
         return null;
+    }
+
+    public static boolean IsRemoteDebuggingActivated(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return prefs.getBoolean(RemoteDebugging, false);
+    }
+
+    public static boolean DisablePlaybackRequireGesture(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return prefs.getBoolean(DisablePlaybackRequireGesture, false);
     }
 //
 //    public static void SetUseOrNotGDrive(Activity activity, boolean useGDrive) {

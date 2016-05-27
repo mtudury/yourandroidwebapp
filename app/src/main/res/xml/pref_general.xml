@@ -3,21 +3,15 @@
         android:title="@string/pref_header_general"
         android:key="general_settings"
         >
-        <Preference android:title="@string/title_activity_clear_cache">
+        <Preference android:title="@string/title_activity_google_drive_settings">
             <intent
-                android:action="android.intent.action.WEBMAIN"
-                android:targetClass="fr.coding.yourandroidwebapp.WebMainActivity"
-                android:targetPackage="fr.coding.yourandroidwebapp">
-                <extra android:name="webappid" android:value="CLEAR_CACHE" />
-            </intent>
+                android:action="android.intent.action.VIEW"
+                android:data="CREATE"
+                android:targetClass="fr.coding.yourandroidwebapp.GoogleDriveSettingsActivity"
+                android:targetPackage="fr.coding.yourandroidwebapp" />
         </Preference>
-    <Preference android:title="@string/title_activity_google_drive_settings">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="CREATE"
-            android:targetClass="fr.coding.yourandroidwebapp.GoogleDriveSettingsActivity"
-            android:targetPackage="fr.coding.yourandroidwebapp" />
-    </Preference>
+
+
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
@@ -57,6 +51,29 @@
             android:key="local_export"
             android:title="@string/pref_title_local_export"
             android:summary="@string/pref_description_local_export"
+            android:defaultValue="false"
+            />
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_header_dev">
+        <Preference android:title="@string/title_activity_clear_cache">
+            <intent
+                android:action="android.intent.action.WEBMAIN"
+                android:targetClass="fr.coding.yourandroidwebapp.WebMainActivity"
+                android:targetPackage="fr.coding.yourandroidwebapp">
+                <extra android:name="webappid" android:value="CLEAR_CACHE" />
+            </intent>
+        </Preference>
+        <CheckBoxPreference
+            android:key="webview_debug_mode"
+            android:title="@string/pref_title_webview_debug_mode"
+            android:summary="@string/pref_description_webview_debug_mode"
+            android:defaultValue="false"
+            />
+        <CheckBoxPreference
+            android:key="webview_disable_playback_require_gesture"
+            android:title="@string/pref_title_disable_playback_require_gesture"
+            android:summary="@string/pref_description_disable_playback_require_gesture"
             android:defaultValue="false"
             />
 

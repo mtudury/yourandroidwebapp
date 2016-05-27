@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -80,6 +81,14 @@ public class WebMainActivity extends Activity {
         wvc = new AutoAuthSslWebView();
         mWebView.setWebViewClient(wvc);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (AppSettingsManager.IsRemoteDebuggingActivated(this))
+                WebView.setWebContentsDebuggingEnabled(true);
+        }
+
+        if (AppSettingsManager.DisablePlaybackRequireGesture(this)){
+            mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+        }
 
         settingsManager = new AppSettingsManager(this);
         AppSettings settings = settingsManager.LoadSettingsLocally();
