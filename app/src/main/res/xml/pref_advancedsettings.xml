@@ -1,0 +1,20 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_header_googledrivesync"
+        android:key="general_settings"
+        >
+        <CheckBoxPreference
+            android:key="webview_disable_playback_require_gesture"
+            android:title="@string/pref_title_disable_playback_require_gesture"
+            android:summary="@string/pref_description_disable_playback_require_gesture"
+            android:defaultValue="false"
+            />
+        <EditTextPreference
+            android:key="webview_user_agent"
+            android:title="@string/pref_title_webview_user_agent"
+            />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

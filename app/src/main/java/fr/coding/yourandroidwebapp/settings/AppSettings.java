@@ -20,6 +20,8 @@ public class AppSettings {
     public List<SslByPass> SslByPasses;
     public List<HostAuth> HostAuths;
 
+    public AdvancedAppSettings Advanced;
+
     public AppSettings()
     {
         WebApps = new ArrayList<>();

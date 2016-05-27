@@ -30,5 +30,12 @@
                 android:targetClass="fr.coding.yourandroidwebapp.HostAuthSettingsListActivity"
                 android:targetPackage="fr.coding.yourandroidwebapp" />
         </Preference>
+        <Preference android:title="@string/title_activity_advanced_settings">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="CREATE"
+                android:targetClass="fr.coding.yourandroidwebapp.AdvancedSettingsActivity"
+                android:targetPackage="fr.coding.yourandroidwebapp" />
+        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

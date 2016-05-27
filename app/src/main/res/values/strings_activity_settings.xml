@@ -100,4 +100,6 @@
 
     <string name="pref_title_disable_playback_require_gesture">Disable medias playback require gesture</string>
     <string name="pref_description_disable_playback_require_gesture">See https://developer.android.com/reference/android/webkit/WebSettings.html#setMediaPlaybackRequiresUserGesture(boolean) and http://chromium-bugs.chromium.narkive.com/cW5IXVgj/issue-178297-in-chromium-android-chrome-does-not-allow-applications-to-play-html5-audio-without-an</string>
+
+    <string name="pref_title_webview_user_agent">Custom User-Agent</string>
 </resources>

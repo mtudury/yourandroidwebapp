@@ -94,6 +94,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
         </activity>
+        <activity
+            android:name=".AdvancedSettingsActivity"
+            android:label="@string/title_activity_advanced_settings"
+            android:parentActivityName=".SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
+        </activity>
     </application>
 
 </manifest>
