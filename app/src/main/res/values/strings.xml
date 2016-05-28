@@ -20,7 +20,7 @@
     <string name="webapp_url_hint">http://www.google.com</string>
     <string name="sslsetting_detail_activated">Allowed</string>
     <string name="sslsetting_save_button">Save</string>
-    <string name="webapp_sslall_activated">All invalid certificates accepted (security warning)</string>
+    <string name="webapp_sslall_activated">All invalid certificates accepted</string>
     <string name="webapp_ssl_activated">Valid personal certificates accepted</string>
     <string name="webapp_autoauth">Allow to try auto Auth</string>
     <string name="title_hostauth_list">HostAuths</string>
@@ -33,4 +33,11 @@
     <string name="dialog_title_disconnect_gdrive_account">Disconnect ?</string>
     <string name="dialog_message_disconnect_gdrive_account">Disconnect from account : </string>
     <string name="title_activity_advanced_settings">Advanced Settings</string>
+    <string name="webapp_title_alternateurl">Alternate Url based on WIFI networks</string>
+    <string name="webapp_general">General</string>
+    <string name="webapp_actions">Actions</string>
+    <string name="webapp_httpsettings">HTTP Custom settings (security : warning)</string>
+    <string name="webapp_alternateurl">Alternate Url : </string>
+    <string name="webapp_alternateurlssid">Name of wifi networks (SSID) separated by commas if more than one :</string>
+    <string name="webapp_delete">Delete</string>
 </resources>
