@@ -1,6 +1,9 @@
 package fr.coding.yourandroidwebapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 
 import java.util.UUID;
 
@@ -160,6 +164,35 @@ public class WebAppDetailFragment extends Fragment {
                         startActivity(detailIntent);
                     }
                 });
+            }
+        });
+
+        Button buttonDelete = (Button) rootView.findViewById(R.id.webapp_delete);
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context ctx = v.getContext();
+
+                new AlertDialog.Builder(ctx)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(ctx.getString(R.string.dialog_title_delete))
+                        .setMessage(ctx.getString(R.string.dialog_message_delete_webapp))
+                        .setNegativeButton("No", null)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                settings.WebApps.remove(mItem);
+                                activity.SaveSettings(settings, new Callback<String>() {
+                                    @Override
+                                    public void onCallback(String res) {
+                                        activity.finish();
+                                        startActivity(activity.getIntent());
+                                    }
+                                });
+                            }
+
+                        })
+                        .show();
             }
         });
 

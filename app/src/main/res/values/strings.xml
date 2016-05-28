@@ -40,4 +40,6 @@
     <string name="webapp_alternateurl">Alternate Url : </string>
     <string name="webapp_alternateurlssid">Name of wifi networks (SSID) separated by commas if more than one :</string>
     <string name="webapp_delete">Delete</string>
+    <string name="dialog_title_delete">Confirm deletion</string>
+    <string name="dialog_message_delete_webapp">Delete this WebApp</string>
 </resources>
