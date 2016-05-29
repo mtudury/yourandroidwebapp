@@ -23,6 +23,11 @@ public class WebApp {
     public String name;
     public String url;
     public String iconUrl;
+
+    // alternate url
+    public String alternateUrl;
+    public String alternateSSIDs;
+
     // ssl
     public boolean allCertsByPass;
     public boolean allowedSSlActivated;
@@ -42,6 +47,13 @@ public class WebApp {
 
         if (jsonobj.has("iconUrl"))
             webapp.iconUrl = jsonobj.getString("iconUrl");
+
+        if (jsonobj.has("alternateUrl"))
+            webapp.alternateUrl = jsonobj.getString("alternateUrl");
+        if (jsonobj.has("alternateSSIDs"))
+            webapp.alternateUrl = jsonobj.getString("alternateSSIDs");
+
+
         if (jsonobj.has("allCertsByPass"))
             webapp.allCertsByPass = jsonobj.getBoolean("allCertsByPass");
         if (jsonobj.has("allowedSSlActivated"))
@@ -49,6 +61,7 @@ public class WebApp {
 
         if (jsonobj.has("autoAuth"))
             webapp.autoAuth = jsonobj.getBoolean("autoAuth");
+
 
         return webapp;
     }
@@ -59,6 +72,10 @@ public class WebApp {
         jsonobj.put("name", name);
         jsonobj.put("url", url);
         jsonobj.put("iconUrl", iconUrl);
+
+        jsonobj.put("alternateUrl", alternateUrl);
+        jsonobj.put("alternateSSIDs", alternateSSIDs);
+
         jsonobj.put("allCertsByPass", allCertsByPass);
         jsonobj.put("allowedSSlActivated", allowedSSlActivated);
         jsonobj.put("autoAuth", autoAuth);

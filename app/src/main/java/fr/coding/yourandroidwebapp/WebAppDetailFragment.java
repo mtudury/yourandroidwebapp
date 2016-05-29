@@ -1,13 +1,11 @@
 package fr.coding.yourandroidwebapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +15,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.Plus;
-
 import java.util.UUID;
 
 import fr.coding.tools.Callback;
-import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
-import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
 /**
@@ -85,12 +78,7 @@ public class WebAppDetailFragment extends Fragment {
 
             // Show the dummy content as text in a TextView.
             if ((mItem != null) && (rootView != null)) {
-                ((EditText) rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
-                ((EditText) rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
-                ((EditText) rootView.findViewById(R.id.webapp_iconurl)).setText(mItem.iconUrl);
-                ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).setChecked(mItem.allCertsByPass);
-                ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).setChecked(mItem.allowedSSlActivated);
-                ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).setChecked(mItem.autoAuth);
+                fillItem();
 
                 CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
                 if (appBarLayout != null) {
@@ -212,12 +200,35 @@ public class WebAppDetailFragment extends Fragment {
     }
 
     private void getItem(View rootView) {
+        // base fields
         mItem.name = ((EditText) rootView.findViewById(R.id.webapp_name)).getText().toString();
         mItem.url = ((EditText) rootView.findViewById(R.id.webapp_url)).getText().toString();
         mItem.iconUrl = ((EditText) rootView.findViewById(R.id.webapp_iconurl)).getText().toString();
+
+        // alternate fields
+        mItem.alternateUrl = ((EditText) rootView.findViewById(R.id.webapp_alternateurl)).getText().toString();
+        mItem.alternateSSIDs = ((EditText) rootView.findViewById(R.id.webapp_alternateurlssid)).getText().toString();
+
+        // insecure fields
         mItem.allCertsByPass = ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).isChecked();
         mItem.allowedSSlActivated = ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).isChecked();
         mItem.autoAuth = ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).isChecked();
+    }
+
+    private void fillItem() {
+        // base fields
+        ((EditText) rootView.findViewById(R.id.webapp_name)).setText(mItem.name);
+        ((EditText) rootView.findViewById(R.id.webapp_url)).setText(mItem.url);
+        ((EditText) rootView.findViewById(R.id.webapp_iconurl)).setText(mItem.iconUrl);
+
+        // alternate fields
+        ((EditText) rootView.findViewById(R.id.webapp_alternateurl)).setText(mItem.alternateUrl);
+        ((EditText) rootView.findViewById(R.id.webapp_alternateurlssid)).setText(mItem.alternateSSIDs);
+
+        // insecure fields
+        ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).setChecked(mItem.allCertsByPass);
+        ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).setChecked(mItem.allowedSSlActivated);
+        ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).setChecked(mItem.autoAuth);
     }
 
     public void createShortcut(View view) {
