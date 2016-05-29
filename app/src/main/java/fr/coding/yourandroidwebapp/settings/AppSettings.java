@@ -66,6 +66,10 @@ public class AppSettings {
                 appSettings.HostAuths.add(HostAuth.JSONobjToSslByPass(arr.getJSONObject(i)));
             }
         }
+        if (jsonobj.has("advanced"))
+        {
+            appSettings.Advanced = AdvancedAppSettings.JSONobjToWebApp(jsonobj.getJSONObject("advanced"));
+        }
 
         return appSettings;
     }
@@ -89,6 +93,10 @@ public class AppSettings {
             hostAuths.put(hostAuth.toJSONobj());
         }
         jsonobj.put("HostAuths", hostAuths);
+
+        if (Advanced != null) {
+            jsonobj.put("advanced", Advanced.toJSONobj());
+        }
 
         return jsonobj;
     }

@@ -51,7 +51,7 @@ public class WebApp {
         if (jsonobj.has("alternateUrl"))
             webapp.alternateUrl = jsonobj.getString("alternateUrl");
         if (jsonobj.has("alternateSSIDs"))
-            webapp.alternateUrl = jsonobj.getString("alternateSSIDs");
+            webapp.alternateSSIDs = jsonobj.getString("alternateSSIDs");
 
 
         if (jsonobj.has("allCertsByPass"))
