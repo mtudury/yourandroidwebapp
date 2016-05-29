@@ -22,6 +22,7 @@ import fr.coding.tools.Callback;
 import fr.coding.tools.CallbackResult;
 import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
+import fr.coding.tools.networks.Wifi;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivityHelper;
 import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
@@ -39,6 +40,7 @@ public class WebMainActivity extends Activity {
     private String webAppId;
 
     private boolean needLoad = true;
+    private boolean lastContextAlternate;
 
     private AppSettingsManager settingsManager;
 
@@ -176,6 +178,15 @@ public class WebMainActivity extends Activity {
         }
     }
 
+    protected boolean isAlternateContext(WebApp webapp) {
+        if ((webapp.alternateSSIDs == null)||(webapp.alternateSSIDs.isEmpty()))
+            return false;
+        if ((webapp.alternateUrl == null)||(webapp.alternateUrl.isEmpty()))
+            return false;
+
+        return Wifi.isOnlineAndWifi(this) && Wifi.isInSSIDList(this, webapp.alternateSSIDs);
+    }
+
     protected void LoadWebViewSettings(AppSettings settings) {
         if ((webAppId != null) && (!webAppId.isEmpty())) {
             wa = settings.getWebAppById(webAppId);
@@ -188,6 +199,11 @@ public class WebMainActivity extends Activity {
                     wvc.setAllowedHosts(settings.HostAuths);
                 }
                 url = wa.url;
+                lastContextAlternate = isAlternateContext(wa);
+                if (lastContextAlternate) {
+                    url = wa.alternateUrl;
+                }
+
             } else {
                 Toast.makeText(this, "This WebAppId does not exist", Toast.LENGTH_LONG).show();
             }
@@ -212,6 +228,18 @@ public class WebMainActivity extends Activity {
         if (mWebView != null) {
             mWebView.onResume();
             mWebView.resumeTimers();
+        }
+        boolean newContext = isAlternateContext(wa);
+        if (newContext != lastContextAlternate)
+        {
+            lastContextAlternate = newContext;
+            url = wa.url;
+            lastContextAlternate = isAlternateContext(wa);
+            if (lastContextAlternate) {
+                url = wa.alternateUrl;
+            }
+            LoadWebView();
+
         }
     }
 
