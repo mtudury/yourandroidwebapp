@@ -95,6 +95,10 @@ public class WebMainActivity extends Activity {
             mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
         }
 
+        if ((settings.Advanced.userAgent != null)&&(!settings.Advanced.userAgent.isEmpty())) {
+            mWebView.getSettings().setUserAgentString(settings.Advanced.userAgent);
+        }
+
         wvc.sslUnknownManager = new Callback<SslByPass>() {
             @Override
             public void onCallback(final SslByPass arg) {
