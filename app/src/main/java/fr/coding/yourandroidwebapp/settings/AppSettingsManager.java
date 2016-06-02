@@ -285,17 +285,4 @@ public class AppSettingsManager {
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         return prefs.getBoolean(RemoteDebugging, false);
     }
-
-    public static boolean DisablePlaybackRequireGesture(Activity activity) {
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        return prefs.getBoolean(DisablePlaybackRequireGesture, false);
-    }
-//
-//    public static void SetUseOrNotGDrive(Activity activity, boolean useGDrive) {
-//        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = prefs.edit();
-//        editor.putBoolean(UseGDrive, useGDrive);
-//        editor.apply();
-//    }
-
 }

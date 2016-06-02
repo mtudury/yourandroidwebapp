@@ -70,12 +70,5 @@
             android:summary="@string/pref_description_webview_debug_mode"
             android:defaultValue="false"
             />
-        <CheckBoxPreference
-            android:key="webview_disable_playback_require_gesture"
-            android:title="@string/pref_title_disable_playback_require_gesture"
-            android:summary="@string/pref_description_disable_playback_require_gesture"
-            android:defaultValue="false"
-            />
-
     </PreferenceCategory>
 </PreferenceScreen>

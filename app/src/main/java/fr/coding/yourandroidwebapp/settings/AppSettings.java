@@ -27,6 +27,7 @@ public class AppSettings {
         WebApps = new ArrayList<>();
         SslByPasses = new ArrayList<>();
         HostAuths = new ArrayList<>();
+        Advanced = new AdvancedAppSettings();
     }
 
     public WebApp getWebAppById(String id) {

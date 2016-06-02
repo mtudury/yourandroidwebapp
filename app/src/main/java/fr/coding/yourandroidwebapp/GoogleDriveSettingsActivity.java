@@ -449,7 +449,8 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
         int id = item.getItemId();
         if (id == android.R.id.home) {
             if (!super.onMenuItemSelected(featureId, item)) {
-                NavUtils.navigateUpFromSameTask(this);
+                //NavUtils.navigateUpFromSameTask(this);
+                navigateUpTo(getIntent());
             }
             return true;
         }

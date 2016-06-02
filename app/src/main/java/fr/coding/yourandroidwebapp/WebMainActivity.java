@@ -88,12 +88,12 @@ public class WebMainActivity extends Activity {
                 WebView.setWebContentsDebuggingEnabled(true);
         }
 
-        if (AppSettingsManager.DisablePlaybackRequireGesture(this)){
-            mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
-        }
-
         settingsManager = new AppSettingsManager(this);
         AppSettings settings = settingsManager.LoadSettingsLocally();
+
+        if (settings.Advanced.disableMediasRequireUserGesture){
+            mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+        }
 
         wvc.sslUnknownManager = new Callback<SslByPass>() {
             @Override
