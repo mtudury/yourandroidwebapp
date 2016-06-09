@@ -98,7 +98,8 @@ public class WebApp {
             Bitmap theBitmap = null;
             try {
                 byte[] img = new RetrieveHttpFile().execute(app.iconUrl).get();
-                theBitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                if (img != null)
+                    theBitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             } catch (ExecutionException ee) {
                 ee.printStackTrace();
             } catch (InterruptedException ee) {
