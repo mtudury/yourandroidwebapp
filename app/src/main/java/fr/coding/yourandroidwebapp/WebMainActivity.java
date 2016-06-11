@@ -202,6 +202,7 @@ public class WebMainActivity extends Activity {
                 if (wa.autoAuth) {
                     wvc.setAllowedHosts(settings.HostAuths);
                 }
+                mWebView.getSettings().setCacheMode(wa.cacheMode);
                 url = wa.url;
                 lastContextAlternate = isAlternateContext(wa);
                 if (lastContextAlternate) {

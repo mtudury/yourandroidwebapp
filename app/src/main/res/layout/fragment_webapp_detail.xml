@@ -82,6 +82,13 @@
         android:padding="16dp"
         android:text="@string/webapp_autoauth"
         tools:context="fr.coding.yourandroidwebapp.SSLSettingDetailFragment"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="@string/webapp_cache_mode_title"/>
+    <Spinner
+        android:id="@+id/webapp_cache_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></Spinner>
     <Space
         android:layout_width="fill_parent"
         android:layout_height="30dp" />
@@ -105,6 +112,12 @@
         android:id="@+id/webapp_create_shortcut"
         android:layout_height="wrap_content"
         android:text="@string/webapp_create_shortcut"
+        android:layout_width="fill_parent">
+    </Button>
+    <Button
+        android:id="@+id/webapp_duplicate"
+        android:layout_height="wrap_content"
+        android:text="@string/webapp_duplicate"
         android:layout_width="fill_parent">
     </Button>
     <Button

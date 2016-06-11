@@ -42,4 +42,14 @@
     <string name="webapp_delete">Delete</string>
     <string name="dialog_title_delete">Confirm deletion</string>
     <string name="dialog_message_delete_webapp">Delete this WebApp</string>
+    <string name="webapp_duplicate">Duplicate</string>
+    <string name="webapp_cache_mode_title">Cache Mode</string>
+    <string name="dialog_title_duplicate">Duplicate</string>
+    <string name="dialog_message_duplicate_webapp">duplicate this WebApp ?</string>
+    <string-array name="cache_mode">
+        <item>Default</item>
+        <item>No Cache</item>
+        <item>Cache First</item>
+        <item>Only Cache</item>
+    </string-array>
 </resources>

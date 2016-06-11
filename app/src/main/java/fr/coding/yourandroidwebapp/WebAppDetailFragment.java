@@ -10,9 +10,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.UUID;
@@ -184,9 +187,45 @@ public class WebAppDetailFragment extends Fragment {
             }
         });
 
+        Button buttonDuplicate = (Button) rootView.findViewById(R.id.webapp_duplicate);
+        buttonDuplicate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context ctx = v.getContext();
+
+                new AlertDialog.Builder(ctx)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(ctx.getString(R.string.dialog_title_duplicate))
+                        .setMessage(ctx.getString(R.string.dialog_message_duplicate_webapp))
+                        .setNegativeButton("No", null)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                settings.WebApps.add(mItem.Duplicate());
+                                activity.SaveSettings(settings, new Callback<String>() {
+                                    @Override
+                                    public void onCallback(String res) {
+                                        activity.finish();
+                                        startActivity(activity.getIntent());
+                                    }
+                                });
+                            }
+
+                        })
+                        .show();
+            }
+        });
+
+
         if (settings != null) {
             onSettingsReceived(settings);
         }
+
+        Spinner cachemode = (Spinner) rootView.findViewById(R.id.webapp_cache_mode);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(),
+                R.array.cache_mode, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cachemode.setAdapter(adapter);
 
         return rootView;
     }
@@ -213,7 +252,44 @@ public class WebAppDetailFragment extends Fragment {
         mItem.allCertsByPass = ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).isChecked();
         mItem.allowedSSlActivated = ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).isChecked();
         mItem.autoAuth = ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).isChecked();
+
+        // cache mode
+        mItem.cacheMode = SpinnerToCacheMode((Spinner) rootView.findViewById(R.id.webapp_cache_mode));
     }
+
+    private int SpinnerToCacheMode(Spinner spinner) {
+        int result = 0;
+        switch (spinner.getSelectedItemPosition()) {
+            case 1:
+                result = WebSettings.LOAD_NO_CACHE;
+                break;
+            case 2:
+                result = WebSettings.LOAD_CACHE_ELSE_NETWORK;
+                break;
+            case 3:
+                result = WebSettings.LOAD_CACHE_ONLY;
+                break;
+        }
+        return result;
+    }
+
+
+    private int CacheModeToSpinner(int cacheMode) {
+        int result = 0;
+        switch (cacheMode) {
+            case 1:
+                result = WebSettings.LOAD_NO_CACHE;
+                break;
+            case 2:
+                result = WebSettings.LOAD_CACHE_ELSE_NETWORK;
+                break;
+            case 3:
+                result = WebSettings.LOAD_CACHE_ONLY;
+                break;
+        }
+        return result;
+    }
+
 
     private void fillItem() {
         // base fields
