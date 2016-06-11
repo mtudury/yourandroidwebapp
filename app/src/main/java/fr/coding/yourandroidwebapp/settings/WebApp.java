@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.webkit.WebSettings;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import fr.coding.tools.RetrieveHttpFile;
@@ -33,9 +35,30 @@ public class WebApp {
     public boolean allowedSSlActivated;
     // auth
     public boolean autoAuth;
+    // cache mode
+    public int cacheMode;
 
     public String toString() {
         return name;
+    }
+
+    public WebApp Duplicate() {
+        WebApp dup = new WebApp();
+        dup.id = UUID.randomUUID().toString();
+
+        dup.name = name;
+        dup.url = url;
+        dup.iconUrl = iconUrl;
+
+        dup.alternateUrl = alternateUrl;
+        dup.alternateSSIDs = alternateSSIDs;
+        dup.allCertsByPass = allCertsByPass;
+        dup.allowedSSlActivated = allowedSSlActivated;
+
+        dup.autoAuth = autoAuth;
+        dup.cacheMode = cacheMode;
+
+        return dup;
     }
 
 
@@ -62,6 +85,10 @@ public class WebApp {
         if (jsonobj.has("autoAuth"))
             webapp.autoAuth = jsonobj.getBoolean("autoAuth");
 
+        webapp.cacheMode = WebSettings.LOAD_DEFAULT;
+        if (jsonobj.has("cacheMode"))
+            webapp.cacheMode = jsonobj.getInt("cacheMode");
+
 
         return webapp;
     }
@@ -79,6 +106,8 @@ public class WebApp {
         jsonobj.put("allCertsByPass", allCertsByPass);
         jsonobj.put("allowedSSlActivated", allowedSSlActivated);
         jsonobj.put("autoAuth", autoAuth);
+
+        jsonobj.put("cacheMode", cacheMode);
         return jsonobj;
     }
 

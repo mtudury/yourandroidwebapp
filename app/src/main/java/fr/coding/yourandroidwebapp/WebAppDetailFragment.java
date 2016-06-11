@@ -260,6 +260,9 @@ public class WebAppDetailFragment extends Fragment {
     private int SpinnerToCacheMode(Spinner spinner) {
         int result = 0;
         switch (spinner.getSelectedItemPosition()) {
+            case 0:
+                result = WebSettings.LOAD_DEFAULT;
+                break;
             case 1:
                 result = WebSettings.LOAD_NO_CACHE;
                 break;
@@ -277,14 +280,17 @@ public class WebAppDetailFragment extends Fragment {
     private int CacheModeToSpinner(int cacheMode) {
         int result = 0;
         switch (cacheMode) {
-            case 1:
-                result = WebSettings.LOAD_NO_CACHE;
+            case WebSettings.LOAD_DEFAULT:
+                result = 0;
                 break;
-            case 2:
-                result = WebSettings.LOAD_CACHE_ELSE_NETWORK;
+            case WebSettings.LOAD_NO_CACHE:
+                result = 1;
                 break;
-            case 3:
-                result = WebSettings.LOAD_CACHE_ONLY;
+            case WebSettings.LOAD_CACHE_ELSE_NETWORK:
+                result = 2;
+                break;
+            case WebSettings.LOAD_CACHE_ONLY:
+                result = 3;
                 break;
         }
         return result;
@@ -305,6 +311,9 @@ public class WebAppDetailFragment extends Fragment {
         ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).setChecked(mItem.allCertsByPass);
         ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).setChecked(mItem.allowedSSlActivated);
         ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).setChecked(mItem.autoAuth);
+
+        // cache mode
+        ((Spinner) rootView.findViewById(R.id.webapp_cache_mode)).setSelection(CacheModeToSpinner(mItem.cacheMode));
     }
 
     public void createShortcut(View view) {
