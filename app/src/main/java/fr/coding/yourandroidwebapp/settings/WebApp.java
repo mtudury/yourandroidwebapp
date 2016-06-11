@@ -46,7 +46,7 @@ public class WebApp {
         WebApp dup = new WebApp();
         dup.id = UUID.randomUUID().toString();
 
-        dup.name = name;
+        dup.name = name + " Copy";
         dup.url = url;
         dup.iconUrl = iconUrl;
 
