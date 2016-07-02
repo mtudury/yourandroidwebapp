@@ -3,6 +3,19 @@
         android:title="@string/pref_header_general"
         android:key="general_settings"
         >
+
+        <CheckBoxPreference
+            android:key="webview_fullscreen_mode"
+            android:title="@string/pref_title_webview_fullscreen_mode"
+            android:summary="@string/pref_description_webview_fullscreen_mode"
+            android:defaultValue="false"
+            />
+        <CheckBoxPreference
+            android:key="webview_keepscreen_on"
+            android:title="@string/pref_title_webview_keepscreen_on"
+            android:summary="@string/pref_description_webview_keepscreen_on"
+            android:defaultValue="false"
+            />
         <Preference android:title="@string/title_activity_google_drive_settings">
             <intent
                 android:action="android.intent.action.VIEW"

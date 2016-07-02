@@ -36,6 +36,8 @@ public class AppSettingsManager {
     public static final String PREFS_CUSTOMDRIVEIDDESC = "google_drive_customiddesc";
     private static final String UseGDrive = "google_drive_usage";
     private static  final String RemoteDebugging = "webview_debug_mode";
+    private static  final String KeepScreenOn = "webview_keepscreen_on";
+    private static final String FullScreenMode = "webview_fullscreen_mode";
     private static  final String DisablePlaybackRequireGesture = "webview_disable_playback_require_gesture";
 
     private GoogleApiClient googleApiClient;
@@ -285,4 +287,15 @@ public class AppSettingsManager {
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         return prefs.getBoolean(RemoteDebugging, false);
     }
+
+    public static boolean ImmersiveFullscreenMode(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return prefs.getBoolean(FullScreenMode, false);
+    }
+
+    public static boolean KeepTheScreenOn(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return prefs.getBoolean(KeepScreenOn, false);
+    }
+
 }
