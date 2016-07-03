@@ -69,6 +69,12 @@
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_dev">
+        <CheckBoxPreference
+            android:key="webview_progress"
+            android:title="@string/pref_title_webview_progress"
+            android:summary="@string/pref_description_webview_progress"
+            android:defaultValue="false"
+            />
         <Preference android:title="@string/title_activity_clear_cache">
             <intent
                 android:action="android.intent.action.WEBMAIN"

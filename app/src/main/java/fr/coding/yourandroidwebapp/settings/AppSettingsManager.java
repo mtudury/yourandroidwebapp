@@ -38,6 +38,7 @@ public class AppSettingsManager {
     private static  final String RemoteDebugging = "webview_debug_mode";
     private static  final String KeepScreenOn = "webview_keepscreen_on";
     private static final String FullScreenMode = "webview_fullscreen_mode";
+    private static final String ProgressBar = "webview_progress";
     private static  final String DisablePlaybackRequireGesture = "webview_disable_playback_require_gesture";
 
     private GoogleApiClient googleApiClient;
@@ -298,4 +299,8 @@ public class AppSettingsManager {
         return prefs.getBoolean(KeepScreenOn, false);
     }
 
+    public static boolean ShowProgressBar(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return prefs.getBoolean(ProgressBar, false);
+    }
 }

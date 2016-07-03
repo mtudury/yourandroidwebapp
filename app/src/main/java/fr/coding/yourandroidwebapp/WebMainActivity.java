@@ -89,20 +89,22 @@ public class WebMainActivity extends Activity {
         wvc = new AutoAuthSslWebView();
         mWebView.setWebViewClient(wvc);
 
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                // Activities and WebViews measure progress with different scales.
-                // The progress meter will automatically disappear when we reach 100%
-                ProgressBar pb = ((ProgressBar)webActivity.findViewById(R.id.viewprogress));
-                if (pb != null) {
-                    int visibility = View.GONE;
-                    if (progress< 100)
-                        visibility = View.VISIBLE;
-                    pb.setProgress(progress);
-                    pb.setVisibility(visibility);
+        if (AppSettingsManager.ShowProgressBar(this)) {
+            mWebView.setWebChromeClient(new WebChromeClient() {
+                public void onProgressChanged(WebView view, int progress) {
+                    // Activities and WebViews measure progress with different scales.
+                    // The progress meter will automatically disappear when we reach 100%
+                    ProgressBar pb = ((ProgressBar) webActivity.findViewById(R.id.viewprogress));
+                    if (pb != null) {
+                        int visibility = View.GONE;
+                        if (progress < 100)
+                            visibility = View.VISIBLE;
+                        pb.setProgress(progress);
+                        pb.setVisibility(visibility);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (AppSettingsManager.IsRemoteDebuggingActivated(this))
