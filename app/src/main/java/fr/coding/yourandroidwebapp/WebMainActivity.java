@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +17,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import fr.coding.tools.AutoAuthSslWebView;
@@ -86,6 +88,21 @@ public class WebMainActivity extends Activity {
         // Force links and redirects to open in the WebView instead of in a browser
         wvc = new AutoAuthSslWebView();
         mWebView.setWebViewClient(wvc);
+
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                // Activities and WebViews measure progress with different scales.
+                // The progress meter will automatically disappear when we reach 100%
+                ProgressBar pb = ((ProgressBar)webActivity.findViewById(R.id.viewprogress));
+                if (pb != null) {
+                    int visibility = View.GONE;
+                    if (progress< 100)
+                        visibility = View.VISIBLE;
+                    pb.setProgress(progress);
+                    pb.setVisibility(visibility);
+                }
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (AppSettingsManager.IsRemoteDebuggingActivated(this))
