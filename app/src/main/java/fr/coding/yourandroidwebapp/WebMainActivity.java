@@ -233,7 +233,7 @@ public class WebMainActivity extends Activity {
                 }
 
             } else {
-                Toast.makeText(this, "This WebAppId does not exist", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "This WebAppId does not exist (no more?)", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -257,17 +257,18 @@ public class WebMainActivity extends Activity {
             mWebView.onResume();
             mWebView.resumeTimers();
         }
-        boolean newContext = isAlternateContext(wa);
-        if (newContext != lastContextAlternate)
-        {
-            lastContextAlternate = newContext;
-            url = wa.url;
-            lastContextAlternate = isAlternateContext(wa);
-            if (lastContextAlternate) {
-                url = wa.alternateUrl;
-            }
-            LoadWebView();
+        if (wa != null) {
+            boolean newContext = isAlternateContext(wa);
+            if (newContext != lastContextAlternate) {
+                lastContextAlternate = newContext;
+                url = wa.url;
+                lastContextAlternate = isAlternateContext(wa);
+                if (lastContextAlternate) {
+                    url = wa.alternateUrl;
+                }
+                LoadWebView();
 
+            }
         }
     }
 
