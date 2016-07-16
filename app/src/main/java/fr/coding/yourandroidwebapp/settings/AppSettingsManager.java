@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.Date;
 
 import fr.coding.tools.*;
 import fr.coding.tools.gdrive.GoogleDriveCreateFile;
@@ -39,7 +40,7 @@ public class AppSettingsManager {
     private static  final String KeepScreenOn = "webview_keepscreen_on";
     private static final String FullScreenMode = "webview_fullscreen_mode";
     private static final String ProgressBar = "webview_progress";
-    private static  final String DisablePlaybackRequireGesture = "webview_disable_playback_require_gesture";
+    private static final String PREFS_GDRIVELASTUPDATED = "google_drive_last_updated";
 
     private GoogleApiClient googleApiClient;
 
@@ -107,6 +108,7 @@ public class AppSettingsManager {
                     res = AppSettings.JSONobjToAppSettings(new JSONObject(restxt));
                     jsonval = restxt;
                     SaveLocally();
+                    AppSettingsManager.SetLastUpdatedFromGDrive(activity, new Date());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     new AlertDialog.Builder(activity).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
@@ -302,5 +304,19 @@ public class AppSettingsManager {
     public static boolean ShowProgressBar(Activity activity) {
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         return prefs.getBoolean(ProgressBar, false);
+    }
+
+    public static Date GetLastUpdatedFromGDrive(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        Date datedef = new Date();
+        return new Date(prefs.getLong(PREFS_GDRIVELASTUPDATED, datedef.getTime()));
+    }
+
+
+    public static void SetLastUpdatedFromGDrive(Activity activity, Date lastUpdated) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(PREFS_GDRIVELASTUPDATED, lastUpdated.getTime());
+        editor.commit();
     }
 }

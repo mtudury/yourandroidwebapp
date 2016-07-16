@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import fr.coding.tools.AutoAuthSslWebView;
 import fr.coding.tools.Callback;
 import fr.coding.tools.CallbackResult;
@@ -236,16 +238,6 @@ public class WebMainActivity extends Activity {
                 Toast.makeText(this, "This WebAppId does not exist (no more?)", Toast.LENGTH_LONG).show();
             }
         }
-
-        mWebView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                LoadWebView();
-
-                needLoad = false;
-            }
-        }, 5);
     }
 
     @Override
@@ -259,7 +251,7 @@ public class WebMainActivity extends Activity {
         }
         if (wa != null) {
             boolean newContext = isAlternateContext(wa);
-            if (newContext != lastContextAlternate) {
+            if ((newContext != lastContextAlternate)||(needLoad)) {
                 lastContextAlternate = newContext;
                 url = wa.url;
                 lastContextAlternate = isAlternateContext(wa);
@@ -268,6 +260,10 @@ public class WebMainActivity extends Activity {
                 }
                 LoadWebView();
 
+            }
+            // refresh local settings (used as cache when using gdrive) once by week
+            if (AppSettingsManager.IsSettingsInGdrive(this)&&(AppSettingsManager.GetLastUpdatedFromGDrive(this).getTime() < new Date().getTime()-(7*24*60*60*1000))) {
+                UpdateLocalConfig();
             }
         }
     }
@@ -300,6 +296,7 @@ public class WebMainActivity extends Activity {
 
     protected void LoadWebView() {
         mWebView.loadUrl(url);
+        needLoad = false;
     }
 
     @Override
@@ -319,31 +316,33 @@ public class WebMainActivity extends Activity {
         final WebMainActivity webActivity = this;
         arg.activated = true;
 
-        if (coreActivity == null) {
-            coreActivity = new AppSettingsActivityHelper(this, new AppSettingsCallback() {
-                @Override
-                public void onAppSettingsReady(AppSettings settings) {
-                    boolean found = false;
-                    for (SslByPass ssl : settings.SslByPasses) {
-                        if ((ssl.Host.equals(arg.Host))
-                                && (ssl.CName.equals(arg.CName))
-                                && (ssl.ValidNotAfter == arg.ValidNotAfter)) {
-                            found = true;
-                            ssl.activated = true;
-                        }
+        AppSettingsCallback SaveSSLCallback = new AppSettingsCallback() {
+            @Override
+            public void onAppSettingsReady(AppSettings settings) {
+                boolean found = false;
+                for (SslByPass ssl : settings.SslByPasses) {
+                    if ((ssl.Host.equals(arg.Host))
+                            && (ssl.CName.equals(arg.CName))
+                            && (ssl.ValidNotAfter == arg.ValidNotAfter)) {
+                        found = true;
+                        ssl.activated = true;
                     }
-                    if (!found) {
-                        settings.SslByPasses.add(arg);
-                    }
-                    settings.getWebAppById(webAppId).allowedSSlActivated = true;
-                    coreActivity.Save(settings);
-
-                    LoadWebViewSettings(settings);
                 }
-            }, TAG);
+                if (!found) {
+                    settings.SslByPasses.add(arg);
+                }
+                settings.getWebAppById(webAppId).allowedSSlActivated = true;
+                coreActivity.Save(settings);
+
+                LoadWebViewSettings(settings);
+            }
+        };
+
+        if (coreActivity == null) {
+            coreActivity = new AppSettingsActivityHelper(this, SaveSSLCallback, TAG);
             coreActivity.onResume();
         } else {
-            coreActivity.getSettings();
+            coreActivity.getSettings(SaveSSLCallback);
         }
     }
 
@@ -351,30 +350,51 @@ public class WebMainActivity extends Activity {
         final WebMainActivity webActivity = this;
         arg.activated = true;
 
-        if (coreActivity == null) {
-            coreActivity = new AppSettingsActivityHelper(webActivity, new AppSettingsCallback() {
-                @Override
-                public void onAppSettingsReady(AppSettings settings) {
-                    boolean found = false;
-                    for (HostAuth hostAuth : settings.HostAuths) {
-                        if (hostAuth.Host.equals(arg.Host)) {
-                            found = true;
-                            hostAuth.Login = arg.Login;
-                            hostAuth.Password = arg.Password;
-                        }
+        AppSettingsCallback SaveAcceptedHostAuth = new AppSettingsCallback() {
+            @Override
+            public void onAppSettingsReady(AppSettings settings) {
+                boolean found = false;
+                for (HostAuth hostAuth : settings.HostAuths) {
+                    if (hostAuth.Host.equals(arg.Host)) {
+                        found = true;
+                        hostAuth.Login = arg.Login;
+                        hostAuth.Password = arg.Password;
                     }
-                    if (!found) {
-                        settings.HostAuths.add(arg);
-                    }
-                    settings.getWebAppById(webAppId).autoAuth = true;
-                    coreActivity.Save(settings);
                 }
-            }, TAG);
+                if (!found) {
+                    settings.HostAuths.add(arg);
+                }
+                settings.getWebAppById(webAppId).autoAuth = true;
+                coreActivity.Save(settings);
+            }
+        };
+
+        if (coreActivity == null) {
+            coreActivity = new AppSettingsActivityHelper(webActivity, SaveAcceptedHostAuth, TAG);
             coreActivity.onResume();
         } else {
-            coreActivity.getSettings();
+            coreActivity.getSettings(SaveAcceptedHostAuth);
         }
     }
+
+    protected void UpdateLocalConfig() {
+        final WebMainActivity webActivity = this;
+
+        AppSettingsCallback DoNothingCallback = new AppSettingsCallback() {
+            @Override
+            public void onAppSettingsReady(AppSettings settings) {
+            }
+        };
+
+        if (coreActivity == null) {
+            coreActivity = new AppSettingsActivityHelper(webActivity, DoNothingCallback, TAG);
+            coreActivity.onResume();
+        } else {
+            coreActivity.getSettings(DoNothingCallback);
+        }
+    }
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

@@ -48,6 +48,11 @@ public class AppSettingsActivityHelper extends GoogleDriveCoreActivity implement
         appSettingsManager.LoadSettings(googleApiClient, this);
     }
 
+    public void getSettings(AppSettingsCallback appSettingsCallback) {
+        this.appSettingsCallback = appSettingsCallback;
+        appSettingsManager.LoadSettings(googleApiClient, this);
+    }
+
     public AppSettings getAppSettings() {
         return appSettings;
     }
