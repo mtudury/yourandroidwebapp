@@ -211,6 +211,10 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
 
             });
         }
+        Preference prefautorefresh = findPreference(AppSettingsManager.AutoRefresh);
+        if (prefautorefresh != null) {
+            bindPreferenceSummaryToValue(prefautorefresh);
+        }
     }
 
     @Override

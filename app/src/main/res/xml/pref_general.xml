@@ -16,6 +16,13 @@
             android:summary="@string/pref_description_webview_keepscreen_on"
             android:defaultValue="false"
             />
+        <ListPreference
+            android:title="@string/pref_title_refreshevery"
+            android:summary="@string/pref_description_refreshevery"
+            android:key="webview_refreshevery"
+            android:entries="@array/pref_refreshevery_titles"
+            android:entryValues="@array/pref_refreshevery_values"
+            android:defaultValue="-1" />
         <Preference android:title="@string/title_activity_google_drive_settings">
             <intent
                 android:action="android.intent.action.VIEW"

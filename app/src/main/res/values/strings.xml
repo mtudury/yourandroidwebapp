@@ -52,6 +52,8 @@
     <string name="pref_description_webview_keepscreen_on">The device will stay awake when displaying a webapp</string>
     <string name="pref_title_webview_progress">Show progress bar</string>
     <string name="pref_description_webview_progress">On top of the webview add a progress bar allowing to follow the progress of the web page rendering</string>
+    <string name="pref_title_refreshevery">Refresh Webview content every</string>
+    <string name="pref_description_refreshevery">Allow the Webview to be refreshed at specific time</string>
     <string-array name="cache_mode">
         <item>Default</item>
         <item>No Cache</item>

@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import fr.coding.tools.AutoAuthSslWebView;
 import fr.coding.tools.Callback;
@@ -197,6 +199,26 @@ public class WebMainActivity extends Activity {
                 return null;
             }
         };
+
+        long autoRefreshDelay = AppSettingsManager.AutoRefreshRate(this)*1000*60;
+        if (autoRefreshDelay>0) {
+            Timer timer = new Timer();
+            class AutoRefresh extends TimerTask {
+
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable(){
+
+                        @Override
+                        public void run() {
+                            LoadWebView();
+                        }});
+                }
+
+            }
+            AutoRefresh ar = new AutoRefresh();
+            timer.schedule(ar, autoRefreshDelay, autoRefreshDelay);
+        }
 
         if (webAppId.equals( "CLEAR_CACHE")) {
             mWebView.clearCache(true);

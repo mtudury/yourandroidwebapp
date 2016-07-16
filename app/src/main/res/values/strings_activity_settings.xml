@@ -102,4 +102,25 @@
     <string name="pref_description_disable_playback_require_gesture">See https://developer.android.com/reference/android/webkit/WebSettings.html#setMediaPlaybackRequiresUserGesture(boolean) and http://chromium-bugs.chromium.narkive.com/cW5IXVgj/issue-178297-in-chromium-android-chrome-does-not-allow-applications-to-play-html5-audio-without-an</string>
 
     <string name="pref_title_webview_user_agent">Custom User-Agent</string>
+
+    <string-array name="pref_refreshevery_titles">
+        <item>Never</item>
+        <item>1 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Once per day</item>
+    </string-array>
+    <string-array name="pref_refreshevery_values">
+        <item>-1</item>
+        <item>1</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>1440</item>
+    </string-array>
 </resources>

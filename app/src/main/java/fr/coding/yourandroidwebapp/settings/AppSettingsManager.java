@@ -40,6 +40,7 @@ public class AppSettingsManager {
     private static  final String KeepScreenOn = "webview_keepscreen_on";
     private static final String FullScreenMode = "webview_fullscreen_mode";
     private static final String ProgressBar = "webview_progress";
+    public static final String AutoRefresh = "webview_refreshevery";
     private static final String PREFS_GDRIVELASTUPDATED = "google_drive_last_updated";
 
     private GoogleApiClient googleApiClient;
@@ -312,6 +313,10 @@ public class AppSettingsManager {
         return new Date(prefs.getLong(PREFS_GDRIVELASTUPDATED, datedef.getTime()));
     }
 
+    public static long AutoRefreshRate(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return Long.parseLong(prefs.getString(AutoRefresh, "-1"));
+    }
 
     public static void SetLastUpdatedFromGDrive(Activity activity, Date lastUpdated) {
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
