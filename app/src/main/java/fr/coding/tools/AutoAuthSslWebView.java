@@ -2,6 +2,8 @@ package fr.coding.tools;
 
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebView;
+
+import java.util.Date;
 import java.util.List;
 import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
@@ -22,12 +24,15 @@ public class AutoAuthSslWebView extends SslWebView {
         return allowedHosts;
     }
 
+    public long AutoTestedDate = 0;
+
     @Override
     public void onReceivedHttpAuthRequest(WebView webView, HttpAuthHandler handler, String host, String realm) {
-        if (allowedHosts != null) {
+        if ((allowedHosts != null)&&(AutoTestedDate < (new Date().getTime()-(15000)))) {
             for (HostAuth ha :
                     allowedHosts) {
                 if (host.equals(ha.Host)) {
+                    AutoTestedDate = new Date().getTime();
                     handler.proceed(ha.Login, ha.Password);
                     return;
                 }
