@@ -12,5 +12,7 @@ Features :
 - Alternate URLs if in office (WIFI based detection)
 - Clear WebView Cache
 - Allow remote debugging with Chrome
-- FullScreen Mode
-- Keep the screen On
+- Kiosk Mode Features :
+  - FullScreen Mode
+  - Keep the screen On
+  - AutoRefresh every (xx minutes)

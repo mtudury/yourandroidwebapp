@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -72,7 +73,7 @@ public class WebMainActivity extends Activity {
 
         final WebMainActivity webActivity = this;
 
-        url = "http://toutestquantique.fr/en/";
+        url = "file:///android_asset/default.html";
         webAppId = getIntent().getStringExtra("webappid");
 
         mWebView = (WebView) findViewById(R.id.activity_main_webview);
@@ -230,16 +231,16 @@ public class WebMainActivity extends Activity {
     }
 
     protected boolean isAlternateContext(WebApp webapp) {
-        if ((webapp.alternateSSIDs == null)||(webapp.alternateSSIDs.isEmpty()))
+        if (TextUtils.isEmpty(webapp.alternateSSIDs))
             return false;
-        if ((webapp.alternateUrl == null)||(webapp.alternateUrl.isEmpty()))
+        if (TextUtils.isEmpty(webapp.alternateUrl))
             return false;
 
         return Wifi.isOnlineAndWifi(this) && Wifi.isInSSIDList(this, webapp.alternateSSIDs);
     }
 
     protected void LoadWebViewSettings(AppSettings settings) {
-        if ((webAppId != null) && (!webAppId.isEmpty())) {
+        if (!TextUtils.isEmpty(webAppId)) {
             wa = settings.getWebAppById(webAppId);
             if (wa != null) {
                 wvc.setCompleteByPass(wa.allCertsByPass);
@@ -250,7 +251,8 @@ public class WebMainActivity extends Activity {
                     wvc.setAllowedHosts(settings.HostAuths);
                 }
                 mWebView.getSettings().setCacheMode(wa.cacheMode);
-                url = wa.url;
+                if (!TextUtils.isEmpty(wa.url))
+                    url = wa.url;
                 lastContextAlternate = isAlternateContext(wa);
                 if (lastContextAlternate) {
                     url = wa.alternateUrl;
@@ -275,7 +277,8 @@ public class WebMainActivity extends Activity {
             boolean newContext = isAlternateContext(wa);
             if ((newContext != lastContextAlternate)||(needLoad)) {
                 lastContextAlternate = newContext;
-                url = wa.url;
+                if (!TextUtils.isEmpty(wa.url))
+                    url = wa.url;
                 lastContextAlternate = isAlternateContext(wa);
                 if (lastContextAlternate) {
                     url = wa.alternateUrl;
