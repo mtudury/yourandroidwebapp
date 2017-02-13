@@ -1,0 +1,10 @@
+YourAndroidWebApp Privacy Policy
+--------------------------------
+
+This application does not collect any data regarding your privacy.
+
+If you use Google Drive to share your settings between device, this application use Google API's to retrieve the FirstName and LastName, the email associated with the Account in order to show them on the google drive settings menu in the application. These informations are not used for something else.
+
+Privacy regarding the website you embed in this App : If you embed a website in this application, refer to the website privacy policy.
+
+This app does not collect any data regarding the usage you made of it.
