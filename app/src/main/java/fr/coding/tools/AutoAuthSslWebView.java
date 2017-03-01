@@ -25,14 +25,19 @@ public class AutoAuthSslWebView extends SslWebView {
     }
 
     public long AutoTestedDate = 0;
+    public int counttry = 0;
 
     @Override
     public void onReceivedHttpAuthRequest(WebView webView, HttpAuthHandler handler, String host, String realm) {
-        if ((allowedHosts != null)&&(AutoTestedDate < (new Date().getTime()-(15000)))) {
+        if (AutoTestedDate > (new Date().getTime()-(15000))) {
+            counttry = 0;
+        }
+        if ((allowedHosts != null)&&((AutoTestedDate < (new Date().getTime()-(15000)))||(counttry < 10))) {
             for (HostAuth ha :
                     allowedHosts) {
                 if (host.equals(ha.Host)) {
                     AutoTestedDate = new Date().getTime();
+                    counttry++;
                     handler.proceed(ha.Login, ha.Password);
                     return;
                 }
