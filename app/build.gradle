@@ -5,13 +5,13 @@ android {
 
     }
     compileSdkVersion 22
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "fr.coding.yourandroidwebapp"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 27
-        versionName "1.9.5"
+        versionCode 28
+        versionName "1.9.6"
     }
     buildTypes {
         release {
