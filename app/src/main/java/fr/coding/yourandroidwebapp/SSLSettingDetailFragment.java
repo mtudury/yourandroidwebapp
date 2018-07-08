@@ -102,12 +102,29 @@ public class SSLSettingDetailFragment extends Fragment {
                 }
             });
         }
+
+        Button button = (Button) rootView.findViewById(R.id.sslsetting_delete);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteSslSetting(v);
+            }
+        });
+
+
         return rootView;
     }
 
     public void saveSslSetting(View view) {
         View rootView = view.getRootView();
         getItem(rootView);
+
+        activity.SaveSettings(settings);
+    }
+
+
+    public void deleteSslSetting(View view) {
+        settings.SslByPasses.remove(mItem);
 
         activity.SaveSettings(settings);
     }

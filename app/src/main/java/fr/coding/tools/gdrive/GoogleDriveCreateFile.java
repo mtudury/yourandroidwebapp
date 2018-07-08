@@ -37,7 +37,8 @@ public class GoogleDriveCreateFile extends GoogleDriveBaseTools {
         super(gApiClient, activity, "GoogleDriveCreateFile");
     }
 
-    public void CreateFile(String fileName, String mimetype, Callback<String> callback) {
+    public void CreateFile(String fileName, String content, String mimetype, Callback<String> callback) {
+        writeContents = content;
         CreateFile(new MetadataChangeSet.Builder()
                 .setTitle(fileName)
                 .setMimeType(mimetype)
@@ -68,20 +69,21 @@ public class GoogleDriveCreateFile extends GoogleDriveBaseTools {
                         public void run() {
                             // write content to DriveContents
                             OutputStream outputStream = driveContents.getOutputStream();
-                            Writer writer = new OutputStreamWriter(outputStream);
-                            try {
-                                writer.write(writeContents);
-                                writer.close();
-                            } catch (IOException e) {
-                                Log.e("AppSettingsManager", e.getMessage());
+                            if (outputStream != null) {
+                                Writer writer = new OutputStreamWriter(outputStream);
+                                try {
+                                    writer.write(writeContents);
+                                    writer.close();
+                                } catch (IOException e) {
+                                    Log.e("AppSettingsManager", e.getMessage());
+                                }
+
+
+                                // create a file on root folder
+                                Drive.DriveApi.getAppFolder(googleApiClient)
+                                        .createFile(googleApiClient, changeSet, driveContents)
+                                        .setResultCallback(fileCallback);
                             }
-
-
-
-                            // create a file on root folder
-                            Drive.DriveApi.getAppFolder(googleApiClient)
-                                    .createFile(googleApiClient, changeSet, driveContents)
-                                    .setResultCallback(fileCallback);
                         }
                     }.start();
                 }

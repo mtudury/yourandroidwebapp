@@ -24,12 +24,16 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
  */
 public class HostAuthSettingsDetailActivity extends AppSettingsActivity implements AppSettingsCallback {
 
+    public FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hostauth_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

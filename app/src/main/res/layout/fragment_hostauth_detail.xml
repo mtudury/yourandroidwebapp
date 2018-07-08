@@ -1,5 +1,26 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/hostauth_detail"
-    style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="16dp" android:textIsSelectable="true"
-    tools:context=".HostAuthSettingsDetailFragment" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/hostauth_detail"
+            style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
+            android:layout_height="match_parent" android:padding="16dp" android:textIsSelectable="true"
+            tools:context=".HostAuthSettingsDetailFragment" />
+        <Button
+            android:id="@+id/hostauth_delete"
+            android:layout_height="wrap_content"
+            android:text="@string/hostauth_delete"
+            android:layout_width="fill_parent">
+        </Button>
+
+    </LinearLayout>
+</ScrollView>

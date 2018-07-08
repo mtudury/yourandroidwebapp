@@ -257,7 +257,7 @@ public class AppSettingsManager {
             new GoogleDriveUpdateFile(googleApiClient, activity).SetDriveFileContent(df, jsonval, successSavedCallBack);
         } else {
             // create file
-            new GoogleDriveCreateFile(googleApiClient, activity).CreateFile(PREFSFILE, "application/json", successSavedCallBack);
+            new GoogleDriveCreateFile(googleApiClient, activity).CreateFile(PREFSFILE, jsonval, "application/json", successSavedCallBack);
         }
     }
 

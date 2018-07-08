@@ -6,6 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,10 @@ public class SSLSettingListFragment extends ListFragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 sslByPasses ));
+
+        if (sslByPasses.size() == 0) {
+            Toast.makeText(getActivity(), "This list is empty until you visit a site with selfsigned ssl certificate", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

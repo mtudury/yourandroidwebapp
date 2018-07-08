@@ -153,6 +153,8 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    Toast.makeText(preference.getContext(), "Before use this option, ensure you have exported your settings to google drive (in order to create the file to be selected).", Toast.LENGTH_LONG).show();
+
                     if ((getGoogleApiClient() != null) && (getGoogleApiClient().isConnected())) {
                         IntentSender intentSender = Drive.DriveApi
                                 .newOpenFileActivityBuilder()
@@ -175,7 +177,6 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
             SharedPreferences prefs = this.getSharedPreferences(AppSettingsManager.PREFS, Context.MODE_PRIVATE);
             pref2.setSummary(prefs.getString(AppSettingsManager.PREFS_CUSTOMDRIVEIDDESC, ""));
-
         }
 
         Preference pref3 = findPreference("google_drive_account");

@@ -7,9 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import fr.coding.tools.model.HostAuth;
+import fr.coding.tools.model.SslByPass;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 
@@ -81,6 +84,26 @@ public class HostAuthSettingsDetailFragment extends Fragment {
             onSettingsReceived(settings);
         }
 
+            Button button = (Button) rootView.findViewById(R.id.hostauth_delete);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteHostAuthSetting(v);
+                }
+            });
+
         return rootView;
+    }
+
+
+    public void deleteHostAuthSetting(View view) {
+        settings.HostAuths.remove(mItem);
+
+        activity.SaveSettings(settings);
+    }
+
+
+    private void getItem(View rootView) {
+
     }
 }

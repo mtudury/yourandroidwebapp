@@ -6,6 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,13 +75,17 @@ public class HostAuthSettingsListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
         List<HostAuth> hostAuths = new ArrayList<>(((AppSettingsActivity)getActivity()).getAppSettings().HostAuths);
         setListAdapter(new ArrayAdapter<HostAuth>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 hostAuths));
+
+        if (hostAuths.size() == 0) {
+            Toast.makeText(getActivity(), "This list is empty until you visit a site with login/pwd auth", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override

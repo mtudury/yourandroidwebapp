@@ -33,8 +33,14 @@
             android:id="@+id/sslsetting_save_button"
             android:layout_height="wrap_content"
             android:text="@string/sslsetting_save_button"
-            android:layout_width="fill_parent"
-            android:visibility="invisible">
+            android:layout_width="fill_parent">
+        </Button>
+
+        <Button
+            android:id="@+id/sslsetting_delete"
+            android:layout_height="wrap_content"
+            android:text="@string/sslsetting_delete"
+            android:layout_width="fill_parent">
         </Button>
     </LinearLayout>
 </ScrollView>
