@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 import java.io.*;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -100,7 +101,7 @@ public abstract class GoogleDriveApiAppCompatActivity extends AppCompatActivity 
     /**
      * Getter for the {@code GoogleApiClient}.
      */
-    public GoogleApiClient getGoogleApiClient() {
+    public GoogleSignInClient getGoogleApiClient() {
         return coreActivity.getGoogleApiClient();
     }
 

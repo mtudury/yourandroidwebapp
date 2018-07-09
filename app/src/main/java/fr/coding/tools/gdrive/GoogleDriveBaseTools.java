@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.*;
@@ -19,15 +20,15 @@ public class GoogleDriveBaseTools {
 
     protected String TAG;
 
-    protected GoogleApiClient googleApiClient;
+    protected GoogleSignInClient googleApiClient;
 
     protected Activity activity;
 
-    public GoogleDriveBaseTools(GoogleApiClient gApiClient, Activity activity, String LogTAG) {
+    public GoogleDriveBaseTools(GoogleSignInClient gApiClient, Activity activity, String LogTAG) {
         googleApiClient = gApiClient;
         this.activity = activity;
         this.TAG = LogTAG;
     }
 
-    public GoogleApiClient getGoogleApiClient() { return googleApiClient; }
+    public GoogleSignInClient getGoogleApiClient() { return googleApiClient; }
 }

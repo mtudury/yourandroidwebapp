@@ -7,12 +7,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.signin.SignIn;
+import com.google.android.gms.signin.SignInClient;
 
 
 /**
@@ -44,17 +49,17 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
 
     public void onResume() {
         if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(activity)
-                    .addApi(Drive.API)
-                    .addScope(new Scope(Scopes.PROFILE))
-                    .addScope(new Scope(Scopes.EMAIL))
-                    .addScope(Drive.SCOPE_FILE)
-                    .addScope(Drive.SCOPE_APPFOLDER)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestProfile()
+                    .requestScopes(Drive.SCOPE_APPFOLDER)
+                    .requestScopes(Drive.SCOPE_FILE)
                     .build();
+
+            googleApiClient = GoogleSignIn.getClient(activity, gso);
         }
-        googleApiClient.connect();
+        Intent intent = googleApiClient.getSignInIntent();
+        activity.startActivityForResult(intent, REQUEST_CODE_RESOLUTION);
     }
 
     /**
@@ -63,15 +68,15 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (googleApiClient != null) {
             if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == activity.RESULT_OK) {
-                googleApiClient.connect();
+                //googleApiClient.connect();
             }
         }
     }
 
     public void onPause() {
-        if (googleApiClient != null) {
+        /*if (googleApiClient != null) {
             googleApiClient.disconnect();
-        }
+        }*/
     }
 
     /**
