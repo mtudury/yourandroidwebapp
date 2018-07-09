@@ -29,16 +29,12 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.drive.*;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.PersonBuffer;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -196,7 +192,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Plus.AccountApi.clearDefaultAccount(getGoogleApiClient());
+                                        Auth.GoogleSignInApi.signOut(getGoogleApiClient());
                                         finish();
                                     }
 
@@ -371,40 +367,35 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
         //todo renseigner le google account dans la pref : google_drive_account
         Preference pref = findPreference("google_drive_account");
         if (pref != null) {
-            Person currentPerson = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
-            if (currentPerson != null) {
-                String DisplayName = currentPerson.getDisplayName();
-                pref.setSummary(DisplayName + " (" + Plus.AccountApi.getAccountName(getGoogleApiClient()) + ")");
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+            if (acct != null) {
+                String personEmail = acct.getEmail();
+                String DisplayName = acct.getDisplayName();
+                pref.setSummary(DisplayName + " (" + personEmail + ")");
             } else {
-                pref.setSummary(Plus.AccountApi.getAccountName(getGoogleApiClient()));
+                pref.setSummary("Unknow");
             }
         }
 
         if (localdriveId != null) {
             final Context act = this;
-            Drive.DriveApi.getFolder(getGoogleApiClient(), localdriveId).getMetadata(getGoogleApiClient()).setResultCallback(new ResultCallback<DriveResource.MetadataResult>() {
-                @Override
-                public void onResult(DriveResource.MetadataResult mdRslt) {
-                    if (mdRslt != null && mdRslt.getStatus().isSuccess()) {
 
-                        SharedPreferences prefs = act.getSharedPreferences(AppSettingsManager.PREFS, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(AppSettingsManager.PREFS_CUSTOMDRIVEIDDESC, mdRslt.getMetadata().getTitle());
-                        editor.commit();
+            Task<Metadata> getMetadataTask = Drive.getDriveResourceClient(this, GoogleSignIn.getLastSignedInAccount(this)).getMetadata(localdriveId.asDriveFile());
+            getMetadataTask.addOnSuccessListener(this, metadata -> {
+                SharedPreferences prefs = act.getSharedPreferences(AppSettingsManager.PREFS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(AppSettingsManager.PREFS_CUSTOMDRIVEIDDESC, metadata.getTitle());
+                editor.commit();
 
-                        Preference pref2 = findPreference("google_drive_path_custom");
-                        if (pref2 != null) {
-                            pref2.setSummary(mdRslt.getMetadata().getTitle());
-                        }
-
-                        //Toast.makeText(act, mdRslt.getMetadata().getTitle(), Toast.LENGTH_LONG).show();
-
-                        localdriveId = null;
-                    }
+                Preference pref2 = findPreference("google_drive_path_custom");
+                if (pref2 != null) {
+                    pref2.setSummary(metadata.getTitle());
                 }
-            });
 
+                localdriveId = null;
+            });
         }
+
     }
 
     /**

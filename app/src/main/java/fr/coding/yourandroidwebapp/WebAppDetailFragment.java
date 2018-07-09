@@ -320,6 +320,8 @@ public class WebAppDetailFragment extends Fragment {
         View rootView = view.getRootView();
         getItem(rootView);
 
+        Toast.makeText(getActivity(), R.string.webapp_shortcutcreating_toast, Toast.LENGTH_SHORT).show();
+
         activity.SaveSettings(settings);
         mItem.LauncherShortcut(getActivity().getApplicationContext());
         Toast.makeText(getActivity(), R.string.webapp_shortcutcreated_toast, Toast.LENGTH_SHORT).show();

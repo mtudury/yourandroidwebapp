@@ -13,7 +13,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.drive.Drive;
-import com.google.android.gms.plus.Plus;
+
 
 /**
  * Created by Matthieu on 07/11/2015.
@@ -46,7 +46,6 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(activity)
                     .addApi(Drive.API)
-                    .addApi(Plus.API)
                     .addScope(new Scope(Scopes.PROFILE))
                     .addScope(new Scope(Scopes.EMAIL))
                     .addScope(Drive.SCOPE_FILE)
