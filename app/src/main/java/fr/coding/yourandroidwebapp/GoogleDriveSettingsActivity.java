@@ -217,7 +217,8 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().isConnected())) {
+                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
+                        DriveClient drc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
                         Drive.DriveApi.newDriveContents(getGoogleApiClient())
                                 .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
                                     @Override
@@ -227,8 +228,8 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                                         MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
                                                 .setTitle(filename)
                                                 .setMimeType("text/plain").build();
-                                        IntentSender intentSender = Drive.DriveApi
-                                                .newCreateFileActivityBuilder()
+                                        IntentSender intentSender = drc
+                                                .newOpenFileActivityIntentSender()
                                                 .setInitialMetadata(metadataChangeSet)
                                                 .setInitialDriveContents(result.getDriveContents())
                                                 .build(getGoogleApiClient());
@@ -288,7 +289,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
             case REQUEST_CODE_OPENER:
                 if (resultCode == RESULT_OK) {
                     DriveId driveId = (DriveId) data.getParcelableExtra(
-                            OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+                            OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID);
                     localdriveId = driveId;
 
                     SharedPreferences prefs = this.getSharedPreferences(AppSettingsManager.PREFS, Context.MODE_PRIVATE);
@@ -302,7 +303,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
             case REQUEST_CODE_CREATOR:
                 if (resultCode == RESULT_OK) {
                     DriveId driveId = (DriveId) data.getParcelableExtra(
-                            OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+                            OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID);
                     final GoogleDriveSettingsActivity ctx = this;
                     AppSettingsManager manager = new AppSettingsManager(ctx);
                     String jsonval = "";
@@ -325,7 +326,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
             case REQUEST_CODE_IMPORT: {
                 if (resultCode == RESULT_OK) {
                     DriveId driveId = (DriveId) data.getParcelableExtra(
-                            OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+                            OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID);
                     final GoogleDriveSettingsActivity ctx = this;
                     DriveFile df = driveId.asDriveFile();
                     new GoogleDriveReadFile(getGoogleApiClient(), ctx).GetDriveFileContent(df, new Callback<String>() {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.*;
 import com.google.android.gms.drive.*;
 import com.google.android.gms.drive.DriveApi.*;
@@ -43,7 +44,7 @@ public class AppSettingsManager {
     public static final String AutoRefresh = "webview_refreshevery";
     private static final String PREFS_GDRIVELASTUPDATED = "google_drive_last_updated";
 
-    private GoogleApiClient googleApiClient;
+    private GoogleSignInClient googleApiClient;
 
     private AppSettingsCallback getResultHandler;
 
@@ -57,7 +58,7 @@ public class AppSettingsManager {
         activity = act;
     }
 
-    public void LoadSettings(GoogleApiClient apiClient, AppSettingsCallback handler) {
+    public void LoadSettings(GoogleSignInClient apiClient, AppSettingsCallback handler) {
         googleApiClient = apiClient;
         getResultHandler = handler;
 
@@ -127,7 +128,7 @@ public class AppSettingsManager {
         });
     }
 
-    public void Save(AppSettings apps, GoogleApiClient apiClient, Callback<String> saveHandler) {
+    public void Save(AppSettings apps, GoogleSignInClient apiClient, Callback<String> saveHandler) {
         googleApiClient = apiClient;
         saveResultHandler = saveHandler;
         try {

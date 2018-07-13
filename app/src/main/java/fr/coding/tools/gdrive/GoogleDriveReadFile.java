@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveResourceClient;
+import com.google.android.gms.tasks.Task;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +28,7 @@ public class GoogleDriveReadFile extends GoogleDriveBaseTools {
 
     private Callback<String> readCallback;
 
-    public GoogleDriveReadFile(GoogleApiClient gApiClient, Activity activity) {
+    public GoogleDriveReadFile(GoogleSignInClient gApiClient, Activity activity) {
         super(gApiClient, activity, "GoogleDriveReadFile");
     }
 
@@ -34,20 +39,12 @@ public class GoogleDriveReadFile extends GoogleDriveBaseTools {
      */
     public void GetDriveFileContent(DriveFile df, Callback<String> readcallback) {
         readCallback = readcallback;
-        df.open(googleApiClient, DriveFile.MODE_READ_ONLY, null).setResultCallback(driveContentsCallback);
-    }
+        DriveResourceClient drc = Drive.getDriveResourceClient(activity, GoogleSignIn.getLastSignedInAccount(activity));
+        Task<DriveContents> openTask =
+                drc.openFile(df, DriveFile.MODE_READ_ONLY);
 
-    final private ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback = new
-            ResultCallback<DriveApi.DriveContentsResult>() {
-                @Override
-                public void onResult(DriveApi.DriveContentsResult result) {
-                    if (!result.getStatus().isSuccess()) {
-                        new AlertDialog.Builder(activity).setTitle("Error Saving Settings").setMessage(result.getStatus().getStatusMessage()).setNeutralButton("Close", null).show();
-                        return;
-                    }
-                    final DriveContents driveContents = result.getDriveContents();
-
-                    // Perform I/O off the UI thread.
+        openTask.addOnSuccessListener(driveContents -> {
+                        // Perform I/O off the UI thread.
                     new Thread() {
                         @Override
                         public void run() {
@@ -67,7 +64,7 @@ public class GoogleDriveReadFile extends GoogleDriveBaseTools {
                                 Log.e(TAG, "IOException while reading from the stream", e);
                             }
 
-                            driveContents.discard(googleApiClient);
+                            drc.discardContents(driveContents);
 
                             final String resultcontents = contents;
                             activity.runOnUiThread(new Runnable() {
@@ -78,6 +75,8 @@ public class GoogleDriveReadFile extends GoogleDriveBaseTools {
                             });
                         }
                     }.start();
-                }
+                }).addOnFailureListener(failure -> {
+            new AlertDialog.Builder(activity).setTitle("Error Saving Settings").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
+        });
             };
 }

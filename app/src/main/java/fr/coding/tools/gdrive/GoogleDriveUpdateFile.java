@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveResourceClient;
+import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -27,7 +32,7 @@ public class GoogleDriveUpdateFile extends GoogleDriveBaseTools {
     private String writeContents;
 
 
-    public GoogleDriveUpdateFile(GoogleApiClient gApiClient, Activity activity) {
+    public GoogleDriveUpdateFile(GoogleSignInClient gApiClient, Activity activity) {
         super(gApiClient, activity, "GoogleDriveUpdateFile");
     }
 
@@ -35,46 +40,39 @@ public class GoogleDriveUpdateFile extends GoogleDriveBaseTools {
     public void SetDriveFileContent(DriveFile df, String contents, Callback<String> writecallback) {
         writeCallback = writecallback;
         writeContents = contents;
-        df.open(googleApiClient, DriveFile.MODE_WRITE_ONLY, null).setResultCallback(writedriveContentsCallback);
-    }
+        DriveResourceClient drc = Drive.getDriveResourceClient(activity, GoogleSignIn.getLastSignedInAccount(activity));
 
-    final private ResultCallback<DriveApi.DriveContentsResult> writedriveContentsCallback = new
-            ResultCallback<DriveApi.DriveContentsResult>() {
+        Task<DriveContents> openTask =
+                drc.openFile(df, DriveFile.MODE_WRITE_ONLY);
+
+        openTask.addOnSuccessListener(driveContents -> {
+            // Perform I/O off the UI thread.
+            new Thread() {
                 @Override
-                public void onResult(DriveApi.DriveContentsResult result) {
-                    if (!result.getStatus().isSuccess()) {
-                        new AlertDialog.Builder(activity).setTitle("Error Saving Settings").setMessage(result.getStatus().getStatusMessage()).setNeutralButton("Close", null).show();
-                        return;
-                    }
-                    final DriveContents driveContents = result.getDriveContents();
-
-                    // Perform I/O off the UI thread.
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            try {
-                                OutputStream outputStream = driveContents.getOutputStream();
-                                Writer writer = new OutputStreamWriter(outputStream);
-                                writer.write(writeContents);
-                                writer.close();
-                                driveContents.commit(googleApiClient, null).await();
-                                if (writeCallback != null) {
-                                    activity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            writeCallback.onCallback(writeContents);
-                                        }
-                                    });
+                public void run() {
+                    try {
+                        OutputStream outputStream = driveContents.getOutputStream();
+                        Writer writer = new OutputStreamWriter(outputStream);
+                        writer.write(writeContents);
+                        writer.close();
+                        drc.commitContents(driveContents, null);
+                        if (writeCallback != null) {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    writeCallback.onCallback(writeContents);
                                 }
-
-                            } catch (IOException e) {
-                                Log.e(TAG, "IOException while reading from the stream", e);
-                            }
+                            });
                         }
-                    }.start();
+
+                    } catch (IOException e) {
+                        Log.e(TAG, "IOException while reading from the stream", e);
+                    }
                 }
-            };
-
-
+            }.start();
+        }).addOnFailureListener(failure -> {
+            new AlertDialog.Builder(activity).setTitle("Error Saving Settings").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
+        });
+    }
 
 }

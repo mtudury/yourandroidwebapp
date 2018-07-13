@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -108,7 +109,7 @@ public abstract class GoogleDriveApiAppCompatPreferenceActivity extends AppCompa
     /**
      * Getter for the {@code GoogleApiClient}.
      */
-    public GoogleApiClient getGoogleApiClient() {
+    public GoogleSignInClient getGoogleApiClient() {
         return coreActivity.getGoogleApiClient();
     }
 
