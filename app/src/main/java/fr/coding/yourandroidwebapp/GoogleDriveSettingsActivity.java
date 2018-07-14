@@ -155,16 +155,19 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                     Toast.makeText(preference.getContext(), "Before use this option, ensure you have exported your settings to google drive (in order to create the file to be selected).", Toast.LENGTH_LONG).show();
 
                     if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
-                        IntentSender intentSender = Drive.DriveApi
-                                .newOpenFileActivityBuilder()
-                                //.setMimeType(new String[]{DriveFolder.MIME_TYPE})
-                                .build(getGoogleApiClient());
-                        try {
-                            startIntentSenderForResult(
-                                    intentSender, REQUEST_CODE_OPENER, null, 0, 0, 0);
-                        } catch (IntentSender.SendIntentException e) {
-                            //Log.w(TAG, "Unable to send intent", e);
-                        }
+                        DriveClient dc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
+                        OpenFileActivityOptions createOptions =
+                                new OpenFileActivityOptions.Builder()
+                                        .build();
+                        dc.newOpenFileActivityIntentSender(createOptions).addOnSuccessListener(intentSender -> {
+                            try {
+                                startIntentSenderForResult(
+                                        intentSender, REQUEST_CODE_OPENER, null, 0, 0, 0);
+                            } catch (IntentSender.SendIntentException e) {
+                                e.printStackTrace();
+                                new AlertDialog.Builder(preference.getContext()).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                            }
+                        });
                     } else {
                         Toast.makeText(preference.getContext(), "Currently connecting, retry in seconds", Toast.LENGTH_LONG).show();
                     }
@@ -195,7 +198,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Auth.GoogleSignInApi.signOut(getGoogleApiClient());
+                                        getGoogleApiClient().signOut();
                                         finish();
                                     }
 
@@ -231,37 +234,47 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                                         // write content to DriveContents
                                         OutputStream outputStream = driveContents.getOutputStream();
                                         if (outputStream != null) {
-                                            Writer writer = new OutputStreamWriter(outputStream);
+                                            AppSettingsManager manager = new AppSettingsManager(ctx);
+                                            String jsonval = "";
                                             try {
-                                                writer.write(writeContents);
-                                                writer.close();
-                                            } catch (IOException e) {
-                                                Log.e("AppSettingsManager", e.getMessage());
-                                            }
-
-                                            DriveClient dc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
-                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                            String filename = "appsettings_backup_" + format.format(new Date()) + ".json";
-                                            MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                                                    .setTitle(filename)
-                                                    .setMimeType("text/plain").build();
-
-                                            CreateFileActivityOptions createOptions =
-                                                    new CreateFileActivityOptions.Builder()
-                                                            .setInitialDriveContents(driveContents)
-                                                            .setInitialMetadata(metadataChangeSet)
-                                                            .build();
-
-                                            dc.newCreateFileActivityIntentSender(createOptions).addOnSuccessListener( intentSender -> {
+                                                jsonval = manager.LoadSettingsLocally().AppSettingsToJSONobj().toString();
+                                                Writer writer = new OutputStreamWriter(outputStream);
                                                 try {
-                                                    startIntentSenderForResult(
-                                                            intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
-                                                } catch (IntentSender.SendIntentException e) {
-                                                    e.printStackTrace();
-                                                    new AlertDialog.Builder(ctx).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                                                    writer.write(jsonval);
+                                                    writer.close();
+                                                } catch (IOException e) {
+                                                    Log.e("AppSettingsManager", e.getMessage());
                                                 }
+
+                                                DriveClient dc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
+                                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                                String filename = "appsettings_backup_" + format.format(new Date()) + ".json";
+                                                MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                                                        .setTitle(filename)
+                                                        .setMimeType("text/plain").build();
+
+                                                CreateFileActivityOptions createOptions =
+                                                        new CreateFileActivityOptions.Builder()
+                                                                .setInitialDriveContents(driveContents)
+                                                                .setInitialMetadata(metadataChangeSet)
+                                                                .build();
+
+                                                dc.newCreateFileActivityIntentSender(createOptions).addOnSuccessListener(intentSender -> {
+                                                    try {
+                                                        startIntentSenderForResult(
+                                                                intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
+                                                    } catch (IntentSender.SendIntentException e) {
+                                                        e.printStackTrace();
+                                                        new AlertDialog.Builder(ctx).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                                                    }
                                                 });
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                new AlertDialog.Builder(ctx).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
                                             }
+
+                                        }
+
 //                                    }
 //                                }.start();
                             });
@@ -283,16 +296,19 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
-                        IntentSender intentSender = Drive.DriveApi
-                                .newOpenFileActivityBuilder()
-                                //.setMimeType(new String[]{DriveFolder.MIME_TYPE})
-                                .build(getGoogleApiClient());
-                        try {
-                            startIntentSenderForResult(
-                                    intentSender, REQUEST_CODE_IMPORT, null, 0, 0, 0);
-                        } catch (IntentSender.SendIntentException e) {
-                            //Log.w(TAG, "Unable to send intent", e);
-                        }
+                        DriveClient dc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
+                        OpenFileActivityOptions createOptions =
+                                new OpenFileActivityOptions.Builder()
+                                        .build();
+                        dc.newOpenFileActivityIntentSender(createOptions).addOnSuccessListener(intentSender -> {
+                            try {
+                                startIntentSenderForResult(
+                                        intentSender, REQUEST_CODE_IMPORT, null, 0, 0, 0);
+                            } catch (IntentSender.SendIntentException e) {
+                                e.printStackTrace();
+                                new AlertDialog.Builder(preference.getContext()).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                            }
+                        });
                     } else {
                         Toast.makeText(preference.getContext(), "Currently connecting, retry in seconds", Toast.LENGTH_LONG).show();
                     }
