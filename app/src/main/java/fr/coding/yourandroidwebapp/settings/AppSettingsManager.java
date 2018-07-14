@@ -20,6 +20,7 @@ import java.util.Date;
 
 import fr.coding.tools.*;
 import fr.coding.tools.gdrive.GoogleDriveCreateFile;
+import fr.coding.tools.gdrive.GoogleDriveFindFile;
 import fr.coding.tools.gdrive.GoogleDriveReadFile;
 import fr.coding.tools.gdrive.GoogleDriveUpdateFile;
 import fr.coding.yourandroidwebapp.R;
@@ -62,28 +63,23 @@ public class AppSettingsManager {
         googleApiClient = apiClient;
         getResultHandler = handler;
 
+        // from gdrive appfolder or specific user defined path
         String driveid = LoadFromUserGdrive(activity);
         if (driveid != null) {
             DriveFile df = DriveId.decodeFromString(driveid).asDriveFile();
             getDriveAppSettings(df);
         }
         else {
-            Drive.DriveApi.getAppFolder(googleApiClient)
-                    .queryChildren(googleApiClient, new Query.Builder()
-                            .addFilter(Filters.eq(SearchableField.TITLE, PREFSFILE))
-                            .build())
-                    .setResultCallback(new ResultCallback<MetadataBufferResult>() {
-                        @Override
-                        public void onResult(MetadataBufferResult metadataBufferResult) {
-                            QueryResultsCallback(metadataBufferResult);
-                        }
-                    });
+            GoogleDriveFindFile gdff = new GoogleDriveFindFile(apiClient, activity);
+            gdff.FindFileAppFolder(PREFSFILE, result -> {
+                QueryResultsCallback(result);
+            });
         }
     }
 
-    public void QueryResultsCallback(MetadataBufferResult result) {
-        if (result.getMetadataBuffer().getCount() > 0) {
-            DriveFile df = result.getMetadataBuffer().get(0).getDriveId().asDriveFile();
+    public void QueryResultsCallback(MetadataBuffer mdb) {
+        if (mdb.getCount() > 0) {
+            DriveFile df = mdb.get(0).getDriveId().asDriveFile();
             getDriveAppSettings(df);
         } else {
             AppSettings res = new AppSettings();
@@ -135,6 +131,7 @@ public class AppSettingsManager {
             jsonval = apps.AppSettingsToJSONobj().toString();
             SaveLocally();
 
+            // from gdrive appfolder or specific user defined path
             if ((apiClient != null)&&(IsSettingsInGdrive(activity))) {
                 String driveid = LoadFromUserGdrive(activity);
                 if (driveid != null) {
@@ -142,16 +139,10 @@ public class AppSettingsManager {
                     new GoogleDriveUpdateFile(googleApiClient, activity).SetDriveFileContent(df, jsonval, successSavedCallBack);
                 }
                 else {
-                    Drive.DriveApi.getAppFolder(googleApiClient)
-                            .queryChildren(googleApiClient, new Query.Builder()
-                                    .addFilter(Filters.eq(SearchableField.TITLE, PREFSFILE))
-                                    .build())
-                            .setResultCallback(new ResultCallback<MetadataBufferResult>() {
-                                @Override
-                                public void onResult(MetadataBufferResult metadataBufferResult) {
-                                    QueryResultsCallbackSave(metadataBufferResult);
-                                }
-                            });
+                    GoogleDriveFindFile gdff = new GoogleDriveFindFile(apiClient, activity);
+                    gdff.FindFileAppFolder(PREFSFILE, result -> {
+                        QueryResultsCallbackSave(result);
+                    });
                 }
             }
         } catch (IOException|JSONException e) {
@@ -250,11 +241,11 @@ public class AppSettingsManager {
         return new AppSettings();
     }
 
-    public void QueryResultsCallbackSave(MetadataBufferResult result) {
+    public void QueryResultsCallbackSave(MetadataBuffer mdb) {
 
-        if (result.getMetadataBuffer().getCount() > 0) {
+        if (mdb.getCount() > 0) {
             // update
-            DriveFile df = result.getMetadataBuffer().get(0).getDriveId().asDriveFile();
+            DriveFile df = mdb.get(0).getDriveId().asDriveFile();
             new GoogleDriveUpdateFile(googleApiClient, activity).SetDriveFileContent(df, jsonval, successSavedCallBack);
         } else {
             // create file

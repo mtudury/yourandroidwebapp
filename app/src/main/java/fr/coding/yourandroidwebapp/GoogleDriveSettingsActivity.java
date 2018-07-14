@@ -25,6 +25,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
@@ -42,6 +43,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -151,7 +154,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 public boolean onPreferenceClick(Preference preference) {
                     Toast.makeText(preference.getContext(), "Before use this option, ensure you have exported your settings to google drive (in order to create the file to be selected).", Toast.LENGTH_LONG).show();
 
-                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().isConnected())) {
+                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
                         IntentSender intentSender = Drive.DriveApi
                                 .newOpenFileActivityBuilder()
                                 //.setMimeType(new String[]{DriveFolder.MIME_TYPE})
@@ -183,7 +186,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     final Preference localpref = preference;
-                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().isConnected())) {
+                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
                         new AlertDialog.Builder(ctx)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setTitle(ctx.getString(R.string.dialog_title_disconnect_gdrive_account))
@@ -218,30 +221,50 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
-                        DriveClient drc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
-                        Drive.DriveApi.newDriveContents(getGoogleApiClient())
-                                .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+                        DriveResourceClient drc = Drive.getDriveResourceClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
+                        drc.createContents().addOnSuccessListener( driveContents ->
+                            {
+                                // Perform I/O off the UI thread.
+/*                                new Thread() {
                                     @Override
-                                    public void onResult(DriveApi.DriveContentsResult result) {
-                                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                        String filename = "appsettings_backup_" + format.format(new Date()) + ".json";
-                                        MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                                                .setTitle(filename)
-                                                .setMimeType("text/plain").build();
-                                        IntentSender intentSender = drc
-                                                .newOpenFileActivityIntentSender()
-                                                .setInitialMetadata(metadataChangeSet)
-                                                .setInitialDriveContents(result.getDriveContents())
-                                                .build(getGoogleApiClient());
-                                        try {
-                                            startIntentSenderForResult(
-                                                    intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
-                                        } catch (IntentSender.SendIntentException e) {
-                                            e.printStackTrace();
-                                            new AlertDialog.Builder(ctx).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
-                                        }
-                                    }
-                                });
+                                    public void run() {*/
+                                        // write content to DriveContents
+                                        OutputStream outputStream = driveContents.getOutputStream();
+                                        if (outputStream != null) {
+                                            Writer writer = new OutputStreamWriter(outputStream);
+                                            try {
+                                                writer.write(writeContents);
+                                                writer.close();
+                                            } catch (IOException e) {
+                                                Log.e("AppSettingsManager", e.getMessage());
+                                            }
+
+                                            DriveClient dc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
+                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                            String filename = "appsettings_backup_" + format.format(new Date()) + ".json";
+                                            MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                                                    .setTitle(filename)
+                                                    .setMimeType("text/plain").build();
+
+                                            CreateFileActivityOptions createOptions =
+                                                    new CreateFileActivityOptions.Builder()
+                                                            .setInitialDriveContents(driveContents)
+                                                            .setInitialMetadata(metadataChangeSet)
+                                                            .build();
+
+                                            dc.newCreateFileActivityIntentSender(createOptions).addOnSuccessListener( intentSender -> {
+                                                try {
+                                                    startIntentSenderForResult(
+                                                            intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
+                                                } catch (IntentSender.SendIntentException e) {
+                                                    e.printStackTrace();
+                                                    new AlertDialog.Builder(ctx).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                                                }
+                                                });
+                                            }
+//                                    }
+//                                }.start();
+                            });
                     } else {
                         Toast.makeText(preference.getContext(), "Currently connecting, retry in seconds", Toast.LENGTH_LONG).show();
                     }
@@ -259,7 +282,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().isConnected())) {
+                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
                         IntentSender intentSender = Drive.DriveApi
                                 .newOpenFileActivityBuilder()
                                 //.setMimeType(new String[]{DriveFolder.MIME_TYPE})
