@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.*;
 import com.google.android.gms.tasks.Task;
@@ -68,15 +69,15 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity {
+public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
 
-    protected static final int REQUEST_CODE_OPENER = NEXT_AVAILABLE_REQUEST_CODE;
-    protected static final int REQUEST_CODE_CREATOR = NEXT_AVAILABLE_REQUEST_CODE + 1;
-    protected static final int REQUEST_CODE_IMPORT = NEXT_AVAILABLE_REQUEST_CODE + 2;
+    protected static final int REQUEST_CODE_OPENER = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE;
+    protected static final int REQUEST_CODE_CREATOR = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE + 1;
+    protected static final int REQUEST_CODE_IMPORT = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE + 2;
 
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
@@ -154,8 +155,9 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 public boolean onPreferenceClick(Preference preference) {
                     Toast.makeText(preference.getContext(), "Before use this option, ensure you have exported your settings to google drive (in order to create the file to be selected).", Toast.LENGTH_LONG).show();
 
-                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
-                        DriveClient dc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
+                    GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(preference.getContext());
+                    if (gsa != null) {
+                        DriveClient dc = Drive.getDriveClient(preference.getContext(), gsa);
                         OpenFileActivityOptions createOptions =
                                 new OpenFileActivityOptions.Builder()
                                         .build();
@@ -189,7 +191,8 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     final Preference localpref = preference;
-                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
+                    GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(preference.getContext());
+                    if (gsa != null) {
                         new AlertDialog.Builder(ctx)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setTitle(ctx.getString(R.string.dialog_title_disconnect_gdrive_account))
@@ -198,7 +201,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        getGoogleApiClient().signOut();
+                                        GoogleSignIn.getClient(ctx, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut();
                                         finish();
                                     }
 
@@ -223,8 +226,9 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
-                        DriveResourceClient drc = Drive.getDriveResourceClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
+                    GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(preference.getContext());
+                    if (gsa != null) {
+                        DriveResourceClient drc = Drive.getDriveResourceClient(preference.getContext(), gsa);
                         drc.createContents().addOnSuccessListener( driveContents ->
                             {
                                 // Perform I/O off the UI thread.
@@ -295,8 +299,9 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if ((getGoogleApiClient() != null) && (getGoogleApiClient().asGoogleApiClient().isConnected())) {
-                        DriveClient dc = Drive.getDriveClient(preference.getContext(), GoogleSignIn.getLastSignedInAccount(preference.getContext()));
+                    GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(preference.getContext());
+                    if (gsa != null) {
+                        DriveClient dc = Drive.getDriveClient(preference.getContext(), gsa);
                         OpenFileActivityOptions createOptions =
                                 new OpenFileActivityOptions.Builder()
                                         .build();
@@ -318,6 +323,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
             });
         }
+        onConnected(savedInstanceState);
 
         super.onPostCreate(savedInstanceState);
     }
@@ -348,7 +354,7 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                     String jsonval = "";
                     try {
                         jsonval = manager.LoadSettingsLocally().AppSettingsToJSONobj().toString();
-                        new GoogleDriveUpdateFile(getGoogleApiClient(), this).SetDriveFileContent(driveId.asDriveFile(), jsonval, new Callback<String>() {
+                        new GoogleDriveUpdateFile(GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN), this).SetDriveFileContent(driveId.asDriveFile(), jsonval, new Callback<String>() {
                             @Override
                             public void onCallback(String restxt) {
                                 Toast.makeText(ctx, R.string.webapp_exported_toast, Toast.LENGTH_SHORT).show();
@@ -368,14 +374,14 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                             OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID);
                     final GoogleDriveSettingsActivity ctx = this;
                     DriveFile df = driveId.asDriveFile();
-                    new GoogleDriveReadFile(getGoogleApiClient(), ctx).GetDriveFileContent(df, new Callback<String>() {
+                    new GoogleDriveReadFile(GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN), ctx).GetDriveFileContent(df, new Callback<String>() {
                         @Override
                         public void onCallback(String restxt) {
                             AppSettings res = null;
                             try {
                                 res = AppSettings.JSONobjToAppSettings(new JSONObject(restxt));
                                 AppSettingsManager manager = new AppSettingsManager(ctx);
-                                manager.Save(res, getGoogleApiClient(), new Callback<String>() {
+                                manager.Save(res, GoogleSignIn.getClient(ctx, GoogleSignInOptions.DEFAULT_SIGN_IN), new Callback<String>() {
                                     @Override
                                     public void onCallback(String arg) {
                                         Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
@@ -401,9 +407,8 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
     private DriveId localdriveId;
 
     //Toast.makeText(this, Drive.DriveApi.getFolder(getGoogleApiClient(), driveId).toString(), Toast.LENGTH_LONG).show();
-    @Override
     public void onConnected(Bundle connectionHint) {
-        super.onConnected(connectionHint);
+        //super.onConnected(connectionHint);
         //todo renseigner le google account dans la pref : google_drive_account
         Preference pref = findPreference("google_drive_account");
         if (pref != null) {
@@ -413,7 +418,8 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
                 String DisplayName = acct.getDisplayName();
                 pref.setSummary(DisplayName + " (" + personEmail + ")");
             } else {
-                pref.setSummary("Unknow");
+                GoogleDriveCoreActivity gdca = new GoogleDriveCoreActivity(this, GoogleDriveApiAppCompatPreferenceActivity.TAG);
+                gdca.onResume();
             }
         }
 

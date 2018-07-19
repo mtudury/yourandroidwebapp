@@ -20,7 +20,7 @@ public abstract class GoogleDriveApiAppCompatPreferenceActivity extends AppCompa
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = "GoogleDriveApiAppCompatPreferenceActivity";
+    public static final String TAG = "GoogleDriveApiAppCompatPreferenceActivity";
 
     protected static final int NEXT_AVAILABLE_REQUEST_CODE = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE;
 
