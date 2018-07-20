@@ -57,6 +57,10 @@ public abstract class GoogleDriveApiAppCompatPreferenceActivity extends AppCompa
         coreActivity.onResume();
     }
 
+    protected  void Connect() {
+        coreActivity.connect();
+    }
+
     /**
      * Handles resolution callbacks.
      */

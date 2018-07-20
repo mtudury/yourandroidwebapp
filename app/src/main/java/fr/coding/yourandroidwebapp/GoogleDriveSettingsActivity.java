@@ -69,7 +69,7 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
+public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity {
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -341,6 +341,8 @@ public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(AppSettingsManager.PREFS_CUSTOMDRIVEID, driveId.encodeToString());
                     editor.commit();
+
+                    onConnected(null);
                     //showMessage("Selected folder's ID: " + driveId);
                 }
 
@@ -418,8 +420,7 @@ public class GoogleDriveSettingsActivity extends AppCompatPreferenceActivity {
                 String DisplayName = acct.getDisplayName();
                 pref.setSummary(DisplayName + " (" + personEmail + ")");
             } else {
-                GoogleDriveCoreActivity gdca = new GoogleDriveCoreActivity(this, GoogleDriveApiAppCompatPreferenceActivity.TAG);
-                gdca.onResume();
+                Connect();
             }
         }
 

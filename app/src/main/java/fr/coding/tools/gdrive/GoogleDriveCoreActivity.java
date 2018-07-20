@@ -48,6 +48,10 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
     }
 
     public void onResume() {
+
+    }
+
+    public void connect() {
         if (googleApiClient == null) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
@@ -68,7 +72,7 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (googleApiClient != null) {
             if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == activity.RESULT_OK) {
-                //googleApiClient.connect();
+                onConnected(null);
             }
         }
     }
