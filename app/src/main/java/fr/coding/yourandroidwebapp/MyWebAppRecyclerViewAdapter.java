@@ -4,10 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import fr.coding.tools.ImageViewUrl;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
 public class MyWebAppRecyclerViewAdapter extends RecyclerView.Adapter<MyWebAppRecyclerViewAdapter.ViewHolder> {
@@ -30,7 +32,8 @@ public class MyWebAppRecyclerViewAdapter extends RecyclerView.Adapter<MyWebAppRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(holder.mItem.name);
+        if (holder.mItem.iconUrl!= null)
+            new ImageViewUrl(holder.mImageView).execute(holder.mItem.iconUrl);
         holder.mContentView.setText(holder.mItem.name);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -52,14 +55,14 @@ public class MyWebAppRecyclerViewAdapter extends RecyclerView.Adapter<MyWebAppRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        public final ImageView mImageView;
         public final TextView mContentView;
         public WebApp mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
+            mImageView = (ImageView) view.findViewById(R.id.img);
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 
