@@ -63,7 +63,7 @@
         <item>Cache First</item>
         <item>Only Cache</item>
     </string-array>
-    <string name="title_activity_startup">StartupActivity</string>
+    <string name="title_activity_startup">YourAndroidWebApp</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

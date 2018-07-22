@@ -29,6 +29,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.WEBMAIN" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StartupActivity" />
         </activity>
         <activity
             android:name=".WebAppListActivity"

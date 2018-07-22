@@ -223,7 +223,7 @@ public class WebMainActivity extends Activity {
             timer.schedule(ar, autoRefreshDelay, autoRefreshDelay);
         }
 
-        if (webAppId.equals( "CLEAR_CACHE")) {
+        if ((webAppId != null) && (webAppId.equals( "CLEAR_CACHE"))) {
             mWebView.clearCache(true);
             Toast.makeText(this, "Cache Cleared", Toast.LENGTH_LONG).show();
             finish();
