@@ -176,8 +176,9 @@ public class WebAppDetailFragment extends Fragment {
                                 activity.SaveSettings(settings, new Callback<String>() {
                                     @Override
                                     public void onCallback(String res) {
-                                        activity.finish();
-                                        startActivity(activity.getIntent());
+                                        Intent intent = new Intent(v.getContext(),SettingsActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
                                     }
                                 });
                             }

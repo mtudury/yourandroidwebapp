@@ -132,7 +132,7 @@ public class AppSettingsManager {
             SaveLocally();
 
             // from gdrive appfolder or specific user defined path
-            if ((apiClient != null)&&(IsSettingsInGdrive(activity))) {
+            if (IsSettingsInGdrive(activity)) {
                 String driveid = LoadFromUserGdrive(activity);
                 if (driveid != null) {
                     DriveFile df = DriveId.decodeFromString(driveid).asDriveFile();

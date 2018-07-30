@@ -67,13 +67,14 @@ public class WebAppListActivity extends AppSettingsActivity
         });*/
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
     public void onAppSettingsReady(AppSettings settings) {
         if (!allreadyInit) {
             FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
-            flayout.addView(getLayoutInflater().inflate(R.layout.activity_webapp_list, null));
+            getLayoutInflater().inflate(R.layout.activity_webapp_list, flayout);
             if (findViewById(R.id.webapp_detail_container) != null) {
                 // The detail container view will be present only in the
                 // large-screen layouts (res/values-large and

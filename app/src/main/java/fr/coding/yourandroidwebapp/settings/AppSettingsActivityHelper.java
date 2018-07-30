@@ -33,6 +33,7 @@ public class AppSettingsActivityHelper extends GoogleDriveCoreActivity implement
     public void onResume() {
         if (UseGDrive) {
             super.onResume();
+            appSettingsManager.LoadSettings(googleApiClient, this);
         } else {
             appSettings = appSettingsManager.LoadSettingsLocally();
             appSettingsCallback.onAppSettingsReady(appSettings);

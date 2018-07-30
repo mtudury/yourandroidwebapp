@@ -67,7 +67,7 @@ public class SSLSettingListActivity extends AppSettingsActivity
     public void onAppSettingsReady(AppSettings settings) {
         if (!allreadyInit) {
             FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
-            flayout.addView(getLayoutInflater().inflate(R.layout.activity_sslsetting_list, null));
+            getLayoutInflater().inflate(R.layout.activity_sslsetting_list, flayout);
 
             if (findViewById(R.id.sslsetting_detail_container) != null) {
                 // The detail container view will be present only in the

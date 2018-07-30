@@ -1,6 +1,7 @@
 package fr.coding.yourandroidwebapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import fr.coding.tools.Callback;
 import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
@@ -99,7 +101,14 @@ public class HostAuthSettingsDetailFragment extends Fragment {
     public void deleteHostAuthSetting(View view) {
         settings.HostAuths.remove(mItem);
 
-        activity.SaveSettings(settings);
+        activity.SaveSettings(settings, new Callback<String>() {
+            @Override
+            public void onCallback(String res) {
+                Intent intent = new Intent(view.getContext(),SettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
     }
 
 

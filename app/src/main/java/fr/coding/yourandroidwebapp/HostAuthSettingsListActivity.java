@@ -55,7 +55,7 @@ public class HostAuthSettingsListActivity extends AppSettingsActivity
     public void onAppSettingsReady(AppSettings settings) {
         if (!allreadyInit) {
             FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
-            flayout.addView(getLayoutInflater().inflate(R.layout.activity_hostauth_list, null));
+            getLayoutInflater().inflate(R.layout.activity_hostauth_list, flayout);
 
             if (findViewById(R.id.hostauth_detail_container) != null) {
                 // The detail container view will be present only in the
