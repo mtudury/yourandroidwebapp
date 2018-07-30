@@ -16,14 +16,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import fr.coding.yourandroidwebapp.R;
+
 public class DiskCacheImageViewUrl extends AsyncTask<String, Void, Bitmap> {
     RetrieveHttpFile filer;
     ImageView bmImage;
     Context context;
+    Bitmap basebm;
 
     public DiskCacheImageViewUrl(Context lcontext, ImageView bmImage) {
         this.bmImage = bmImage;
         this.context = lcontext;
+        this.basebm = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
     }
 
     protected Bitmap doInBackground(String... urls) {
@@ -41,15 +45,18 @@ public class DiskCacheImageViewUrl extends AsyncTask<String, Void, Bitmap> {
 
             filer = new RetrieveHttpFile();
             byte[] bytes = filer.doInBackground(urls);
-            if (bytes.length>0) {
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(cache_file));
-                bos.write(bytes);
-                bos.flush();
-                bos.close();
-                Log.i("DiskCacheImageViewUrl",urls[0]+ " added to disk cache");
-            }
 
-            mIcon11 = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            Bitmap scaledBitmap = basebm;
+            if (bytes.length > 0)
+                scaledBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), 384, 384, true);
+
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(cache_file));
+            scaledBitmap.compress(Bitmap.CompressFormat.PNG, 90, bos);
+            bos.flush();
+            bos.close();
+            Log.i("DiskCacheImageViewUrl",urls[0]+ " added to disk cache");
+
+            mIcon11 = scaledBitmap;
 
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
