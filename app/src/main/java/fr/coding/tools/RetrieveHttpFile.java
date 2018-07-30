@@ -27,6 +27,7 @@ public class RetrieveHttpFile extends AsyncTask<String, Void, byte[]> {
                 if (r == -1) break;
                 out.write(buffer, 0, r);
             }
+            in.close();
 
             return out.toByteArray();
         } catch (Exception e) {

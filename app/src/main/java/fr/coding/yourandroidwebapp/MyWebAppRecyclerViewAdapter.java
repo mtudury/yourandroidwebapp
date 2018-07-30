@@ -1,6 +1,7 @@
 package fr.coding.yourandroidwebapp;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import fr.coding.tools.DiskCacheImageViewUrl;
 import fr.coding.tools.ImageViewUrl;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
@@ -32,8 +34,8 @@ public class MyWebAppRecyclerViewAdapter extends RecyclerView.Adapter<MyWebAppRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        if (holder.mItem.iconUrl!= null)
-            new ImageViewUrl(holder.mImageView).execute(holder.mItem.iconUrl);
+        if (!TextUtils.isEmpty(holder.mItem.iconUrl))
+            new DiskCacheImageViewUrl(holder.mView.getContext() ,holder.mImageView).execute(holder.mItem.iconUrl);
         holder.mContentView.setText(holder.mItem.name);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

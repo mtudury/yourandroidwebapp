@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
+import fr.coding.tools.DiskCacheRetrieveHttpFile;
 import fr.coding.tools.RetrieveHttpFile;
 import fr.coding.yourandroidwebapp.R;
 import fr.coding.yourandroidwebapp.WebMainActivity;
@@ -126,7 +127,7 @@ public class WebApp {
         if ((app.iconUrl != null) && (!app.iconUrl.isEmpty())) {
             Bitmap theBitmap = null;
             try {
-                byte[] img = new RetrieveHttpFile().execute(app.iconUrl).get();
+                byte[] img = new DiskCacheRetrieveHttpFile().execute(app.iconUrl).get();
                 if (img != null)
                     theBitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             } catch (ExecutionException ee) {
