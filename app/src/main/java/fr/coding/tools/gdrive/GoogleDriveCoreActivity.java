@@ -71,8 +71,12 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (googleApiClient != null) {
-            if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == activity.RESULT_OK) {
-                onConnected(null);
+            if (requestCode == REQUEST_CODE_RESOLUTION) {
+                if (resultCode == activity.RESULT_OK) {
+                    onConnected(null);
+                } else {
+                    Toast.makeText(activity, "Google Drive attach failed", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
