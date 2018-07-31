@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
@@ -73,6 +74,10 @@ public class WebAppListActivity extends AppSettingsActivity
     @Override
     public void onAppSettingsReady(AppSettings settings) {
         if (!allreadyInit) {
+            //getSupportFragmentManager().beginTransaction().hide(findViewById(R.id.frameLayout)).commit();
+            TextView txtView = (TextView)findViewById(R.id.loading_webapp);
+            txtView.setVisibility(View.INVISIBLE);
+
             FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
             getLayoutInflater().inflate(R.layout.activity_webapp_list, flayout);
             if (findViewById(R.id.webapp_detail_container) != null) {

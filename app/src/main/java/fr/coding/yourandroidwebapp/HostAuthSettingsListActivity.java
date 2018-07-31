@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
@@ -54,6 +56,9 @@ public class HostAuthSettingsListActivity extends AppSettingsActivity
     @Override
     public void onAppSettingsReady(AppSettings settings) {
         if (!allreadyInit) {
+            TextView txtView = (TextView)findViewById(R.id.loading_hostauth);
+            txtView.setVisibility(View.INVISIBLE);
+
             FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
             getLayoutInflater().inflate(R.layout.activity_hostauth_list, flayout);
 

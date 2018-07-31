@@ -10,6 +10,7 @@ import android.view.View;
 
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
@@ -66,6 +67,9 @@ public class SSLSettingListActivity extends AppSettingsActivity
     @Override
     public void onAppSettingsReady(AppSettings settings) {
         if (!allreadyInit) {
+            TextView txtView = (TextView)findViewById(R.id.loading_sslsetting);
+            txtView.setVisibility(View.INVISIBLE);
+
             FrameLayout flayout = (FrameLayout) findViewById(R.id.frameLayout);
             getLayoutInflater().inflate(R.layout.activity_sslsetting_list, flayout);
 
