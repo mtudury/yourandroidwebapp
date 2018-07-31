@@ -2,6 +2,8 @@ package fr.coding.yourandroidwebapp;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -28,7 +30,9 @@ import java.util.Date;
 import java.util.List;
 
 import fr.coding.tools.Callback;
+import fr.coding.tools.Perms;
 import fr.coding.tools.filedialog.SimpleFileDialog;
+import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
@@ -52,6 +56,9 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+    protected static final int REQUEST_CODE_EXPORT = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE + 10;
+    protected static final int REQUEST_CODE_IMPORT = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE + 11;
+
     private GoogleApiClient.ConnectionCallbacks saveOnConnect = null;
 
     @Override
@@ -71,6 +78,30 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
         super.onPostCreate(savedInstanceState);
 
         setupSimplePreferencesScreen();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                              String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_EXPORT:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    exportToSD(this);
+                } else {
+                    Toast.makeText(this, "SD write permission denied, aborting", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_CODE_IMPORT:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    importFromSD(this);
+                } else {
+                    Toast.makeText(this, "SD read permission denied, aborting", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
     }
 
     /**
@@ -140,21 +171,12 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    SimpleFileDialog FolderChooseDialog = new SimpleFileDialog(ctx, "FileSave",
-                            new SimpleFileDialog.SimpleFileDialogListener() {
-                                @Override
-                                public void onChosenDir(String chosenDir) {
-                                    // The code in this function will be executed when the dialog OK button is pushed
-                                    AppSettingsManager manager = new AppSettingsManager(ctx);
-                                    manager.ExportSettingsToExternalStorage(manager.LoadSettingsLocally(), chosenDir);
-                                    Toast.makeText(ctx, R.string.webapp_exported_toast, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    FolderChooseDialog.Default_File_Name = "appsettings_backup_" + format.format(new Date()) + ".json";
-                    FolderChooseDialog.chooseFile_or_Dir();
-                    return false;
+                    if (Perms.checkWriteSDPermission(ctx)) {
+                        return exportToSD(ctx);
+                    } else {
+                        Perms.requestWriteSDPermissio(ctx, REQUEST_CODE_EXPORT);
+                        return false;
+                    }
                 }
 
 
@@ -168,44 +190,13 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    SimpleFileDialog FolderChooseDialog = new SimpleFileDialog(ctx, "FileOpen",
-                            new SimpleFileDialog.SimpleFileDialogListener() {
-                                @Override
-                                public void onChosenDir(String chosenDir) {
-                                    final AppSettingsManager manager = new AppSettingsManager(ctx);
-                                    final AppSettings settings = manager.LoadSettingsFromExternalStorage(chosenDir);
+                    if (Perms.checkWriteSDPermission(ctx)) {
+                        return importFromSD(ctx);
+                    } else {
+                        Perms.requestReadSDPermissio(ctx, REQUEST_CODE_IMPORT);
+                        return false;
+                    }
 
-                                    if (AppSettingsManager.IsSettingsInGdrive(ctx)) {
-                                        // The code in this function will be executed when the dialog OK button is pushed
-                                        saveOnConnect = new GoogleApiClient.ConnectionCallbacks() {
-                                            @Override
-                                            public void onConnected(@Nullable Bundle bundle) {
-                                                manager.Save(settings, getGoogleApiClient(), new Callback<String>() {
-                                                    @Override
-                                                    public void onCallback(String arg) {
-                                                        Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-
-                                            }
-
-                                            @Override
-                                            public void onConnectionSuspended(int a) {
-
-                                            }
-                                        };
-                                        manualConnect();
-                                    }
-                                    else
-                                    {
-                                        manager.SaveSettingsLocally(settings);
-                                        Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-
-                    FolderChooseDialog.chooseFile_or_Dir();
-                    return false;
                 }
 
 
@@ -215,6 +206,65 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
         if (prefautorefresh != null) {
             bindPreferenceSummaryToValue(prefautorefresh);
         }
+    }
+
+    private boolean importFromSD(SettingsActivity ctx) {
+        SimpleFileDialog FolderChooseDialog = new SimpleFileDialog(ctx, "FileOpen",
+                new SimpleFileDialog.SimpleFileDialogListener() {
+                    @Override
+                    public void onChosenDir(String chosenDir) {
+                        final AppSettingsManager manager = new AppSettingsManager(ctx);
+                        final AppSettings settings = manager.LoadSettingsFromExternalStorage(chosenDir);
+
+                        if (AppSettingsManager.IsSettingsInGdrive(ctx)) {
+                            // The code in this function will be executed when the dialog OK button is pushed
+                            saveOnConnect = new GoogleApiClient.ConnectionCallbacks() {
+                                @Override
+                                public void onConnected(@Nullable Bundle bundle) {
+                                    manager.Save(settings, getGoogleApiClient(), new Callback<String>() {
+                                        @Override
+                                        public void onCallback(String arg) {
+                                            Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                }
+
+                                @Override
+                                public void onConnectionSuspended(int a) {
+
+                                }
+                            };
+                            manualConnect();
+                        }
+                        else
+                        {
+                            manager.SaveSettingsLocally(settings);
+                            Toast.makeText(ctx, R.string.webapp_imported_toast, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        FolderChooseDialog.chooseFile_or_Dir();
+        return false;
+    }
+
+    private boolean exportToSD(SettingsActivity ctx) {
+        SimpleFileDialog FolderChooseDialog = new SimpleFileDialog(ctx, "FileSave",
+                new SimpleFileDialog.SimpleFileDialogListener() {
+                    @Override
+                    public void onChosenDir(String chosenDir) {
+                        // The code in this function will be executed when the dialog OK button is pushed
+                        AppSettingsManager manager = new AppSettingsManager(ctx);
+                        manager.ExportSettingsToExternalStorage(manager.LoadSettingsLocally(), chosenDir);
+                        Toast.makeText(ctx, R.string.webapp_exported_toast, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        FolderChooseDialog.Default_File_Name = "appsettings_backup_" + format.format(new Date()) + ".json";
+        FolderChooseDialog.chooseFile_or_Dir();
+        return false;
     }
 
     @Override
