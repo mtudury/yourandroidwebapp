@@ -2,8 +2,11 @@ package fr.coding.yourandroidwebapp.settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
 import android.webkit.WebSettings;
 import android.widget.Toast;
 
@@ -17,6 +20,9 @@ import fr.coding.tools.DiskCacheRetrieveHttpFile;
 import fr.coding.tools.RetrieveHttpFile;
 import fr.coding.yourandroidwebapp.R;
 import fr.coding.yourandroidwebapp.WebMainActivity;
+
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N_MR1;
 
 /**
  * Created by Matthieu on 13/09/2015.
@@ -114,20 +120,11 @@ public class WebApp {
 
     public void LauncherShortcut(Context appContext) {
         WebApp app = this;
-        Intent shortcutIntent = new Intent(appContext, WebMainActivity.class);
-        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        shortcutIntent.setAction("android.intent.action.WEBMAIN");
-        shortcutIntent.putExtra("webappid", app.id);
 
-        Intent addIntent = new Intent();
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, app.name);
-
+        Bitmap theBitmap = null;
         if ((app.iconUrl != null) && (!app.iconUrl.isEmpty())) {
-            Bitmap theBitmap = null;
             try {
-                byte[] img = new DiskCacheRetrieveHttpFile().execute(app.iconUrl).get();
+                byte[] img = new DiskCacheRetrieveHttpFile(appContext).execute(app.iconUrl).get();
                 if (img != null)
                     theBitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             } catch (ExecutionException ee) {
@@ -137,17 +134,46 @@ public class WebApp {
             }
             if (theBitmap == null) {
                 Toast.makeText(appContext, "Error loading icon, Url : " + app.iconUrl, Toast.LENGTH_LONG).show();
-                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(appContext, R.mipmap.ic_launcher));
             } else {
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(theBitmap, 256, 256, true);
-                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, scaledBitmap);
+                theBitmap = scaledBitmap;
             }
-        } else {
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(appContext, R.mipmap.ic_launcher));
         }
-        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-        // requires android permission :
-        // <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-        appContext.sendBroadcast(addIntent);
+
+        Intent shortcutIntent = new Intent(appContext, WebMainActivity.class);
+        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        shortcutIntent.setAction("android.intent.action.WEBMAIN");
+        shortcutIntent.putExtra("webappid", app.id);
+
+        if (SDK_INT >= 26) {
+            ShortcutManager scm = (ShortcutManager)appContext.getSystemService(Context.SHORTCUT_SERVICE);
+            ShortcutInfo.Builder scib = new ShortcutInfo.Builder(appContext, app.id)
+                    .setShortLabel(app.name)
+                    .setIntent(shortcutIntent);
+            if (theBitmap != null) {
+                scib.setIcon(Icon.createWithBitmap(theBitmap));
+            } else {
+                scib.setIcon(Icon.createWithBitmap(BitmapFactory.decodeResource(appContext.getResources(), R.mipmap.ic_launcher)));
+            }
+
+            scm.requestPinShortcut(scib.build(), null);
+        } else {
+
+
+            Intent addIntent = new Intent();
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, app.name);
+            if (theBitmap == null) {
+                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(appContext, R.mipmap.ic_launcher));
+            } else {
+                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, theBitmap);
+            }
+
+            addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            // requires android permission :
+            // <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+            appContext.sendBroadcast(addIntent);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package fr.coding.tools;
 
+import android.content.Context;
 import android.util.Base64;
 
 import java.io.BufferedInputStream;
@@ -12,6 +13,11 @@ import java.io.InputStream;
 
 public class DiskCacheRetrieveHttpFile extends RetrieveHttpFile {
     protected Exception exceptioncache;
+    Context context;
+
+    public DiskCacheRetrieveHttpFile(Context lcontext) {
+        this.context = lcontext;
+    }
 
     protected byte[] doInBackground(String... urls) {
         try {
@@ -21,7 +27,7 @@ public class DiskCacheRetrieveHttpFile extends RetrieveHttpFile {
             byte[] encoded_name = Base64.encode(urls[0].getBytes(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
             String key_name = new String(encoded_name);
 
-            File cache_file = new File(key_name, CacheSubDir.getAbsolutePath());
+            File cache_file = new File(context.getCacheDir(), key_name);
             if (cache_file.exists()&&cache_file.length()>0) {
                 InputStream in = new BufferedInputStream(new FileInputStream(cache_file));
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
