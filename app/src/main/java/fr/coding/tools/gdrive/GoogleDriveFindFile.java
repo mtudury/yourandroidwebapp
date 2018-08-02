@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -27,29 +28,39 @@ public class GoogleDriveFindFile extends GoogleDriveBaseTools {
     }
 
     public void FindFileAppFolder(String filename, OnSuccessListener<MetadataBuffer> callback) {
-        DriveResourceClient drc = Drive.getDriveResourceClient(activity, GoogleSignIn.getLastSignedInAccount(activity));
-        drc.getAppFolder().addOnSuccessListener(
-                result -> {
-                    FindFile(result,
-                            new Query.Builder()
-                                    .addFilter(Filters.eq(SearchableField.TITLE, filename))
-                                    .build(),
-                            callback);
+        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(activity);
+        if (gsa != null) {
+            DriveResourceClient drc = Drive.getDriveResourceClient(activity, gsa);
+            drc.getRootFolder().addOnSuccessListener(
+                    result -> {
+                        FindFile(result,
+                                new Query.Builder()
+                                        .addFilter(Filters.eq(SearchableField.TITLE, filename))
+                                        .build(),
+                                callback);
 
-                }
-        ).addOnFailureListener(failure -> {
-            new AlertDialog.Builder(activity).setTitle("Error retry later").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
-        });;
+                    }
+            ).addOnFailureListener(failure -> {
+                new AlertDialog.Builder(activity).setTitle("Error retry later").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
+            });
+        } else {
+            new AlertDialog.Builder(activity).setTitle("NotConnected").setMessage("Go to google drive settings to link to an account").setNeutralButton("Close", null).show();
+        }
     }
 
     public void FindFileRootFolder(String filename, OnSuccessListener<MetadataBuffer> callback) {
-        DriveResourceClient drc = Drive.getDriveResourceClient(activity, GoogleSignIn.getLastSignedInAccount(activity));
-        drc.query(
-                new Query.Builder()
-                        .addFilter(Filters.eq(SearchableField.TITLE, filename))
-                        .build()).addOnSuccessListener(callback).addOnFailureListener(failure -> {
-            new AlertDialog.Builder(activity).setTitle("Error retry later").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
-        });;
+        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(activity);
+        if (gsa != null) {
+            DriveResourceClient drc = Drive.getDriveResourceClient(activity, gsa);
+            drc.query(
+                    new Query.Builder()
+                            .addFilter(Filters.eq(SearchableField.TITLE, filename))
+                            .build()).addOnSuccessListener(callback).addOnFailureListener(failure -> {
+                new AlertDialog.Builder(activity).setTitle("Error retry later").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
+            });
+        } else {
+            new AlertDialog.Builder(activity).setTitle("NotConnected").setMessage("Go to google drive settings to link to an account").setNeutralButton("Close", null).show();
+        }
     }
 
     public void FindFile(DriveFolder folder, String filename, OnSuccessListener<MetadataBuffer> callback) {
@@ -61,9 +72,15 @@ public class GoogleDriveFindFile extends GoogleDriveBaseTools {
     }
 
     public void FindFile(DriveFolder folder, Query query, OnSuccessListener<MetadataBuffer> callback) {
-        DriveResourceClient drc = Drive.getDriveResourceClient(activity, GoogleSignIn.getLastSignedInAccount(activity));
-        drc.queryChildren(folder, query).addOnSuccessListener(callback).addOnFailureListener(failure -> {
-            new AlertDialog.Builder(activity).setTitle("Error retry later").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
-        });;
+        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(activity);
+        if (gsa != null) {
+            DriveResourceClient drc = Drive.getDriveResourceClient(activity, gsa);
+            drc.queryChildren(folder, query).addOnSuccessListener(callback).addOnFailureListener(failure -> {
+                new AlertDialog.Builder(activity).setTitle("Error retry later").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
+            });
+        } else {
+            new AlertDialog.Builder(activity).setTitle("NotConnected").setMessage("Go to google drive settings to link to an account").setNeutralButton("Close", null).show();
+        }
+
     }
 }

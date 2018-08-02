@@ -56,7 +56,6 @@ public class GoogleDriveCoreActivity extends GoogleDriveBaseTools implements
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .requestProfile()
-                    .requestScopes(Drive.SCOPE_APPFOLDER)
                     .requestScopes(Drive.SCOPE_FILE)
                     .build();
 

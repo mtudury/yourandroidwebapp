@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.*;
 import com.google.android.gms.drive.*;
@@ -30,7 +32,7 @@ import fr.coding.yourandroidwebapp.R;
  */
 public class AppSettingsManager {
 
-    public static final String PREFSFILE = "appconfig.json";
+    public static final String PREFSFILE = "yourandroidwebappconfig.json";
 
     public static final String PREFS = "fr.coding.yourandroidwebapp_preferences";
 
@@ -93,7 +95,8 @@ public class AppSettingsManager {
                 e.printStackTrace();
                 new AlertDialog.Builder(activity).setTitle("ErrorLoadingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
             }
-            getResultHandler.onAppSettingsReady(res);
+            if (getResultHandler != null)
+                getResultHandler.onAppSettingsReady(res);
         }
     }
 
@@ -119,7 +122,8 @@ public class AppSettingsManager {
                 }
 
 
-                getResultHandler.onAppSettingsReady(res);
+                if (getResultHandler != null)
+                    getResultHandler.onAppSettingsReady(res);
             }
         });
     }
@@ -267,6 +271,10 @@ public class AppSettingsManager {
 
 
     public static boolean IsSettingsInGdrive(Activity activity) {
+        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(activity);
+        if (gsa == null)
+            return  false;
+
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         return prefs.getBoolean(UseGDrive, false);
     }

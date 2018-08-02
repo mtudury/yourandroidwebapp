@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="@string/pref_header_googledrivesync"
+        android:title="@string/pref_header_advancedsettings"
         android:key="general_settings"
         >
         <CheckBoxPreference

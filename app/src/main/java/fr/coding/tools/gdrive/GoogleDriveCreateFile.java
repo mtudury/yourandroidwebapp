@@ -75,7 +75,7 @@ public class GoogleDriveCreateFile extends GoogleDriveBaseTools {
 
 
                         // create a file on root folder
-                        drc.commitContents(driveContents, changeSet);
+                        drc.getRootFolder().addOnSuccessListener(folder -> { drc.createFile(folder, changeSet, driveContents); });
                     }
                 }
             }.start();

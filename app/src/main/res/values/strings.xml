@@ -154,4 +154,6 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="dialog_title_init_gdrive_account">Replace local settings</string>
+    <string name="dialog_message_init_gdrive_account">Try to load settings from google drive and replace local settings (x) apps will be lost ?</string>
 </resources>

@@ -39,6 +39,13 @@ public class StartupActivity extends AppCompatActivity implements MyWebAppRecycl
             }
         });
 
+
+    }
+
+
+    @Override
+    protected  void onResume() {
+        super.onResume();
         AppSettingsManager settingsManager = new AppSettingsManager(this);
         AppSettings settings = settingsManager.LoadSettingsLocally();
 

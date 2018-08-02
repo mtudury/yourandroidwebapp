@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -40,39 +41,46 @@ public class GoogleDriveUpdateFile extends GoogleDriveBaseTools {
     public void SetDriveFileContent(DriveFile df, String contents, Callback<String> writecallback) {
         writeCallback = writecallback;
         writeContents = contents;
-        DriveResourceClient drc = Drive.getDriveResourceClient(activity, GoogleSignIn.getLastSignedInAccount(activity));
 
-        Task<DriveContents> openTask =
-                drc.openFile(df, DriveFile.MODE_WRITE_ONLY);
+        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(activity);
+        if (gsa != null) {
+            DriveResourceClient drc = Drive.getDriveResourceClient(activity, GoogleSignIn.getLastSignedInAccount(activity));
 
-        openTask.addOnSuccessListener(driveContents -> {
-            // Perform I/O off the UI thread.
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        OutputStream outputStream = driveContents.getOutputStream();
-                        Writer writer = new OutputStreamWriter(outputStream);
-                        writer.write(writeContents);
-                        writer.close();
-                        drc.commitContents(driveContents, null);
-                        if (writeCallback != null) {
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    writeCallback.onCallback(writeContents);
-                                }
-                            });
+            Task<DriveContents> openTask =
+                    drc.openFile(df, DriveFile.MODE_WRITE_ONLY);
+
+            openTask.addOnSuccessListener(driveContents -> {
+                // Perform I/O off the UI thread.
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            OutputStream outputStream = driveContents.getOutputStream();
+                            Writer writer = new OutputStreamWriter(outputStream);
+                            writer.write(writeContents);
+                            writer.close();
+                            drc.commitContents(driveContents, null);
+                            if (writeCallback != null) {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        writeCallback.onCallback(writeContents);
+                                    }
+                                });
+                            }
+
+                        } catch (IOException e) {
+                            Log.e(TAG, "IOException while reading from the stream", e);
                         }
-
-                    } catch (IOException e) {
-                        Log.e(TAG, "IOException while reading from the stream", e);
                     }
-                }
-            }.start();
-        }).addOnFailureListener(failure -> {
-            new AlertDialog.Builder(activity).setTitle("Error Saving Settings").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
-        });
+                }.start();
+            }).addOnFailureListener(failure -> {
+                new AlertDialog.Builder(activity).setTitle("Error Saving Settings").setMessage(failure.getLocalizedMessage()).setNeutralButton("Close", null).show();
+            });
+
+        } else {
+            new AlertDialog.Builder(activity).setTitle("NotConnected").setMessage("Go to google drive settings to link to an account").setNeutralButton("Close", null).show();
+        }
     }
 
 }

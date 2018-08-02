@@ -54,6 +54,7 @@
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_advancedsettings">Advanced Settings</string>
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
 
@@ -75,7 +76,7 @@
     <string name="pref_title_hostauth_settings">Authentication Settings</string>
 
     <string name="pref_title_use_custom_google_drive">Use custom sync location</string>
-    <string name="pref_description_use_custom_google_drive">Activating this feature will allow you to save your settings in the folder you choose (not the hidden appfolder), to be activated, you need to add a Custom Sync Location</string>
+    <string name="pref_description_use_custom_google_drive">Activating this feature will allow you to save your settings in the folder you choose (not the root folder), to be activated, you need to first export current settings to google drives (below) (or reuse a previous file, if you allready did it once) and add a Custom Sync Location</string>
     <string name="pref_title_google_drive_path_custom">Custom sync location</string>
     <string name="pref_title_google_drive_path_custom_original">"Custom path : "</string>
     <string name="pref_default_google_drive_path_custom">/Android/Apps/YourAndroidWebApp/appconfig.json</string>
