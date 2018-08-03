@@ -301,35 +301,39 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(preference.getContext());
-                    if (gsa != null) {
-                        AppSettingsManager manager = new AppSettingsManager(ctx);
-                        int cnt = manager.LoadSettingsLocally().WebApps.size();
-                        if (cnt > 0) {
-                            new AlertDialog.Builder(ctx)
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .setTitle(ctx.getString(R.string.dialog_title_init_gdrive_account))
-                                    .setMessage( ctx.getString(R.string.dialog_message_init_gdrive_account).replace("(x)", " : "+cnt))
-                                    .setNegativeButton("No", (dialog, which) -> {
-                                        AppSettings settings = manager.LoadSettingsLocally();
-                                        manager.Save(settings, getGoogleApiClient(), (sett) -> {
-                                            Toast.makeText(preference.getContext(), "OK", Toast.LENGTH_LONG).show();
-                                        });
-                                    })
-                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            AppSettingsManager manager = new AppSettingsManager(ctx);
-                                            manager.LoadSettings(getGoogleApiClient(), null);
-                                        }
+                    CheckBoxPreference pref = (CheckBoxPreference)preference;
+                    if (pref.isChecked()) {
 
-                                    })
-                                    .show();
+                        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(preference.getContext());
+                        if (gsa != null) {
+                            AppSettingsManager manager = new AppSettingsManager(ctx);
+                            int cnt = manager.LoadSettingsLocally().WebApps.size();
+                            if (cnt > 0) {
+                                new AlertDialog.Builder(ctx)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setTitle(ctx.getString(R.string.dialog_title_init_gdrive_account))
+                                        .setMessage( ctx.getString(R.string.dialog_message_init_gdrive_account).replace("(x)", " : "+cnt))
+                                        .setNegativeButton("No", (dialog, which) -> {
+                                            AppSettings settings = manager.LoadSettingsLocally();
+                                            manager.Save(settings, getGoogleApiClient(), (sett) -> {
+                                                Toast.makeText(preference.getContext(), "OK", Toast.LENGTH_LONG).show();
+                                            });
+                                        })
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                AppSettingsManager manager = new AppSettingsManager(ctx);
+                                                manager.LoadSettings(getGoogleApiClient(), null);
+                                            }
+
+                                        })
+                                        .show();
+                            } else {
+                                manager.LoadSettings(getGoogleApiClient(), null);
+                            }
                         } else {
-                            manager.LoadSettings(getGoogleApiClient(), null);
+                            Toast.makeText(preference.getContext(), "Link to a Google Drive account first", Toast.LENGTH_LONG).show();
                         }
-                    } else {
-                        Toast.makeText(preference.getContext(), "Link to a Google Drive account first", Toast.LENGTH_LONG).show();
                     }
                     return true;
                 }
@@ -345,26 +349,23 @@ public class GoogleDriveSettingsActivity extends GoogleDriveApiAppCompatPreferen
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    CheckBoxPreference pref = (CheckBoxPreference)preference;
-                    if (pref.isChecked()) {
-                        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(preference.getContext());
-                        if (gsa != null) {
-                            DriveClient dc = Drive.getDriveClient(preference.getContext(), gsa);
-                            OpenFileActivityOptions createOptions =
-                                    new OpenFileActivityOptions.Builder()
-                                            .build();
-                            dc.newOpenFileActivityIntentSender(createOptions).addOnSuccessListener(intentSender -> {
-                                try {
-                                    startIntentSenderForResult(
-                                            intentSender, REQUEST_CODE_IMPORT, null, 0, 0, 0);
-                                } catch (IntentSender.SendIntentException e) {
-                                    e.printStackTrace();
-                                    new AlertDialog.Builder(preference.getContext()).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
-                                }
-                            });
-                        } else {
-                            Toast.makeText(preference.getContext(), "Link to a Google Drive account first", Toast.LENGTH_LONG).show();
-                        }
+                    GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(preference.getContext());
+                    if (gsa != null) {
+                        DriveClient dc = Drive.getDriveClient(preference.getContext(), gsa);
+                        OpenFileActivityOptions createOptions =
+                                new OpenFileActivityOptions.Builder()
+                                        .build();
+                        dc.newOpenFileActivityIntentSender(createOptions).addOnSuccessListener(intentSender -> {
+                            try {
+                                startIntentSenderForResult(
+                                        intentSender, REQUEST_CODE_IMPORT, null, 0, 0, 0);
+                            } catch (IntentSender.SendIntentException e) {
+                                e.printStackTrace();
+                                new AlertDialog.Builder(preference.getContext()).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(preference.getContext(), "Link to a Google Drive account first", Toast.LENGTH_LONG).show();
                     }
                     return true;
                 }
