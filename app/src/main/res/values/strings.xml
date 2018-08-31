@@ -45,6 +45,7 @@
     <string name="dialog_message_delete_webapp">Delete this WebApp</string>
     <string name="webapp_duplicate">Duplicate</string>
     <string name="webapp_cache_mode_title">Cache Mode</string>
+    <string name="webapp_pinchzoom_mode_title">Zoom Mode</string>
     <string name="dialog_title_duplicate">Duplicate</string>
     <string name="dialog_message_duplicate_webapp">duplicate this WebApp ?</string>
     <string name="pref_title_webview_fullscreen_mode">Immersive Full-Screen Mode</string>
@@ -62,6 +63,11 @@
         <item>No Cache</item>
         <item>Cache First</item>
         <item>Only Cache</item>
+    </string-array>
+    <string-array name="pinchzoom_mode">
+        <item>No Zoom</item>
+        <item>Zoom no Controls</item>
+        <item>Zoom with Controls</item>
     </string-array>
     <string name="title_activity_startup">YourAndroidWebApp</string>
     <string name="title_statup">Startup</string>

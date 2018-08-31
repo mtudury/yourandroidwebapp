@@ -253,6 +253,15 @@ public class WebMainActivity extends Activity {
                     wvc.setAllowedHosts(settings.HostAuths);
                 }
                 mWebView.getSettings().setCacheMode(wa.cacheMode);
+                if (wa.pinchZoomMode > WebApp.PinchZoomMode_None) {
+                    mWebView.getSettings().setBuiltInZoomControls(true);
+                    mWebView.getSettings().setDisplayZoomControls(wa.pinchZoomMode == WebApp.PinchZoomMode_WithControls);
+                } else
+                {
+                    mWebView.getSettings().setBuiltInZoomControls(false);
+                }
+
+
                 if (!TextUtils.isEmpty(wa.url))
                     url = wa.url;
                 lastContextAlternate = isAlternateContext(wa);

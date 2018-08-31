@@ -222,11 +222,19 @@ public class WebAppDetailFragment extends Fragment {
             onSettingsReceived(settings);
         }
 
+        // cachemode
         Spinner cachemode = (Spinner) rootView.findViewById(R.id.webapp_cache_mode);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(),
                 R.array.cache_mode, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cachemode.setAdapter(adapter);
+
+        // pinchzoommode
+        Spinner pinchzoommode = (Spinner) rootView.findViewById(R.id.webapp_pinchzoom_mode);
+        ArrayAdapter<CharSequence> pzadapter = ArrayAdapter.createFromResource(rootView.getContext(),
+                R.array.pinchzoom_mode, android.R.layout.simple_spinner_item);
+        pzadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        pinchzoommode.setAdapter(pzadapter);
 
         return rootView;
     }
@@ -256,6 +264,9 @@ public class WebAppDetailFragment extends Fragment {
 
         // cache mode
         mItem.cacheMode = SpinnerToCacheMode((Spinner) rootView.findViewById(R.id.webapp_cache_mode));
+
+        // pinchZoomMode
+        mItem.pinchZoomMode = ((Spinner) rootView.findViewById(R.id.webapp_pinchzoom_mode)).getSelectedItemPosition();
     }
 
     private int SpinnerToCacheMode(Spinner spinner) {
@@ -315,6 +326,9 @@ public class WebAppDetailFragment extends Fragment {
 
         // cache mode
         ((Spinner) rootView.findViewById(R.id.webapp_cache_mode)).setSelection(CacheModeToSpinner(mItem.cacheMode));
+
+        // pinchZoomMode
+        ((Spinner) rootView.findViewById(R.id.webapp_pinchzoom_mode)).setSelection(mItem.pinchZoomMode);
     }
 
     public void createShortcut(View view) {

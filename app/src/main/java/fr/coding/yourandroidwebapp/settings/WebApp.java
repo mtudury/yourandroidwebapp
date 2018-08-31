@@ -17,17 +17,22 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import fr.coding.tools.DiskCacheRetrieveHttpFile;
-import fr.coding.tools.RetrieveHttpFile;
 import fr.coding.yourandroidwebapp.R;
 import fr.coding.yourandroidwebapp.WebMainActivity;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.N_MR1;
 
 /**
  * Created by Matthieu on 13/09/2015.
  */
 public class WebApp {
+// constantes
+    public static final int PinchZoomMode_None = 0;
+    public static final int PinchZoomMode_NoControls = 1;
+    public static final int PinchZoomMode_WithControls = 2;
+
+// members
+
     public String id;
     public String name;
     public String url;
@@ -44,6 +49,10 @@ public class WebApp {
     public boolean autoAuth;
     // cache mode
     public int cacheMode;
+
+    // pinchzoom mode
+    public int pinchZoomMode;
+
 
     public String toString() {
         return name;
@@ -64,6 +73,7 @@ public class WebApp {
 
         dup.autoAuth = autoAuth;
         dup.cacheMode = cacheMode;
+        dup.pinchZoomMode = pinchZoomMode;
 
         return dup;
     }
@@ -96,6 +106,9 @@ public class WebApp {
         if (jsonobj.has("cacheMode"))
             webapp.cacheMode = jsonobj.getInt("cacheMode");
 
+        webapp.pinchZoomMode = PinchZoomMode_None;
+        if (jsonobj.has("pinchZoomMode"))
+            webapp.pinchZoomMode = jsonobj.getInt("pinchZoomMode");
 
         return webapp;
     }
@@ -115,6 +128,7 @@ public class WebApp {
         jsonobj.put("autoAuth", autoAuth);
 
         jsonobj.put("cacheMode", cacheMode);
+        jsonobj.put("pinchZoomMode", pinchZoomMode);
         return jsonobj;
     }
 
