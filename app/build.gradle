@@ -9,8 +9,8 @@ android {
         applicationId "fr.coding.yourandroidwebapp"
         minSdkVersion 22
         targetSdkVersion 27
-        versionCode 32
-        versionName "2.0.2"
+        versionCode 33
+        versionName "2.1.0"
     }
     buildTypes {
         release {
