@@ -56,8 +56,11 @@
     <string name="pref_description_webview_progress">On top of the webview add a progress bar allowing to follow the progress of the web page rendering</string>
     <string name="pref_title_refreshevery">Refresh Webview content every</string>
     <string name="pref_description_refreshevery">Allow the Webview to be refreshed at specific time</string>
+    <string name="pref_title_disable_downloadviewer_chooser">Download listener use default app</string>
+    <string name="pref_description_disable_downloadviewer_chooser">Do not ask the user for application when opening files (pdf,...), use the default application configured in android</string>
     <string name="sslsetting_delete">Delete</string>
     <string name="hostauth_delete">Delete</string>
+    <string name="download_chooser_title">Choose viewer</string>
     <string-array name="cache_mode">
         <item>Default</item>
         <item>No Cache</item>

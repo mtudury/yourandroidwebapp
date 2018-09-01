@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUriExposedException;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -134,9 +137,37 @@ public class WebMainActivity extends Activity {
         mWebView.setDownloadListener((String url, String userAgent,
                                         String contentDisposition, String mimetype,
                                         long contentLength) -> {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
+                Intent downloadviewer = new Intent(Intent.ACTION_VIEW);
+                downloadviewer.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                downloadviewer.setData(Uri.parse(url));
+
+                try {
+                    if (settings.Advanced.disableDownloadViewerChooser) {
+                        startActivity(downloadviewer);
+                    } else {
+                        Intent downloadviewerchooser = Intent.createChooser(downloadviewer, getResources().getString(R.string.download_chooser_title));
+                        downloadviewerchooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(downloadviewerchooser);
+                    }
+                } catch(RuntimeException fue) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        if (fue instanceof FileUriExposedException) {
+                            Uri contentUri = FileProvider.getUriForFile(this, "fr.coding.yourandroidwebapp.fileProvider", new File(Uri.parse(url).getPath()));
+                            downloadviewer.setData(contentUri);
+                            if (settings.Advanced.disableDownloadViewerChooser) {
+                                startActivity(downloadviewer);
+                            } else {
+                                Intent downloadviewerchooser = Intent.createChooser(downloadviewer, getResources().getString(R.string.download_chooser_title));
+                                downloadviewerchooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                startActivity(downloadviewerchooser);
+                            }
+                        } else {
+                            Toast.makeText(this, fue.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(this, fue.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
             });
 
         wvc.sslUnknownManager = new Callback<SslByPass>() {

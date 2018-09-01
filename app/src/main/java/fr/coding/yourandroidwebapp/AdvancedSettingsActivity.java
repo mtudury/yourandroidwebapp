@@ -186,6 +186,21 @@ public class AdvancedSettingsActivity extends AppSettingsActivity implements App
                 setplaybackrg.setChecked(advSettings.disableMediasRequireUserGesture);
             }
 
+            CheckBoxPreference disableDownloadViewerChooser = (CheckBoxPreference)findPreference("webview_disable_downloadviewer_chooser");
+            if (disableDownloadViewerChooser != null) {
+                disableDownloadViewerChooser.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        advSettings.disableDownloadViewerChooser = (boolean)newValue;
+
+                        activity.SaveSettings(sett);
+                        return true;
+                    }
+
+                });
+                disableDownloadViewerChooser.setChecked(advSettings.disableDownloadViewerChooser);
+            }
+
             EditTextPreference prefuseragent = (EditTextPreference)findPreference("webview_user_agent");
             if (prefuseragent != null) {
                 prefuseragent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
