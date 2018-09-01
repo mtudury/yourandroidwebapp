@@ -3,6 +3,7 @@ package fr.coding.tools;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.security.MessageDigest;
 
 import fr.coding.yourandroidwebapp.R;
 
@@ -34,7 +36,10 @@ public class DiskCacheImageViewUrl extends AsyncTask<String, Void, Bitmap> {
        Bitmap mIcon11 = null;
         try {
 
-            byte[] encoded_name = Base64.encode(urls[0].getBytes(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] textBytes = urls[0].getBytes();
+            md.update(textBytes);
+            byte[] encoded_name = Base64.encode(md.digest(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
             String key_name = new String(encoded_name);
 
             File cache_file = new File(context.getCacheDir(), key_name);
@@ -43,8 +48,19 @@ public class DiskCacheImageViewUrl extends AsyncTask<String, Void, Bitmap> {
                 return mIcon11;
             }
 
-            filer = new RetrieveHttpFile();
-            byte[] bytes = filer.doInBackground(urls);
+            Uri uriimg = Uri.parse(urls[0]);
+            byte[] bytes = null;
+            if (uriimg.getScheme().equalsIgnoreCase("file")||uriimg.getScheme().equalsIgnoreCase("content")) {
+                File file = new File(uriimg.getPath());
+                int size = (int) file.length();
+                bytes = new byte[size];
+                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+                buf.read(bytes, 0, bytes.length);
+                buf.close();
+            } else {
+                filer = new RetrieveHttpFile();
+                bytes = filer.doInBackground(urls);
+            }
 
             Bitmap scaledBitmap = basebm;
             if (bytes.length > 0)

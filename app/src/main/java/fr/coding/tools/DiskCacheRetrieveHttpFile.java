@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.security.MessageDigest;
 
 public class DiskCacheRetrieveHttpFile extends RetrieveHttpFile {
     protected Exception exceptioncache;
@@ -24,7 +25,10 @@ public class DiskCacheRetrieveHttpFile extends RetrieveHttpFile {
             File CacheSubDir = new File("ImgCache");
             CacheSubDir.mkdir();
 
-            byte[] encoded_name = Base64.encode(urls[0].getBytes(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] textBytes = urls[0].getBytes();
+            md.update(textBytes);
+            byte[] encoded_name = Base64.encode(md.digest(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
             String key_name = new String(encoded_name);
 
             File cache_file = new File(context.getCacheDir(), key_name);

@@ -34,8 +34,9 @@ public class MyWebAppRecyclerViewAdapter extends RecyclerView.Adapter<MyWebAppRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        if (!TextUtils.isEmpty(holder.mItem.iconUrl))
-            new DiskCacheImageViewUrl(holder.mView.getContext() ,holder.mImageView).execute(holder.mItem.iconUrl);
+        if (!TextUtils.isEmpty(holder.mItem.iconUrl)) {
+            new DiskCacheImageViewUrl(holder.mView.getContext(), holder.mImageView).execute(holder.mItem.iconUrl);
+        }
         holder.mContentView.setText(holder.mItem.name);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

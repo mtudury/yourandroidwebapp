@@ -7,6 +7,7 @@ import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.webkit.WebSettings;
 import android.widget.Toast;
 
@@ -137,10 +138,15 @@ public class WebApp {
 
         Bitmap theBitmap = null;
         if ((app.iconUrl != null) && (!app.iconUrl.isEmpty())) {
+            Uri icon = Uri.parse(app.iconUrl);
             try {
-                byte[] img = new DiskCacheRetrieveHttpFile(appContext).execute(app.iconUrl).get();
-                if (img != null)
-                    theBitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                if (icon.getScheme().equalsIgnoreCase("file")||icon.getScheme().equalsIgnoreCase("content")) {
+                    theBitmap = BitmapFactory.decodeFile(icon.getPath());
+                } else {
+                    byte[] img = new DiskCacheRetrieveHttpFile(appContext).execute(app.iconUrl).get();
+                    if (img != null)
+                        theBitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                }
             } catch (ExecutionException ee) {
                 ee.printStackTrace();
             } catch (InterruptedException ee) {
