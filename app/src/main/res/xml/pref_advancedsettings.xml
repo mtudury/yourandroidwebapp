@@ -14,9 +14,9 @@
             android:title="@string/pref_title_webview_user_agent"
             />
         <CheckBoxPreference
-            android:key="webview_disable_downloadviewer_chooser"
-            android:title="@string/pref_title_disable_downloadviewer_chooser"
-            android:summary="@string/pref_description_disable_downloadviewer_chooser"
+            android:key="webview_force_downloadviewer_chooser"
+            android:title="@string/pref_title_force_downloadviewer_chooser"
+            android:summary="@string/pref_description_force_downloadviewer_chooser"
             android:defaultValue="false"
             />
 

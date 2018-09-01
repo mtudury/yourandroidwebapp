@@ -3,38 +3,22 @@ package fr.coding.yourandroidwebapp;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
-import android.widget.Toast;
-
-import com.google.android.gms.drive.Drive;
-
-import java.util.List;
 
 import fr.coding.yourandroidwebapp.settings.AdvancedAppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
-import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -186,19 +170,19 @@ public class AdvancedSettingsActivity extends AppSettingsActivity implements App
                 setplaybackrg.setChecked(advSettings.disableMediasRequireUserGesture);
             }
 
-            CheckBoxPreference disableDownloadViewerChooser = (CheckBoxPreference)findPreference("webview_disable_downloadviewer_chooser");
-            if (disableDownloadViewerChooser != null) {
-                disableDownloadViewerChooser.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            CheckBoxPreference forceDownloadViewerChooser = (CheckBoxPreference)findPreference("webview_force_downloadviewer_chooser");
+            if (forceDownloadViewerChooser != null) {
+                forceDownloadViewerChooser.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        advSettings.disableDownloadViewerChooser = (boolean)newValue;
+                        advSettings.forceDownloadViewerChooser = (boolean)newValue;
 
                         activity.SaveSettings(sett);
                         return true;
                     }
 
                 });
-                disableDownloadViewerChooser.setChecked(advSettings.disableDownloadViewerChooser);
+                forceDownloadViewerChooser.setChecked(advSettings.forceDownloadViewerChooser);
             }
 
             EditTextPreference prefuseragent = (EditTextPreference)findPreference("webview_user_agent");

@@ -10,10 +10,10 @@ public class AdvancedAppSettings {
 
     public boolean disableMediasRequireUserGesture;
     public String userAgent;
-    public boolean disableDownloadViewerChooser;
+    public boolean forceDownloadViewerChooser;
 
     public AdvancedAppSettings() {
-        disableDownloadViewerChooser = true;
+        forceDownloadViewerChooser = false;
     }
 
     public static AdvancedAppSettings JSONobjToWebApp(JSONObject jsonobj) throws JSONException {
@@ -21,8 +21,8 @@ public class AdvancedAppSettings {
         advSettings.disableMediasRequireUserGesture = jsonobj.getBoolean("disableMediasRequireUserGesture");
         if (jsonobj.has("userAgent"))
             advSettings.userAgent = jsonobj.getString("userAgent");
-        if (jsonobj.has("disableDownloadViewerChooser"))
-            advSettings.disableDownloadViewerChooser = jsonobj.getBoolean("disableDownloadViewerChooser");
+        if (jsonobj.has("forceDownloadViewerChooser"))
+            advSettings.forceDownloadViewerChooser = jsonobj.getBoolean("forceDownloadViewerChooser");
 
         return advSettings;
     }
@@ -32,7 +32,7 @@ public class AdvancedAppSettings {
         jsonobj.put("disableMediasRequireUserGesture", disableMediasRequireUserGesture);
         if ((userAgent != null)&&(!userAgent.isEmpty()))
             jsonobj.put("userAgent", userAgent);
-        jsonobj.put("disableDownloadViewerChooser", disableDownloadViewerChooser);
+        jsonobj.put("forceDownloadViewerChooser", forceDownloadViewerChooser);
         return jsonobj;
     }
 

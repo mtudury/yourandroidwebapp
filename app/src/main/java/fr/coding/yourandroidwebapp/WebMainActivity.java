@@ -11,11 +11,9 @@ import android.os.Bundle;
 import android.os.FileUriExposedException;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -145,7 +143,7 @@ public class WebMainActivity extends Activity {
 
 
                 try {
-                    if (settings.Advanced.disableDownloadViewerChooser) {
+                    if (!settings.Advanced.forceDownloadViewerChooser) {
                         startActivity(downloadviewer);
                     } else {
                         Intent downloadviewerchooser = Intent.createChooser(downloadviewer, getResources().getString(R.string.download_chooser_title));
@@ -157,7 +155,7 @@ public class WebMainActivity extends Activity {
                         if (fue instanceof FileUriExposedException) {
                             Uri contentUri = FileProvider.getUriForFile(this, "fr.coding.yourandroidwebapp.fileProvider", new File(Uri.parse(url).getPath()));
                             downloadviewer.setData(contentUri);
-                            if (settings.Advanced.disableDownloadViewerChooser) {
+                            if (!settings.Advanced.forceDownloadViewerChooser) {
                                 startActivity(downloadviewer);
                             } else {
                                 Intent downloadviewerchooser = Intent.createChooser(downloadviewer, getResources().getString(R.string.download_chooser_title));
