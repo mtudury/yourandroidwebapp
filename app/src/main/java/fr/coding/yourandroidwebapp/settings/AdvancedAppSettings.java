@@ -12,6 +12,10 @@ public class AdvancedAppSettings {
     public String userAgent;
     public boolean disableDownloadViewerChooser;
 
+    public AdvancedAppSettings() {
+        disableDownloadViewerChooser = true;
+    }
+
     public static AdvancedAppSettings JSONobjToWebApp(JSONObject jsonobj) throws JSONException {
         AdvancedAppSettings advSettings = new AdvancedAppSettings();
         advSettings.disableMediasRequireUserGesture = jsonobj.getBoolean("disableMediasRequireUserGesture");

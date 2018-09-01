@@ -139,7 +139,10 @@ public class WebMainActivity extends Activity {
                                         long contentLength) -> {
                 Intent downloadviewer = new Intent(Intent.ACTION_VIEW);
                 downloadviewer.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                downloadviewer.setData(Uri.parse(url));
+                Uri uri = Uri.parse(url);
+                downloadviewer.setDataAndType(uri, mimetype);
+
+
 
                 try {
                     if (settings.Advanced.disableDownloadViewerChooser) {
