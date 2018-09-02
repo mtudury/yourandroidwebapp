@@ -15,7 +15,7 @@ public class Perms {
     }
 
 
-    public static void requestWriteSDPermissio(Activity activity, int requestCode) {
+    public static void requestWriteSDPermission(Activity activity, int requestCode) {
         ActivityCompat.requestPermissions(activity,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 requestCode);
@@ -27,7 +27,7 @@ public class Perms {
     }
 
 
-    public static void requestReadSDPermissio(Activity activity, int requestCode) {
+    public static void requestReadSDPermission(Activity activity, int requestCode) {
         ActivityCompat.requestPermissions(activity,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 requestCode);

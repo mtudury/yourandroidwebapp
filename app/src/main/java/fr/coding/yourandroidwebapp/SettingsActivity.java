@@ -2,12 +2,10 @@ package fr.coding.yourandroidwebapp;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.media.browse.MediaBrowser;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 
@@ -174,7 +171,7 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
                     if (Perms.checkWriteSDPermission(ctx)) {
                         return exportToSD(ctx);
                     } else {
-                        Perms.requestWriteSDPermissio(ctx, REQUEST_CODE_EXPORT);
+                        Perms.requestWriteSDPermission(ctx, REQUEST_CODE_EXPORT);
                         return false;
                     }
                 }
@@ -190,10 +187,10 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if (Perms.checkWriteSDPermission(ctx)) {
+                    if (Perms.checkReadSDPermission(ctx)) {
                         return importFromSD(ctx);
                     } else {
-                        Perms.requestReadSDPermissio(ctx, REQUEST_CODE_IMPORT);
+                        Perms.requestReadSDPermission(ctx, REQUEST_CODE_IMPORT);
                         return false;
                     }
 

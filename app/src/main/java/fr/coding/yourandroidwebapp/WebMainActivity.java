@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import java.util.TimerTask;
 import fr.coding.tools.AutoAuthSslWebView;
 import fr.coding.tools.Callback;
 import fr.coding.tools.CallbackResult;
+import fr.coding.tools.Perms;
+import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
 import fr.coding.tools.networks.Wifi;
@@ -63,6 +66,7 @@ public class WebMainActivity extends Activity {
 
     private HostAuth hostAuth;
 
+    protected static final int QUERY_PERMS_READSD = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE + 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -271,6 +275,16 @@ public class WebMainActivity extends Activity {
             finish();
         } else {
             LoadWebViewSettings(settings);
+
+            // check local uri and ask for rights if needed
+            if (!TextUtils.isEmpty(url)) {
+                Uri parsedUri = Uri.parse(url);
+                if (parsedUri.getScheme().equalsIgnoreCase("file")||parsedUri.getScheme().equalsIgnoreCase("content")) {
+                    if (!Perms.checkReadSDPermission(this)) {
+                        Perms.requestReadSDPermission(this, QUERY_PERMS_READSD);
+                    }
+                }
+            }
         }
     }
 
@@ -357,6 +371,12 @@ public class WebMainActivity extends Activity {
             coreActivity.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            LoadWebView();
+        }
+    }
     /**
      * Called when activity gets invisible. Connection to Drive service needs to
      * be disconnected as soon as an activity is invisible.
