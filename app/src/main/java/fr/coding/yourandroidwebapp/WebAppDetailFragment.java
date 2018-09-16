@@ -217,6 +217,20 @@ public class WebAppDetailFragment extends Fragment {
             }
         });
 
+        Button buttonFileChooser = (Button) rootView.findViewById(R.id.webapp_offlineopen);
+        buttonFileChooser.setOnClickListener((View v) -> {
+                Intent target = new Intent(Intent.ACTION_GET_CONTENT);
+                // The MIME data type filter
+                target.setType("*/*");
+                // Only return URIs that can be opened with ContentResolver
+                target.addCategory(Intent.CATEGORY_OPENABLE);
+
+                Intent intent = Intent.createChooser(
+                        target, getString(R.string.webapp_offlineopen));
+
+                startActivityForResult(intent, 3601);
+            });
+
 
         if (settings != null) {
             onSettingsReceived(settings);

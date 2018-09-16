@@ -55,6 +55,25 @@
             android:layout_height="30dp" />
         <TextView
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="@string/webapp_title_alternateurloffline" android:textSize="22dp" android:layout_marginBottom="5dp"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="@string/webapp_alternateurl"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"  android:id="@+id/webapp_alternateurloffline" android:inputType="textUri"
+            />
+        <Button
+            android:id="@+id/webapp_offlineopen"
+            android:layout_height="wrap_content"
+            android:text="@string/webapp_offlineopen"
+            android:layout_width="fill_parent">
+        </Button>
+        <Space
+            android:layout_width="fill_parent"
+            android:layout_height="30dp" />
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:text="@string/webapp_httpsettings" android:textSize="22dp" android:layout_marginBottom="5dp"/>
         <CheckBox
             android:id="@+id/webapp_sslall_activated"

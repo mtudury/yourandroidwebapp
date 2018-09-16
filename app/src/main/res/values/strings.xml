@@ -35,6 +35,8 @@
     <string name="dialog_message_disconnect_gdrive_account">Disconnect from account : </string>
     <string name="title_activity_advanced_settings">Advanced Settings</string>
     <string name="webapp_title_alternateurl">Alternate Url based on WIFI networks</string>
+    <string name="webapp_title_alternateurloffline">Alternate Url when not connected to any network</string>
+    <string name="webapp_offlineopen">Open local file</string>
     <string name="webapp_general">General</string>
     <string name="webapp_actions">Actions</string>
     <string name="webapp_httpsettings">HTTP Custom settings (security : warning)</string>
