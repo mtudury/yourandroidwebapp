@@ -61,14 +61,14 @@
             android:layout_height="wrap_content" android:text="@string/webapp_alternateurl"/>
         <EditText
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"  android:id="@+id/webapp_alternateurloffline" android:inputType="textUri"
+            android:layout_height="wrap_content"  android:id="@+id/webapp_alternateurloffline" android:inputType="textUri" android:hint="@string/webapp_localurl_hint"
             />
-        <Button
-            android:id="@+id/webapp_offlineopen"
+        <CheckBox
+            android:id="@+id/webapp_reload_connection_change"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/webapp_offlineopen"
-            android:layout_width="fill_parent">
-        </Button>
+            android:padding="16dp"
+            android:text="@string/webapp_reload_connection_change" />
         <Space
             android:layout_width="fill_parent"
             android:layout_height="30dp" />
