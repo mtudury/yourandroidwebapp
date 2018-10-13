@@ -11,9 +11,11 @@ public class AdvancedAppSettings {
     public boolean disableMediasRequireUserGesture;
     public String userAgent;
     public boolean forceDownloadViewerChooser;
+    public boolean allowGeoloc;
 
     public AdvancedAppSettings() {
         forceDownloadViewerChooser = false;
+        allowGeoloc = false;
     }
 
     public static AdvancedAppSettings JSONobjToWebApp(JSONObject jsonobj) throws JSONException {
@@ -23,6 +25,8 @@ public class AdvancedAppSettings {
             advSettings.userAgent = jsonobj.getString("userAgent");
         if (jsonobj.has("forceDownloadViewerChooser"))
             advSettings.forceDownloadViewerChooser = jsonobj.getBoolean("forceDownloadViewerChooser");
+        if (jsonobj.has("allowGeoloc"))
+            advSettings.allowGeoloc = jsonobj.getBoolean("allowGeoloc");
 
         return advSettings;
     }
@@ -33,6 +37,7 @@ public class AdvancedAppSettings {
         if ((userAgent != null)&&(!userAgent.isEmpty()))
             jsonobj.put("userAgent", userAgent);
         jsonobj.put("forceDownloadViewerChooser", forceDownloadViewerChooser);
+        jsonobj.put("allowGeoloc", allowGeoloc);
         return jsonobj;
     }
 

@@ -185,6 +185,21 @@ public class AdvancedSettingsActivity extends AppSettingsActivity implements App
                 forceDownloadViewerChooser.setChecked(advSettings.forceDownloadViewerChooser);
             }
 
+            CheckBoxPreference allowgeolocPref = (CheckBoxPreference)findPreference("webview_allow_geoloc");
+            if (allowgeolocPref != null) {
+                allowgeolocPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        advSettings.allowGeoloc = (boolean)newValue;
+
+                        activity.SaveSettings(sett);
+                        return true;
+                    }
+
+                });
+                allowgeolocPref.setChecked(advSettings.allowGeoloc);
+            }
+
             EditTextPreference prefuseragent = (EditTextPreference)findPreference("webview_user_agent");
             if (prefuseragent != null) {
                 prefuseragent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

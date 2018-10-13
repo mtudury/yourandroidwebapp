@@ -62,6 +62,8 @@
     <string name="pref_description_refreshevery">Allow the Webview to be refreshed at specific time</string>
     <string name="pref_title_force_downloadviewer_chooser">Force App Chooser</string>
     <string name="pref_description_force_downloadviewer_chooser">When you will click on a PDF/... file in the Webview, force asking for the which application instead of relying on default behavior of android for this file type.</string>
+    <string name="pref_title_webapp_allow_geoloc">Allow geolocation</string>
+    <string name="pref_description_webapp_allow_geoloc">Will permit the website to ask for geolocation of your device</string>
     <string name="sslsetting_delete">Delete</string>
     <string name="hostauth_delete">Delete</string>
     <string name="download_chooser_title">Choose viewer</string>

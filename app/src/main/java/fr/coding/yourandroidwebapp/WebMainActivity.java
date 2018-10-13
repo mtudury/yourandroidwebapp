@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -55,6 +56,7 @@ public class WebMainActivity extends Activity {
 
     private boolean needLoad = true;
     private boolean lastContextAlternate;
+    private AppSettings settings;
 
     private AppSettingsManager settingsManager;
 
@@ -90,12 +92,24 @@ public class WebMainActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true);
+        webSettings.setAllowUniversalAccessFromFileURLs(true);
+        webSettings.setAppCachePath(getCacheDir().getPath());
+        webSettings.setAppCacheEnabled(true);
+
 
         mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 // Activities and WebViews measure progress with different scales.
                 // The progress meter will automatically disappear when we reach 100%
                 webActivity.setProgress(progress * 1000);
+            }
+
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin,
+                                                           GeolocationPermissions.Callback callback) {
+                // Always grant permission since the app itself requires location
+                // permission and the user has therefore already granted it
+                callback.invoke(origin, settings.Advanced.allowGeoloc, false);
             }
         });
 
@@ -126,7 +140,7 @@ public class WebMainActivity extends Activity {
         }
 
         settingsManager = new AppSettingsManager(this);
-        AppSettings settings = settingsManager.LoadSettingsLocally();
+        settings = settingsManager.LoadSettingsLocally();
 
         if (settings.Advanced.disableMediasRequireUserGesture){
             mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
@@ -134,6 +148,10 @@ public class WebMainActivity extends Activity {
 
         if ((settings.Advanced.userAgent != null)&&(!settings.Advanced.userAgent.isEmpty())) {
             mWebView.getSettings().setUserAgentString(settings.Advanced.userAgent);
+        }
+
+        if (settings.Advanced.disableMediasRequireUserGesture){
+            mWebView.getSettings().setGeolocationEnabled(settings.Advanced.disableMediasRequireUserGesture);
         }
 
         mWebView.setDownloadListener((String url, String userAgent,

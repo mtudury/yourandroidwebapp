@@ -19,7 +19,12 @@
             android:summary="@string/pref_description_force_downloadviewer_chooser"
             android:defaultValue="false"
             />
-
+        <CheckBoxPreference
+            android:key="webview_allow_geoloc"
+            android:title="@string/pref_title_webapp_allow_geoloc"
+            android:summary="@string/pref_description_webapp_allow_geoloc"
+            android:defaultValue="false"
+            />
     </PreferenceCategory>
 
 </PreferenceScreen>
