@@ -42,12 +42,17 @@ public class WebApp {
     // alternate url
     public String alternateUrl;
     public String alternateSSIDs;
+    public String alternateUrlNotConnected;
 
     // ssl
     public boolean allCertsByPass;
     public boolean allowedSSlActivated;
     // auth
     public boolean autoAuth;
+
+    // connection
+    public boolean reloadOnConnectionChange;
+
     // cache mode
     public int cacheMode;
 
@@ -69,10 +74,12 @@ public class WebApp {
 
         dup.alternateUrl = alternateUrl;
         dup.alternateSSIDs = alternateSSIDs;
+        dup.alternateUrlNotConnected = alternateUrlNotConnected;
         dup.allCertsByPass = allCertsByPass;
         dup.allowedSSlActivated = allowedSSlActivated;
 
         dup.autoAuth = autoAuth;
+        dup.reloadOnConnectionChange = reloadOnConnectionChange;
         dup.cacheMode = cacheMode;
         dup.pinchZoomMode = pinchZoomMode;
 
@@ -91,6 +98,9 @@ public class WebApp {
 
         if (jsonobj.has("alternateUrl"))
             webapp.alternateUrl = jsonobj.getString("alternateUrl");
+        if (jsonobj.has("alternateUrlNotConnected"))
+            webapp.alternateUrlNotConnected = jsonobj.getString("alternateUrlNotConnected");
+
         if (jsonobj.has("alternateSSIDs"))
             webapp.alternateSSIDs = jsonobj.getString("alternateSSIDs");
 
@@ -102,6 +112,8 @@ public class WebApp {
 
         if (jsonobj.has("autoAuth"))
             webapp.autoAuth = jsonobj.getBoolean("autoAuth");
+        if (jsonobj.has("reloadOnConnectionChange"))
+            webapp.reloadOnConnectionChange = jsonobj.getBoolean("reloadOnConnectionChange");
 
         webapp.cacheMode = WebSettings.LOAD_DEFAULT;
         if (jsonobj.has("cacheMode"))
@@ -122,11 +134,14 @@ public class WebApp {
         jsonobj.put("iconUrl", iconUrl);
 
         jsonobj.put("alternateUrl", alternateUrl);
+        jsonobj.put("alternateUrlNotConnected", alternateUrlNotConnected);
+
         jsonobj.put("alternateSSIDs", alternateSSIDs);
 
         jsonobj.put("allCertsByPass", allCertsByPass);
         jsonobj.put("allowedSSlActivated", allowedSSlActivated);
         jsonobj.put("autoAuth", autoAuth);
+        jsonobj.put("reloadOnConnectionChange", reloadOnConnectionChange);
 
         jsonobj.put("cacheMode", cacheMode);
         jsonobj.put("pinchZoomMode", pinchZoomMode);

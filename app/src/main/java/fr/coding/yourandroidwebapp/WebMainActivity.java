@@ -56,6 +56,7 @@ public class WebMainActivity extends Activity {
 
     private boolean needLoad = true;
     private boolean lastContextAlternate;
+    private boolean lastContextAlternateNotConnect;
     private AppSettings settings;
 
     private AppSettingsManager settingsManager;
@@ -315,6 +316,13 @@ public class WebMainActivity extends Activity {
         return Wifi.isOnlineAndWifi(this) && Wifi.isInSSIDList(this, webapp.alternateSSIDs);
     }
 
+    protected boolean isNotConnectedContext(WebApp webapp) {
+        if (TextUtils.isEmpty(webapp.alternateUrlNotConnected))
+            return false;
+
+        return !Wifi.isOnline(this);
+    }
+
     protected void LoadWebViewSettings(AppSettings settings) {
         if (!TextUtils.isEmpty(webAppId)) {
             wa = settings.getWebAppById(webAppId);
@@ -342,6 +350,10 @@ public class WebMainActivity extends Activity {
                 if (lastContextAlternate) {
                     url = wa.alternateUrl;
                 }
+                lastContextAlternateNotConnect = isNotConnectedContext(wa);
+                if (lastContextAlternateNotConnect) {
+                    url = wa.alternateUrlNotConnected;
+                }
 
             } else {
                 Toast.makeText(this, "This WebAppId does not exist (no more?)", Toast.LENGTH_LONG).show();
@@ -360,13 +372,17 @@ public class WebMainActivity extends Activity {
         }
         if (wa != null) {
             boolean newContext = isAlternateContext(wa);
-            if ((newContext != lastContextAlternate)||(needLoad)) {
+            boolean newContext2 = isNotConnectedContext(wa);
+            if ((newContext != lastContextAlternate)||(newContext2 != lastContextAlternateNotConnect)||(needLoad)) {
                 lastContextAlternate = newContext;
+                lastContextAlternateNotConnect = newContext2;
                 if (!TextUtils.isEmpty(wa.url))
                     url = wa.url;
-                lastContextAlternate = isAlternateContext(wa);
                 if (lastContextAlternate) {
                     url = wa.alternateUrl;
+                }
+                if (lastContextAlternateNotConnect) {
+                    url = wa.alternateUrlNotConnected;
                 }
                 LoadWebView();
 
