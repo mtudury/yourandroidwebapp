@@ -44,4 +44,17 @@ public class Perms {
                 new String[]{Manifest.permission.GET_ACCOUNTS},
                 requestCode);
     }
+
+
+    public static boolean checkGPSPermissions(Context context) {
+        return (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        );
+    }
+
+    public static void requestGPSPermissions (Activity activity, int requestCode) {
+        ActivityCompat.requestPermissions(activity,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                requestCode);
+    }
 }

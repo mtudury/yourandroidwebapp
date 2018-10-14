@@ -76,6 +76,7 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
     private HostAuth hostAuth;
 
     protected static final int QUERY_PERMS_READSD = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE + 100;
+    protected static final int QUERY_PERMS_GPS = QUERY_PERMS_READSD + 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         // Enable Javascript
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true);
         webSettings.setAllowUniversalAccessFromFileURLs(true);
@@ -116,6 +118,12 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
                                                            GeolocationPermissions.Callback callback) {
                 // Always grant permission since the app itself requires location
                 // permission and the user has therefore already granted it
+                if (settings.Advanced.allowGeoloc) {
+                    if (!Perms.checkGPSPermissions(webActivity)) {
+                        Perms.requestGPSPermissions(webActivity, QUERY_PERMS_GPS);
+                    }
+                }
+
                 callback.invoke(origin, settings.Advanced.allowGeoloc, false);
             }
         });
@@ -300,16 +308,6 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
             finish();
         } else {
             LoadWebViewSettings(settings);
-
-            // check local uri and ask for rights if needed
-            if (!TextUtils.isEmpty(url)) {
-                Uri parsedUri = Uri.parse(url);
-                if (parsedUri.getScheme().equalsIgnoreCase("file")||parsedUri.getScheme().equalsIgnoreCase("content")) {
-                    if (!Perms.checkReadSDPermission(this)) {
-                        Perms.requestReadSDPermission(this, QUERY_PERMS_READSD);
-                    }
-                }
-            }
         }
 
         // create receiver, will be registered in onResume
@@ -352,19 +350,6 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
                 {
                     mWebView.getSettings().setBuiltInZoomControls(false);
                 }
-
-
-/*                if (!TextUtils.isEmpty(wa.url))
-                    url = wa.url;
-                lastContextAlternate = isAlternateContext(wa);
-                if (lastContextAlternate) {
-                    url = wa.alternateUrl;
-                }
-                lastContextAlternateNotConnect = isNotConnectedContext(wa);
-                if (lastContextAlternateNotConnect) {
-                    url = wa.alternateUrlNotConnected;
-                }
-*/
             } else {
                 Toast.makeText(this, "This WebAppId does not exist (no more?)", Toast.LENGTH_LONG).show();
             }
@@ -386,6 +371,18 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
                 if (lastContextAlternateNotConnect) {
                     url = wa.alternateUrlNotConnected;
                 }
+
+
+                // check local uri and ask for rights if needed
+                if (!TextUtils.isEmpty(url)) {
+                    Uri parsedUri = Uri.parse(url);
+                    if (parsedUri.getScheme().equalsIgnoreCase("file")||parsedUri.getScheme().equalsIgnoreCase("content")) {
+                        if (!Perms.checkReadSDPermission(this)) {
+                            Perms.requestReadSDPermission(this, QUERY_PERMS_READSD);
+                        }
+                    }
+                }
+
                 LoadWebView();
             }
         }
