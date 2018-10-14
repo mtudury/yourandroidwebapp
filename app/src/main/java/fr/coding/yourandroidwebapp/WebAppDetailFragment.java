@@ -76,6 +76,7 @@ public class WebAppDetailFragment extends Fragment {
                 mItem.id = UUID.randomUUID().toString();
                 mItem.allowedSSlActivated = true;
                 mItem.autoAuth = true;
+                mItem.reloadOnConnectionChange = false;
                 settings.WebApps.add(mItem);
             }
 
@@ -257,10 +258,14 @@ public class WebAppDetailFragment extends Fragment {
         mItem.alternateUrl = ((EditText) rootView.findViewById(R.id.webapp_alternateurl)).getText().toString();
         mItem.alternateSSIDs = ((EditText) rootView.findViewById(R.id.webapp_alternateurlssid)).getText().toString();
 
+        mItem.alternateUrlNotConnected = ((EditText) rootView.findViewById(R.id.webapp_alternateurloffline)).getText().toString();
+
         // insecure fields
         mItem.allCertsByPass = ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).isChecked();
         mItem.allowedSSlActivated = ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).isChecked();
         mItem.autoAuth = ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).isChecked();
+
+        mItem.reloadOnConnectionChange = ((CheckBox) rootView.findViewById(R.id.webapp_reload_connection_change)).isChecked();
 
         // cache mode
         mItem.cacheMode = SpinnerToCacheMode((Spinner) rootView.findViewById(R.id.webapp_cache_mode));
@@ -319,10 +324,14 @@ public class WebAppDetailFragment extends Fragment {
         ((EditText) rootView.findViewById(R.id.webapp_alternateurl)).setText(mItem.alternateUrl);
         ((EditText) rootView.findViewById(R.id.webapp_alternateurlssid)).setText(mItem.alternateSSIDs);
 
+        ((EditText) rootView.findViewById(R.id.webapp_alternateurloffline)).setText(mItem.alternateUrlNotConnected);
+
         // insecure fields
         ((CheckBox) rootView.findViewById(R.id.webapp_sslall_activated)).setChecked(mItem.allCertsByPass);
         ((CheckBox) rootView.findViewById(R.id.webapp_ssl_activated)).setChecked(mItem.allowedSSlActivated);
         ((CheckBox) rootView.findViewById(R.id.webapp_autoauth)).setChecked(mItem.autoAuth);
+
+        ((CheckBox) rootView.findViewById(R.id.webapp_reload_connection_change)).setChecked(mItem.reloadOnConnectionChange);
 
         // cache mode
         ((Spinner) rootView.findViewById(R.id.webapp_cache_mode)).setSelection(CacheModeToSpinner(mItem.cacheMode));

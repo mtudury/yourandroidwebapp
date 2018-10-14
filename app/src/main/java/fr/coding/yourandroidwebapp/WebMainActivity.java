@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +39,8 @@ import fr.coding.tools.Perms;
 import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
+import fr.coding.tools.networks.NetworkChangeEvent;
+import fr.coding.tools.networks.NetworkChangeReceiver;
 import fr.coding.tools.networks.Wifi;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivityHelper;
@@ -45,7 +49,7 @@ import fr.coding.yourandroidwebapp.settings.WebApp;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 
-public class WebMainActivity extends Activity {
+public class WebMainActivity extends Activity implements NetworkChangeEvent {
 
     private WebView mWebView;
     private AutoAuthSslWebView wvc;
@@ -64,6 +68,8 @@ public class WebMainActivity extends Activity {
     private static final String TAG = "WebMainActivity";
 
     protected AppSettingsActivityHelper coreActivity = null;
+
+    protected NetworkChangeReceiver networkChangeReceiver = null;
 
     private WebApp wa;
 
@@ -305,6 +311,10 @@ public class WebMainActivity extends Activity {
                 }
             }
         }
+
+        // create receiver, will be registered in onResume
+        networkChangeReceiver = new NetworkChangeReceiver();
+        networkChangeReceiver.eventReceiver = this;
     }
 
     protected boolean isAlternateContext(WebApp webapp) {
@@ -344,7 +354,7 @@ public class WebMainActivity extends Activity {
                 }
 
 
-                if (!TextUtils.isEmpty(wa.url))
+/*                if (!TextUtils.isEmpty(wa.url))
                     url = wa.url;
                 lastContextAlternate = isAlternateContext(wa);
                 if (lastContextAlternate) {
@@ -354,22 +364,14 @@ public class WebMainActivity extends Activity {
                 if (lastContextAlternateNotConnect) {
                     url = wa.alternateUrlNotConnected;
                 }
-
+*/
             } else {
                 Toast.makeText(this, "This WebAppId does not exist (no more?)", Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (coreActivity != null)
-            coreActivity.onResume();
-        if (mWebView != null) {
-            mWebView.onResume();
-            mWebView.resumeTimers();
-        }
+    public void reloadIfNeeded() {
         if (wa != null) {
             boolean newContext = isAlternateContext(wa);
             boolean newContext2 = isNotConnectedContext(wa);
@@ -385,13 +387,27 @@ public class WebMainActivity extends Activity {
                     url = wa.alternateUrlNotConnected;
                 }
                 LoadWebView();
-
-            }
-            // refresh local settings (used as cache when using gdrive) once by week
-            if (AppSettingsManager.IsSettingsInGdrive(this)&&(AppSettingsManager.GetLastUpdatedFromGDrive(this).getTime() < new Date().getTime()-(7*24*60*60*1000))) {
-                UpdateLocalConfig();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (coreActivity != null)
+            coreActivity.onResume();
+        if (mWebView != null) {
+            mWebView.onResume();
+            mWebView.resumeTimers();
+        }
+        reloadIfNeeded();
+
+        // refresh local settings (used as cache when using gdrive) once by week
+        if (AppSettingsManager.IsSettingsInGdrive(this)&&(AppSettingsManager.GetLastUpdatedFromGDrive(this).getTime() < new Date().getTime()-(7*24*60*60*1000))) {
+            UpdateLocalConfig();
+        }
+
+        this.registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     /**
@@ -423,6 +439,7 @@ public class WebMainActivity extends Activity {
             mWebView.onPause();
             mWebView.pauseTimers();
         }
+        unregisterReceiver(networkChangeReceiver);
         super.onPause();
     }
 
@@ -541,4 +558,8 @@ public class WebMainActivity extends Activity {
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
     }
 
+    @Override
+    public void networkChangeEvent(Intent event) {
+        reloadIfNeeded();
+    }
 }
