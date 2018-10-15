@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUriExposedException;
@@ -28,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.File;
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -175,9 +177,15 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
                 Intent downloadviewer = new Intent(Intent.ACTION_VIEW);
                 downloadviewer.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 Uri uri = Uri.parse(url);
-                downloadviewer.setDataAndType(uri, mimetype);
 
-
+                if (TextUtils.isEmpty(mimetype)) {
+                    mimetype = URLConnection.guessContentTypeFromName(url);
+                }
+                if (TextUtils.isEmpty(mimetype)) {
+                    downloadviewer.setData(uri);
+                } else {
+                    downloadviewer.setDataAndType(uri, mimetype);
+                }
 
                 try {
                     if (!settings.Advanced.forceDownloadViewerChooser) {
@@ -404,7 +412,11 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
             UpdateLocalConfig();
         }
 
-        this.registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        IntentFilter connectivityChange = new IntentFilter();
+        connectivityChange.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        connectivityChange.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        connectivityChange.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+        this.registerReceiver(networkChangeReceiver, connectivityChange);
     }
 
     /**
