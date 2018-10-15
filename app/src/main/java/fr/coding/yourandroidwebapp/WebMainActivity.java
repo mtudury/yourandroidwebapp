@@ -570,6 +570,7 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
 
     @Override
     public void networkChangeEvent(Intent event) {
-        reloadIfNeeded();
+        if ((wa != null)&&(wa.reloadOnConnectionChange))
+            reloadIfNeeded();
     }
 }
