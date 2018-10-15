@@ -77,6 +77,8 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
 
     private HostAuth hostAuth;
 
+    private boolean showprogressbar;
+
     protected static final int QUERY_PERMS_READSD = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE + 100;
     protected static final int QUERY_PERMS_GPS = QUERY_PERMS_READSD + 1;
 
@@ -107,12 +109,26 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         webSettings.setAppCachePath(getCacheDir().getPath());
         webSettings.setAppCacheEnabled(true);
 
+        // Force links and redirects to open in the WebView instead of in a browser
+        wvc = new AutoAuthSslWebView();
+        mWebView.setWebViewClient(wvc);
+
+        showprogressbar = AppSettingsManager.ShowProgressBar(this);
 
         mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 // Activities and WebViews measure progress with different scales.
                 // The progress meter will automatically disappear when we reach 100%
-                webActivity.setProgress(progress * 1000);
+                if (showprogressbar) {
+                    ProgressBar pb = ((ProgressBar) webActivity.findViewById(R.id.viewprogress));
+                    if (pb != null) {
+                        int visibility = View.GONE;
+                        if (progress < 100)
+                            visibility = View.VISIBLE;
+                        pb.setProgress(progress);
+                        pb.setVisibility(visibility);
+                    }
+                }
             }
 
             @Override
@@ -129,27 +145,6 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
                 callback.invoke(origin, settings.Advanced.allowGeoloc, false);
             }
         });
-
-        // Force links and redirects to open in the WebView instead of in a browser
-        wvc = new AutoAuthSslWebView();
-        mWebView.setWebViewClient(wvc);
-
-        if (AppSettingsManager.ShowProgressBar(this)) {
-            mWebView.setWebChromeClient(new WebChromeClient() {
-                public void onProgressChanged(WebView view, int progress) {
-                    // Activities and WebViews measure progress with different scales.
-                    // The progress meter will automatically disappear when we reach 100%
-                    ProgressBar pb = ((ProgressBar) webActivity.findViewById(R.id.viewprogress));
-                    if (pb != null) {
-                        int visibility = View.GONE;
-                        if (progress < 100)
-                            visibility = View.VISIBLE;
-                        pb.setProgress(progress);
-                        pb.setVisibility(visibility);
-                    }
-                }
-            });
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (AppSettingsManager.IsRemoteDebuggingActivated(this))
@@ -328,6 +323,12 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
             return false;
         if (TextUtils.isEmpty(webapp.alternateUrl))
             return false;
+
+
+        if (!Perms.checkGPSPermissions(this)) {
+            Toast.makeText(this, "From latest android version I need Location Permission to get Wifi SSID", Toast.LENGTH_LONG).show();
+            Perms.requestGPSPermissions(this, QUERY_PERMS_GPS);
+        }
 
         return Wifi.isOnlineAndWifi(this) && Wifi.isInSSIDList(this, webapp.alternateSSIDs);
     }
