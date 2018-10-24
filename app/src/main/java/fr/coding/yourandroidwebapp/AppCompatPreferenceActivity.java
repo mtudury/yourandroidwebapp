@@ -77,8 +77,12 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
                 || SSLSettingDetailFragment.class.getName().equals(fragmentName)
                 || SSLSettingListFragment.class.getName().equals(fragmentName)
                 || WebAppDetailFragment.class.getName().equals(fragmentName)
-                || WebAppListFragment .class.getName().equals(fragmentName);
+                || WebAppListFragment.class.getName().equals(fragmentName)
+                || AdvancedSettingsActivity.AdvSettingsPreferenceFragment.class.getName().equals(fragmentName)
+                || SettingsActivity.GeneralPreferenceFragment.class.getName().equals(fragmentName)
+                || GoogleDriveSettingsActivity.GeneralPreferenceFragment.class.getName().equals(fragmentName);
     }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
