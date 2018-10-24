@@ -16,7 +16,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 
@@ -107,9 +109,9 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
      * shown.
      */
     private void setupSimplePreferencesScreen() {
-        if (!isSimplePreferences(this)) {
+        /*if (!isSimplePreferences(this)) {
             return;
-        }
+        }*/
 
         // In the simplified UI, fragments are not used at all and we instead
         // use the older PreferenceActivity APIs.
@@ -444,4 +446,16 @@ public class SettingsActivity extends GoogleDriveApiAppCompatPreferenceActivity 
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
     }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+
+        return false;
+    }
+
 }
