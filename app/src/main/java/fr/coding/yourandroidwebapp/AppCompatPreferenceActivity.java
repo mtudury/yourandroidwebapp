@@ -12,6 +12,9 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A {@link android.preference.PreferenceActivity} which implements and proxies the necessary calls
  * to be used with AppCompat.
@@ -66,6 +69,16 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         getDelegate().addContentView(view, params);
     }
 
+    @Override
+    protected boolean isValidFragment(String fragmentName)
+    {
+        return HostAuthSettingsDetailFragment.class.getName().equals(fragmentName)
+                || HostAuthSettingsListFragment.class.getName().equals(fragmentName)
+                || SSLSettingDetailFragment.class.getName().equals(fragmentName)
+                || SSLSettingListFragment.class.getName().equals(fragmentName)
+                || WebAppDetailFragment.class.getName().equals(fragmentName)
+                || WebAppListFragment .class.getName().equals(fragmentName);
+    }
     @Override
     protected void onPostResume() {
         super.onPostResume();
