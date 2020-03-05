@@ -4,13 +4,13 @@ android {
     signingConfigs {
 
     }
-    compileSdkVersion 27
+    compileSdkVersion 29
     defaultConfig {
         applicationId "fr.coding.yourandroidwebapp"
-        minSdkVersion 22
-        targetSdkVersion 27
-        versionCode 45
-        versionName "2.2.7"
+        minSdkVersion 28
+        targetSdkVersion 29
+        versionCode 46
+        versionName "3.0.0"
     }
     buildTypes {
         release {
@@ -25,11 +25,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api 'com.google.android.gms:play-services-drive:15.+'
-    api 'com.google.android.gms:play-services-auth:15.+'
-    api 'com.android.support:appcompat-v7:27.+'
-    api 'com.android.support:design:27.+'
-    api 'com.android.support:support-v4:27.+'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.android.support:recyclerview-v7:27.+'
 }

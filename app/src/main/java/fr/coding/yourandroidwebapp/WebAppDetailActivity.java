@@ -8,13 +8,10 @@ import android.os.Bundle;
 
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
-import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
-import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 /**
  * An activity representing a single WebApp detail screen. This

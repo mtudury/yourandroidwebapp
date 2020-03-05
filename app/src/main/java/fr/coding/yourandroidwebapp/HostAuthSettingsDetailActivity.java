@@ -1,17 +1,12 @@
 package fr.coding.yourandroidwebapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.view.MenuItem;
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
-import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * An activity representing a single HostAuth detail screen. This

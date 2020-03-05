@@ -8,14 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import fr.coding.tools.gdrive.GoogleDriveApiAppCompatActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
-import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
-import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
 
 /**

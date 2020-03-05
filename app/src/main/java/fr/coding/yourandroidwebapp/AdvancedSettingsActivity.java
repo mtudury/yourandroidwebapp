@@ -10,7 +10,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import fr.coding.yourandroidwebapp.settings.AdvancedAppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
-import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -31,7 +29,7 @@ import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class AdvancedSettingsActivity extends AppSettingsActivity implements AppSettingsCallback {
+public class AdvancedSettingsActivity extends AppSettingsActivity {
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.

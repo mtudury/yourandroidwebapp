@@ -16,7 +16,6 @@ import android.os.FileUriExposedException;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.net.URLConnection;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,15 +36,12 @@ import fr.coding.tools.AutoAuthSslWebView;
 import fr.coding.tools.Callback;
 import fr.coding.tools.CallbackResult;
 import fr.coding.tools.Perms;
-import fr.coding.tools.gdrive.GoogleDriveCoreActivity;
 import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
 import fr.coding.tools.networks.NetworkChangeEvent;
 import fr.coding.tools.networks.NetworkChangeReceiver;
 import fr.coding.tools.networks.Wifi;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
-import fr.coding.yourandroidwebapp.settings.AppSettingsActivityHelper;
-import fr.coding.yourandroidwebapp.settings.AppSettingsCallback;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 
@@ -69,8 +64,6 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
 
     private static final String TAG = "WebMainActivity";
 
-    protected AppSettingsActivityHelper coreActivity = null;
-
     protected NetworkChangeReceiver networkChangeReceiver = null;
 
     private WebApp wa;
@@ -79,13 +72,11 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
 
     private boolean showprogressbar;
 
-    protected static final int QUERY_PERMS_READSD = GoogleDriveCoreActivity.NEXT_AVAILABLE_REQUEST_CODE + 100;
+    protected static final int QUERY_PERMS_READSD = 100;
     protected static final int QUERY_PERMS_GPS = QUERY_PERMS_READSD + 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().requestFeature(Window.FEATURE_PROGRESS);
-
         if (AppSettingsManager.KeepTheScreenOn(this))
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -146,13 +137,11 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (AppSettingsManager.IsRemoteDebuggingActivated(this))
-                WebView.setWebContentsDebuggingEnabled(true);
-        }
+        if (AppSettingsManager.IsRemoteDebuggingActivated(this))
+            WebView.setWebContentsDebuggingEnabled(true);
 
         settingsManager = new AppSettingsManager(this);
-        settings = settingsManager.LoadSettingsLocally();
+        settings = settingsManager.LoadSettingsLocally(this);
 
         if (settings.Advanced.disableMediasRequireUserGesture){
             mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
@@ -400,18 +389,11 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
     @Override
     protected void onResume() {
         super.onResume();
-        if (coreActivity != null)
-            coreActivity.onResume();
         if (mWebView != null) {
             mWebView.onResume();
             mWebView.resumeTimers();
         }
         reloadIfNeeded();
-
-        // refresh local settings (used as cache when using gdrive) once by week
-        if (AppSettingsManager.IsSettingsInGdrive(this)&&(AppSettingsManager.GetLastUpdatedFromGDrive(this).getTime() < new Date().getTime()-(7*24*60*60*1000))) {
-            UpdateLocalConfig();
-        }
 
         IntentFilter connectivityChange = new IntentFilter();
         connectivityChange.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -420,16 +402,6 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         this.registerReceiver(networkChangeReceiver, connectivityChange);
     }
 
-    /**
-     * Handles resolution callbacks.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (coreActivity != null)
-            coreActivity.onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -443,8 +415,6 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
      */
     @Override
     protected void onPause() {
-        if (coreActivity != null)
-            coreActivity.onPause();
         if (mWebView != null) {
             mWebView.onPause();
             mWebView.pauseTimers();
@@ -475,85 +445,48 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         final WebMainActivity webActivity = this;
         arg.activated = true;
 
-        AppSettingsCallback SaveSSLCallback = new AppSettingsCallback() {
-            @Override
-            public void onAppSettingsReady(AppSettings settings) {
-                boolean found = false;
-                for (SslByPass ssl : settings.SslByPasses) {
-                    if ((ssl.Host.equals(arg.Host))
-                            && (ssl.CName.equals(arg.CName))
-                            && (ssl.ValidNotAfter == arg.ValidNotAfter)) {
-                        found = true;
-                        ssl.activated = true;
-                    }
-                }
-                if (!found) {
-                    settings.SslByPasses.add(arg);
-                }
-                settings.getWebAppById(webAppId).allowedSSlActivated = true;
-                coreActivity.Save(settings);
-
-                LoadWebViewSettings(settings);
+        AppSettings settings = AppSettingsManager.LoadSettingsLocally(this);
+        boolean found = false;
+        for (SslByPass ssl : settings.SslByPasses) {
+            if ((ssl.Host.equals(arg.Host))
+                    && (ssl.CName.equals(arg.CName))
+                    && (ssl.ValidNotAfter == arg.ValidNotAfter)) {
+                found = true;
+                ssl.activated = true;
             }
-        };
-
-        if (coreActivity == null) {
-            coreActivity = new AppSettingsActivityHelper(this, SaveSSLCallback, TAG);
-            coreActivity.onResume();
-        } else {
-            coreActivity.getSettings(SaveSSLCallback);
         }
+        if (!found) {
+            settings.SslByPasses.add(arg);
+        }
+        settings.getWebAppById(webAppId).allowedSSlActivated = true;
+        AppSettingsManager sman = new AppSettingsManager(this);
+        sman.SaveSettingsLocally(settings);
+
+        LoadWebViewSettings(settings);
     }
 
     protected void SaveAcceptedHostAuth(final HostAuth arg) {
         final WebMainActivity webActivity = this;
         arg.activated = true;
 
-        AppSettingsCallback SaveAcceptedHostAuth = new AppSettingsCallback() {
-            @Override
-            public void onAppSettingsReady(AppSettings settings) {
-                boolean found = false;
-                for (HostAuth hostAuth : settings.HostAuths) {
-                    if (hostAuth.Host.equals(arg.Host)) {
-                        found = true;
-                        hostAuth.Login = arg.Login;
-                        hostAuth.Password = arg.Password;
-                    }
-                }
-                if (!found) {
-                    settings.HostAuths.add(arg);
-                }
-                settings.getWebAppById(webAppId).autoAuth = true;
-                coreActivity.Save(settings);
+        AppSettings settings = AppSettingsManager.LoadSettingsLocally(this);
+        boolean found = false;
+        for (HostAuth hostAuth : settings.HostAuths) {
+            if (hostAuth.Host.equals(arg.Host)) {
+                found = true;
+                hostAuth.Login = arg.Login;
+                hostAuth.Password = arg.Password;
             }
-        };
-
-        if (coreActivity == null) {
-            coreActivity = new AppSettingsActivityHelper(webActivity, SaveAcceptedHostAuth, TAG);
-            coreActivity.onResume();
-        } else {
-            coreActivity.getSettings(SaveAcceptedHostAuth);
         }
-    }
-
-    protected void UpdateLocalConfig() {
-        final WebMainActivity webActivity = this;
-
-        AppSettingsCallback DoNothingCallback = new AppSettingsCallback() {
-            @Override
-            public void onAppSettingsReady(AppSettings settings) {
-            }
-        };
-
-        if (coreActivity == null) {
-            coreActivity = new AppSettingsActivityHelper(webActivity, DoNothingCallback, TAG);
-            coreActivity.onResume();
-        } else {
-            coreActivity.getSettings(DoNothingCallback);
+        if (!found) {
+            settings.HostAuths.add(arg);
         }
+        settings.getWebAppById(webAppId).autoAuth = true;
+        AppSettingsManager sman = new AppSettingsManager(this);
+        sman.SaveSettingsLocally(settings);
+
+        LoadWebViewSettings(settings);
     }
-
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
