@@ -24,19 +24,14 @@ public class StartupActivity extends AppCompatActivity implements MyWebAppRecycl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*Intent detailIntent = new Intent(view.getContext(), SettingsActivity.class);
-                startActivity(detailIntent);*/
-            }
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener((View view) -> {
+            Intent detailIntent = new Intent(view.getContext(), SettingsActivity.class);
+            startActivity(detailIntent);
         });
-
-
     }
 
 

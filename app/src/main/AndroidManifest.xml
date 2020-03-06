@@ -24,11 +24,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/app_name"
+            android:label="@string/title_activity_settings"
             android:parentActivityName=".StartupActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".StartupActivity" />
+                android:value="fr.coding.yourandroidwebapp.StartupActivity" />
         </activity>
         <activity
             android:name=".WebMainActivity"
@@ -37,6 +37,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.WEBMAIN" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".StartupActivity" />
@@ -63,17 +64,17 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="fr.coding.yourandroidwebapp.fileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
