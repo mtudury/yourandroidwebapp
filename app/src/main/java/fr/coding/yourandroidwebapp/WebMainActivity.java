@@ -13,7 +13,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUriExposedException;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -433,10 +433,10 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         if (mWebView.canGoBack()) {
             mWebView.goBack();
         } else {
-            Intent intent = new Intent(this, SettingsActivity.class);
+            /*Intent intent = new Intent(this, SettingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("EXIT", true);
-            startActivity(intent);
+            startActivity(intent);*/
             finish();
         }
     }

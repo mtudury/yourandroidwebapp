@@ -41,72 +41,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".StartupActivity" />
         </activity>
-        <activity
-            android:name=".WebAppListActivity"
-            android:label="@string/title_webapp_list"
-            android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
 
         <activity
-            android:name=".WebAppDetailActivity"
-            android:label="@string/title_webapp_detail"
-            android:parentActivityName=".WebAppListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".WebAppListActivity" />
-        </activity>
-        <activity
-            android:name=".SSLSettingListActivity"
-            android:label="@string/title_sslsetting_list"
-            android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
-        </activity>
-        <activity
-            android:name=".SSLSettingDetailActivity"
-            android:label="@string/title_sslsetting_detail"
-            android:parentActivityName=".SSLSettingListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.coding.yourandroidwebapp.SSLSettingListActivity" />
-        </activity>
-        <activity
-            android:name=".HostAuthSettingsListActivity"
-            android:label="@string/title_hostauth_list"
-            android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
-        </activity>
-        <activity
-            android:name=".HostAuthSettingsDetailActivity"
-            android:label="@string/title_hostauth_detail"
-            android:parentActivityName=".HostAuthSettingsListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HostAuthSettingsListActivity" />
-        </activity>
-        <activity
             android:name=".GoogleDriveSettingsActivity"
             android:label="@string/title_activity_google_drive_settings"
-            android:parentActivityName=".SettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
-        </activity>
-        <activity
-            android:name=".AdvancedSettingsActivity"
-            android:label="@string/title_activity_advanced_settings"
             android:parentActivityName=".SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -128,7 +70,7 @@
 
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="fr.coding.yourandroidwebapp.fileProvider"
             android:grantUriPermissions="true"
             android:exported="false">

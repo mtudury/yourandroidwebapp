@@ -1,6 +1,6 @@
 package fr.coding.yourandroidwebapp;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import fr.coding.tools.DiskCacheImageViewUrl;
-import fr.coding.tools.ImageViewUrl;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
 public class MyWebAppRecyclerViewAdapter extends RecyclerView.Adapter<MyWebAppRecyclerViewAdapter.ViewHolder> {

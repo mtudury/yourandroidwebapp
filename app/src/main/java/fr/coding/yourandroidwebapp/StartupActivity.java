@@ -2,22 +2,19 @@ package fr.coding.yourandroidwebapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
-import android.widget.ListView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.coding.yourandroidwebapp.settings.AppSettings;
-import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
@@ -34,8 +31,8 @@ public class StartupActivity extends AppCompatActivity implements MyWebAppRecycl
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent detailIntent = new Intent(view.getContext(), SettingsActivity.class);
-                startActivity(detailIntent);
+                /*Intent detailIntent = new Intent(view.getContext(), SettingsActivity.class);
+                startActivity(detailIntent);*/
             }
         });
 
@@ -46,11 +43,10 @@ public class StartupActivity extends AppCompatActivity implements MyWebAppRecycl
     @Override
     protected  void onResume() {
         super.onResume();
-        AppSettingsManager settingsManager = new AppSettingsManager(this);
-        AppSettings settings = settingsManager.LoadSettingsLocally();
+        AppSettings settings = AppSettingsManager.LoadSettingsLocally(this);
 
         List<WebApp> webapps = new ArrayList<>(settings.WebApps);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
+        RecyclerView recyclerView = findViewById(R.id.list);
         recyclerView.setAdapter(new MyWebAppRecyclerViewAdapter(webapps, this));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
