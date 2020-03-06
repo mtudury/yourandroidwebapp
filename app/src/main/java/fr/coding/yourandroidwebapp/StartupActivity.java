@@ -32,6 +32,12 @@ public class StartupActivity extends AppCompatActivity implements MyWebAppRecycl
             Intent detailIntent = new Intent(view.getContext(), SettingsActivity.class);
             startActivity(detailIntent);
         });
+
+        FloatingActionButton createfab = findViewById(R.id.createfab);
+        createfab.setOnClickListener(view -> {
+            Intent detailIntent = new Intent(view.getContext(), WebAppDetail.class);
+            startActivity(detailIntent);
+        });
     }
 
 
