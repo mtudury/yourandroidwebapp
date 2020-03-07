@@ -7,6 +7,7 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import fr.coding.webappsettingsviews.WebAppSettingsAdvancedFragment;
 import fr.coding.webappsettingsviews.WebAppSettingsGeneralFragment;
 import fr.coding.yourandroidwebapp.R;
 
@@ -29,8 +30,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment fr = null;
         switch (position) {
-
-
+            case 1:
+                fr = WebAppSettingsAdvancedFragment.newInstance();
+                break;
             default:
                 fr = WebAppSettingsGeneralFragment.newInstance();
         }
