@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:padding="16dp" android:orientation="vertical" tools:context="fr.coding.yourandroidwebapp.WebAppDetailFragment" android:focusableInTouchMode="true">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="@string/webapp_general" android:textSize="22dp" android:layout_marginBottom="5dp"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="@string/webapp_name" android:id="@+id/webapp_name_id"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:id="@+id/webapp_name"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="@string/webapp_url" android:id="@+id/webapp_name_url"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"  android:id="@+id/webapp_url" android:inputType="textUri" android:hint="@string/webapp_url_hint"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="@string/webapp_iconurl" android:id="@+id/webapp_name_iconurl"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"  android:id="@+id/webapp_iconurl" android:inputType="textUri"
+            />
+        <Space
+            android:layout_width="fill_parent"
+            android:layout_height="30dp" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="@string/webapp_actions" android:textSize="22dp" android:layout_marginBottom="5dp"/>
+        <Button
+            android:id="@+id/webapp_save_button"
+            android:layout_height="wrap_content"
+            android:text="@string/webapp_save_button"
+            android:layout_width="fill_parent"
+            android:visibility="invisible">
+        </Button>
+        <Button
+            android:id="@+id/webapp_launch_webapp"
+            android:layout_height="wrap_content"
+            android:text="@string/webapp_launch_shortcut"
+            android:layout_width="fill_parent">
+        </Button>
+        <Button
+            android:id="@+id/webapp_create_shortcut"
+            android:layout_height="wrap_content"
+            android:text="@string/webapp_create_shortcut"
+            android:layout_width="fill_parent">
+        </Button>
+        <Button
+            android:id="@+id/webapp_duplicate"
+            android:layout_height="wrap_content"
+            android:text="@string/webapp_duplicate"
+            android:layout_width="fill_parent">
+        </Button>
+        <Button
+            android:id="@+id/webapp_delete"
+            android:layout_height="wrap_content"
+            android:text="@string/webapp_delete"
+            android:layout_width="fill_parent">
+        </Button>
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/webapp_detail_text"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:padding="16dp"
+            android:textIsSelectable="true"
+            tools:context="fr.coding.yourandroidwebapp.WebAppDetailFragment" />
+    </LinearLayout>
+</ScrollView>

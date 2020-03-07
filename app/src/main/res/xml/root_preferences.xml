@@ -2,12 +2,6 @@
     <PreferenceCategory
         android:key="webapps_settings"
         android:title="@string/pref_header_webapps">
-        <Preference android:title="@string/pref_title_manage_webapps_settings">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetClass="fr.coding.yourandroidwebapp.WebAppListActivity"
-                android:targetPackage="fr.coding.yourandroidwebapp" />
-        </Preference>
         <Preference android:title="@string/pref_title_ssl_settings">
             <intent
                 android:action="android.intent.action.VIEW"
