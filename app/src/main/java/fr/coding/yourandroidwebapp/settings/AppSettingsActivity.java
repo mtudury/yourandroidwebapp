@@ -12,8 +12,7 @@ public class AppSettingsActivity extends AppCompatActivity {
     }
 
     public void SaveSettings(AppSettings settings) {
-        AppSettingsManager setmgr = new AppSettingsManager(this);
-        setmgr.SaveSettingsLocally(settings);
+        AppSettingsManager.SaveSettingsLocally(this, settings);
     }
 
 }

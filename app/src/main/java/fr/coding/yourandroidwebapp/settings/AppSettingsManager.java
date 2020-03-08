@@ -32,20 +32,13 @@ public class AppSettingsManager {
     public static final String AutoRefresh = "webview_refreshevery";
     private static final String PREFS_GDRIVELASTUPDATED = "google_drive_last_updated";
 
-    private Context context;
-    private String jsonval;
-
-    public AppSettingsManager(Context ctx) {
-        context = ctx;
-    }
-
-    private void SaveExternaly(String path) throws IOException {
+    private static void SaveExternaly(String path, String jsonval) throws IOException {
         FileOutputStream fileout = new FileOutputStream (new File(path));
         OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
         outputWriter.write(jsonval);
         outputWriter.close();
     }
-    private void SaveLocally() throws IOException {
+    private static void SaveLocally(Context context, String jsonval) throws IOException {
         // add-write text into file
         FileOutputStream fileout = context.openFileOutput(PREFSFILE, Context.MODE_PRIVATE);
         OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
@@ -53,10 +46,12 @@ public class AppSettingsManager {
         outputWriter.close();
     }
 
-    public String SaveSettingsLocally(AppSettings apps) {
+    public static String SaveSettingsLocally(Context context, AppSettings apps) {
+        String jsonval = null;
+
         try {
             jsonval = apps.AppSettingsToJSONobj().toString();
-            SaveLocally();
+            SaveLocally(context, jsonval);
         } catch (IOException|JSONException e) {
             e.printStackTrace();
             new AlertDialog.Builder(context).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
@@ -64,10 +59,11 @@ public class AppSettingsManager {
         return jsonval;
     }
 
-    public String ExportSettingsToExternalStorage(AppSettings apps, String path) {
+    public static String ExportSettingsToExternalStorage(Context context, AppSettings apps, String path) {
+        String jsonval = null;
         try {
             jsonval = apps.AppSettingsToJSONobj().toString();
-            SaveExternaly(path);
+            SaveExternaly(path, jsonval);
         } catch (IOException|JSONException e) {
             e.printStackTrace();
             new AlertDialog.Builder(context).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
@@ -75,7 +71,7 @@ public class AppSettingsManager {
         return jsonval;
     }
 
-    private AppSettings LoadExternaly(String path) throws IOException, JSONException {
+    private static AppSettings LoadExternaly(String path) throws IOException, JSONException {
         FileInputStream fileIn=new FileInputStream (new File(path));
         BufferedReader InputRead= new BufferedReader(new InputStreamReader(fileIn));
         StringBuilder builder = new StringBuilder();
@@ -113,7 +109,7 @@ public class AppSettingsManager {
         return new AppSettings();
     }
 
-    public AppSettings LoadSettingsFromExternalStorage(String path) {
+    public AppSettings LoadSettingsFromExternalStorage(Context context, String path) {
         try {
             return LoadExternaly(path);
         }

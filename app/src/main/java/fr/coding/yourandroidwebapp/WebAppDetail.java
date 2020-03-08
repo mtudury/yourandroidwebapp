@@ -18,11 +18,12 @@ import java.util.UUID;
 import fr.coding.webappsettingsviews.WebAppSettingsAdvancedFragment;
 import fr.coding.webappsettingsviews.WebAppSettingsGeneralFragment;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 import fr.coding.yourandroidwebapp.ui.main.SectionsPagerAdapter;
 
-public class WebAppDetail extends AppCompatActivity {
+public class WebAppDetail extends AppSettingsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +38,7 @@ public class WebAppDetail extends AppCompatActivity {
 
         String webAppId = getIntent().getStringExtra("webappid");
         if (webAppId != null) {
-            AppSettings settings = AppSettingsManager.LoadSettingsLocally(this);
-            sectionsPagerAdapter.setWebApp(settings.getWebAppById(webAppId));
+            sectionsPagerAdapter.setWebApp(getAppSettings().getWebAppById(webAppId));
         }
 
 
@@ -49,10 +49,9 @@ public class WebAppDetail extends AppCompatActivity {
                 ((WebAppSettingsGeneralFragment)sectionsPagerAdapter.getItem(0)).fillWebAppfromView(wa);
                 ((WebAppSettingsAdvancedFragment)sectionsPagerAdapter.getItem(1)).fillWebAppfromView(wa);
 
-                AppSettings settings = AppSettingsManager.LoadSettingsLocally(getApplicationContext());
+                AppSettings settings = getAppSettings();
                 settings.UpsertWebApp(wa);
-                AppSettingsManager manager = new AppSettingsManager(getApplicationContext());
-                manager.SaveSettingsLocally(settings);
+                SaveSettings(settings);
 
 
                 Snackbar.make(view, "WebApp Saved", Snackbar.LENGTH_LONG)

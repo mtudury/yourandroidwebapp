@@ -140,8 +140,7 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         if (AppSettingsManager.IsRemoteDebuggingActivated(this))
             WebView.setWebContentsDebuggingEnabled(true);
 
-        settingsManager = new AppSettingsManager(this);
-        settings = settingsManager.LoadSettingsLocally(this);
+        settings = AppSettingsManager.LoadSettingsLocally(this);
 
         if (settings.Advanced.disableMediasRequireUserGesture){
             mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
@@ -462,8 +461,7 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
             settings.SslByPasses.add(arg);
         }
         settings.getWebAppById(webAppId).allowedSSlActivated = true;
-        AppSettingsManager sman = new AppSettingsManager(this);
-        sman.SaveSettingsLocally(settings);
+        AppSettingsManager.SaveSettingsLocally(this, settings);
 
         LoadWebViewSettings(settings);
     }
@@ -485,8 +483,7 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
             settings.HostAuths.add(arg);
         }
         settings.getWebAppById(webAppId).autoAuth = true;
-        AppSettingsManager sman = new AppSettingsManager(this);
-        sman.SaveSettingsLocally(settings);
+        AppSettingsManager.SaveSettingsLocally(this, settings);
 
         LoadWebViewSettings(settings);
     }
