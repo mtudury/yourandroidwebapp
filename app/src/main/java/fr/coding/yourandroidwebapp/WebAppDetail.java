@@ -25,11 +25,14 @@ import fr.coding.yourandroidwebapp.ui.main.SectionsPagerAdapter;
 
 public class WebAppDetail extends AppSettingsActivity {
 
+    WebApp wa = new WebApp();
+    SectionsPagerAdapter sectionsPagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_app_detail);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
@@ -38,25 +41,34 @@ public class WebAppDetail extends AppSettingsActivity {
 
         String webAppId = getIntent().getStringExtra("webappid");
         if (webAppId != null) {
-            sectionsPagerAdapter.setWebApp(getAppSettings().getWebAppById(webAppId));
+            wa = getAppSettings().getWebAppById(webAppId);
         }
-
+        sectionsPagerAdapter.setWebApp(wa);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WebApp wa = new WebApp();
-                ((WebAppSettingsGeneralFragment)sectionsPagerAdapter.getItem(0)).fillWebAppfromView(wa);
-                ((WebAppSettingsAdvancedFragment)sectionsPagerAdapter.getItem(1)).fillWebAppfromView(wa);
 
-                AppSettings settings = getAppSettings();
-                settings.UpsertWebApp(wa);
-                SaveSettings(settings);
-
+                SaveWebApp();
 
                 Snackbar.make(view, "WebApp Saved", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    public void SaveWebApp() {
+        ((WebAppSettingsGeneralFragment)sectionsPagerAdapter.getItem(0)).fillWebAppfromView(wa);
+        ((WebAppSettingsAdvancedFragment)sectionsPagerAdapter.getItem(1)).fillWebAppfromView(wa);
+
+        AppSettings settings = getAppSettings();
+        settings.UpsertWebApp(wa);
+        SaveSettings(settings);
+    }
+
+    public void LaunchWebApp() {
+        SaveWebApp();
+
+        wa.StartWebApp(this);
     }
 }

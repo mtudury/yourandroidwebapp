@@ -2,6 +2,7 @@ package fr.coding.webappsettingsviews;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +12,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import fr.coding.yourandroidwebapp.R;
+import fr.coding.yourandroidwebapp.WebAppDetail;
+import fr.coding.yourandroidwebapp.WebMainActivity;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
@@ -40,6 +44,11 @@ public class WebAppSettingsGeneralFragment extends Fragment {
         if (mViewModel.setWebApp(wa)) {
             fillFragment();
         }
+
+        Button launch = getView().findViewById(R.id.webapp_launch_webapp);
+        launch.setOnClickListener(view -> {
+            ((WebAppDetail)getActivity()).LaunchWebApp();
+        });
     }
 
     public void fillWebAppfromView(WebApp wa) {

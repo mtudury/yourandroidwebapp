@@ -220,4 +220,11 @@ public class WebApp {
             appContext.sendBroadcast(addIntent);
         }
     }
+
+
+    public void StartWebApp(Context ctx) {
+        Intent detailIntent = new Intent(ctx, WebMainActivity.class);
+        detailIntent.putExtra("webappid", id);
+        ctx.startActivity(detailIntent);
+    }
 }

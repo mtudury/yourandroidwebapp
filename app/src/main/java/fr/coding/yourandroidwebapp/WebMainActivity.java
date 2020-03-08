@@ -435,16 +435,11 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         if (mWebView.canGoBack()) {
             mWebView.goBack();
         } else {
-            /*Intent intent = new Intent(this, SettingsActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("EXIT", true);
-            startActivity(intent);*/
             finish();
         }
     }
 
     protected void SaveAcceptedSSlChoice(final SslByPass arg) {
-        final WebMainActivity webActivity = this;
         arg.activated = true;
 
         AppSettings settings = AppSettingsManager.LoadSettingsLocally(this);
@@ -463,11 +458,10 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         settings.getWebAppById(webAppId).allowedSSlActivated = true;
         AppSettingsManager.SaveSettingsLocally(this, settings);
 
-        LoadWebViewSettings(settings);
+        wa.StartWebApp(this);
     }
 
     protected void SaveAcceptedHostAuth(final HostAuth arg) {
-        final WebMainActivity webActivity = this;
         arg.activated = true;
 
         AppSettings settings = AppSettingsManager.LoadSettingsLocally(this);
@@ -485,7 +479,7 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         settings.getWebAppById(webAppId).autoAuth = true;
         AppSettingsManager.SaveSettingsLocally(this, settings);
 
-        LoadWebViewSettings(settings);
+        wa.StartWebApp(this);
     }
 
     @Override

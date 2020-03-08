@@ -70,6 +70,8 @@ public class WebAppSettingsAdvancedFragment extends Fragment {
         ((CheckBox)getView().findViewById(R.id.webapp_sslall_activated)).setChecked(wa.allCertsByPass);
         ((CheckBox)getView().findViewById(R.id.webapp_ssl_activated)).setChecked(wa.allowedSSlActivated);
         ((CheckBox)getView().findViewById(R.id.webapp_autoauth)).setChecked(wa.autoAuth);
+
+
     }
 
     public void setWebApp(WebApp weba) {
