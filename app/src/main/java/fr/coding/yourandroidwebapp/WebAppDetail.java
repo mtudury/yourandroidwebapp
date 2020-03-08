@@ -13,6 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.UUID;
+
+import fr.coding.webappsettingsviews.WebAppSettingsGeneralFragment;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
+import fr.coding.yourandroidwebapp.settings.WebApp;
 import fr.coding.yourandroidwebapp.ui.main.SectionsPagerAdapter;
 
 public class WebAppDetail extends AppCompatActivity {
@@ -28,9 +34,21 @@ public class WebAppDetail extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // TODO: changer le new WebApp par un load plus global
+                WebApp wa = new WebApp();
+                wa.id = UUID.randomUUID().toString();
+                ((WebAppSettingsGeneralFragment)sectionsPagerAdapter.getItem(0)).fillWebAppfromView(wa);
+
+                AppSettings settings = AppSettingsManager.LoadSettingsLocally(getApplicationContext());
+                settings.WebApps.add(wa);
+                AppSettingsManager manager = new AppSettingsManager(getApplicationContext());
+                manager.SaveSettingsLocally(settings);
+
+
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }

@@ -11,8 +11,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import fr.coding.yourandroidwebapp.R;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
+import fr.coding.yourandroidwebapp.settings.WebApp;
 
 public class WebAppSettingsGeneralFragment extends Fragment {
 
@@ -32,7 +36,27 @@ public class WebAppSettingsGeneralFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(WebAppSettingsGeneralViewModel.class);
-        // TODO: Use the ViewModel
+
+        String webAppId = getActivity().getIntent().getStringExtra("webappid");
+        if (webAppId != null) {
+            AppSettings settings = AppSettingsManager.LoadSettingsLocally(getActivity());
+            if (mViewModel.setWebApp(settings.getWebAppById(webAppId))) {
+                fillFragment();
+            }
+        }
+    }
+
+    public void fillWebAppfromView(WebApp wa) {
+        wa.name = ((TextView)getView().findViewById(R.id.webapp_name)).getText().toString();
+        wa.url = ((TextView)getView().findViewById(R.id.webapp_url)).getText().toString();
+        wa.iconUrl = ((TextView)getView().findViewById(R.id.webapp_iconurl)).getText().toString();
+    }
+
+    public void fillFragment() {
+        WebApp wa = mViewModel.getWebApp();
+        ((TextView)getView().findViewById(R.id.webapp_name)).setText(wa.name);
+        ((TextView)getView().findViewById(R.id.webapp_url)).setText(wa.url);
+        ((TextView)getView().findViewById(R.id.webapp_iconurl)).setText(wa.iconUrl);
     }
 
 }

@@ -17,6 +17,9 @@ import fr.coding.yourandroidwebapp.R;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    WebAppSettingsAdvancedFragment advancedFragment = null;
+    WebAppSettingsGeneralFragment settingsGeneralFragment = null;
+
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.webapp_general, R.string.pref_header_advancedsettings};
     private final Context mContext;
@@ -31,10 +34,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Fragment fr = null;
         switch (position) {
             case 1:
-                fr = WebAppSettingsAdvancedFragment.newInstance();
+                if (advancedFragment == null) {
+                    advancedFragment = WebAppSettingsAdvancedFragment.newInstance();
+                }
+                fr = advancedFragment;
                 break;
             default:
-                fr = WebAppSettingsGeneralFragment.newInstance();
+                if (settingsGeneralFragment == null) {
+                    settingsGeneralFragment = WebAppSettingsGeneralFragment.newInstance();
+                }
+                fr = settingsGeneralFragment;
         }
 
         return fr;

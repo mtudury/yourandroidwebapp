@@ -92,52 +92,5 @@
             android:id="@+id/webapp_pinchzoom_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></Spinner>
-        <Space
-            android:layout_width="fill_parent"
-            android:layout_height="30dp" />
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" android:text="@string/webapp_actions" android:textSize="22dp" android:layout_marginBottom="5dp"/>
-        <Button
-            android:id="@+id/webapp_save_button"
-            android:layout_height="wrap_content"
-            android:text="@string/webapp_save_button"
-            android:layout_width="fill_parent"
-            android:visibility="invisible">
-        </Button>
-        <Button
-            android:id="@+id/webapp_launch_webapp"
-            android:layout_height="wrap_content"
-            android:text="@string/webapp_launch_shortcut"
-            android:layout_width="fill_parent">
-        </Button>
-        <Button
-            android:id="@+id/webapp_create_shortcut"
-            android:layout_height="wrap_content"
-            android:text="@string/webapp_create_shortcut"
-            android:layout_width="fill_parent">
-        </Button>
-        <Button
-            android:id="@+id/webapp_duplicate"
-            android:layout_height="wrap_content"
-            android:text="@string/webapp_duplicate"
-            android:layout_width="fill_parent">
-        </Button>
-        <Button
-            android:id="@+id/webapp_delete"
-            android:layout_height="wrap_content"
-            android:text="@string/webapp_delete"
-            android:layout_width="fill_parent">
-        </Button>
-
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/webapp_detail_text"
-            style="?android:attr/textAppearanceLarge"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:padding="16dp"
-            android:textIsSelectable="true"
-            tools:context="fr.coding.yourandroidwebapp.WebAppDetailFragment" />
     </LinearLayout>
 </ScrollView>

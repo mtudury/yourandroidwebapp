@@ -32,11 +32,11 @@ public class AppSettingsManager {
     public static final String AutoRefresh = "webview_refreshevery";
     private static final String PREFS_GDRIVELASTUPDATED = "google_drive_last_updated";
 
-    private Activity activity;
+    private Context context;
     private String jsonval;
 
-    public AppSettingsManager(Activity act) {
-        activity = act;
+    public AppSettingsManager(Context ctx) {
+        context = ctx;
     }
 
     private void SaveExternaly(String path) throws IOException {
@@ -47,7 +47,7 @@ public class AppSettingsManager {
     }
     private void SaveLocally() throws IOException {
         // add-write text into file
-        FileOutputStream fileout = activity.openFileOutput(PREFSFILE, Context.MODE_PRIVATE);
+        FileOutputStream fileout = context.openFileOutput(PREFSFILE, Context.MODE_PRIVATE);
         OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
         outputWriter.write(jsonval);
         outputWriter.close();
@@ -59,7 +59,7 @@ public class AppSettingsManager {
             SaveLocally();
         } catch (IOException|JSONException e) {
             e.printStackTrace();
-            new AlertDialog.Builder(activity).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+            new AlertDialog.Builder(context).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
         }
         return jsonval;
     }
@@ -70,7 +70,7 @@ public class AppSettingsManager {
             SaveExternaly(path);
         } catch (IOException|JSONException e) {
             e.printStackTrace();
-            new AlertDialog.Builder(activity).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+            new AlertDialog.Builder(context).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
         }
         return jsonval;
     }
@@ -124,7 +124,7 @@ public class AppSettingsManager {
         catch (IOException|JSONException e)
         {
             e.printStackTrace();
-            new AlertDialog.Builder(activity).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
+            new AlertDialog.Builder(context).setTitle("ErrorSavingSettings").setMessage(e.toString()).setNeutralButton("Close", null).show();
         }
         return new AppSettings();
     }
