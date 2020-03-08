@@ -55,7 +55,7 @@ public class WebAppDetail extends AppCompatActivity {
                 manager.SaveSettingsLocally(settings);
 
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "WebApp Saved", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

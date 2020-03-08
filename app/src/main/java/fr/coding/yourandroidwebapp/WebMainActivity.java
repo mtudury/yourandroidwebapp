@@ -374,10 +374,13 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
                 // check local uri and ask for rights if needed
                 if (!TextUtils.isEmpty(url)) {
                     Uri parsedUri = Uri.parse(url);
-                    if (parsedUri.getScheme().equalsIgnoreCase("file")||parsedUri.getScheme().equalsIgnoreCase("content")) {
+                    if ((parsedUri.getScheme() != null)&&(parsedUri.getScheme().equalsIgnoreCase("file")||parsedUri.getScheme().equalsIgnoreCase("content"))) {
                         if (!Perms.checkReadSDPermission(this)) {
                             Perms.requestReadSDPermission(this, QUERY_PERMS_READSD);
                         }
+                    }
+                    if (parsedUri.getScheme()==null) {
+                        url = "http://" + url;
                     }
                 }
 

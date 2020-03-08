@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 import fr.coding.yourandroidwebapp.R;
 import fr.coding.yourandroidwebapp.settings.WebApp;
@@ -35,8 +37,22 @@ public class WebAppSettingsAdvancedFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(WebAppSettingsAdvancedViewModel.class);
 
+        if (mViewModel.setWebApp(wa)) {
+            fillFragment();
+        }
+    }
 
-        // TODO: Use the ViewModel
+    public void fillWebAppfromView(WebApp wa) {
+        wa.allCertsByPass = ((CheckBox)getView().findViewById(R.id.webapp_sslall_activated)).isChecked();
+        wa.allowedSSlActivated = ((CheckBox)getView().findViewById(R.id.webapp_ssl_activated)).isChecked();
+        wa.autoAuth = ((CheckBox)getView().findViewById(R.id.webapp_autoauth)).isChecked();
+    }
+
+    public void fillFragment() {
+        WebApp wa = mViewModel.getWebApp();
+        ((CheckBox)getView().findViewById(R.id.webapp_sslall_activated)).setChecked(wa.allCertsByPass);
+        ((CheckBox)getView().findViewById(R.id.webapp_ssl_activated)).setChecked(wa.allowedSSlActivated);
+        ((CheckBox)getView().findViewById(R.id.webapp_autoauth)).setChecked(wa.autoAuth);
     }
 
     public void setWebApp(WebApp weba) {
