@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
 public class WebAppSettingsAdvancedViewModel extends ViewModel {
-    private WebApp wa = new WebApp();
+    private WebApp wa = null;
 
     public WebApp getWebApp() {
         return wa;

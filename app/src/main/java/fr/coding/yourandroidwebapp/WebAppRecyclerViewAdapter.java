@@ -1,10 +1,13 @@
 package fr.coding.yourandroidwebapp;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,13 +62,21 @@ public class WebAppRecyclerViewAdapter extends RecyclerView.Adapter<WebAppRecycl
         public final View mView;
         public final ImageView mImageView;
         public final TextView mContentView;
+        public final ImageButton mEditButton;
         public WebApp mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mImageView = (ImageView) view.findViewById(R.id.img);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mImageView = view.findViewById(R.id.img);
+            mContentView = view.findViewById(R.id.content);
+            mEditButton = view.findViewById(R.id.editButton);
+
+            mEditButton.setOnClickListener(view1 -> {
+                Intent detailIntent = new Intent(view1.getContext(), WebAppDetail.class);
+                detailIntent.putExtra("webappid", mItem.id);
+                view1.getContext().startActivity(detailIntent);
+            });
         }
 
         @Override
