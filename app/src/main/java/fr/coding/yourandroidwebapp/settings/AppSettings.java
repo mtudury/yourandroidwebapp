@@ -49,6 +49,20 @@ public class AppSettings {
         return null;
     }
 
+    public void UpsertWebApp(WebApp wa) {
+        boolean updated = false;
+        for (int i = 0; i < WebApps.size(); i++) {
+            WebApp webApp = WebApps.get(i);
+            if (webApp.id.equals(wa.id)) {
+                WebApps.set(i, wa);
+                updated = true;
+            }
+        }
+        if (!updated) {
+            WebApps.add(wa);
+        }
+    }
+
     public static AppSettings JSONobjToAppSettings(JSONObject jsonobj) throws JSONException {
         AppSettings appSettings = new AppSettings();
         JSONArray arr = jsonobj.getJSONArray("WebApps");

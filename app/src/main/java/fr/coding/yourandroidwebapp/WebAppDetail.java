@@ -15,6 +15,7 @@ import android.view.View;
 
 import java.util.UUID;
 
+import fr.coding.webappsettingsviews.WebAppSettingsAdvancedFragment;
 import fr.coding.webappsettingsviews.WebAppSettingsGeneralFragment;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
@@ -44,13 +45,12 @@ public class WebAppDetail extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: changer le new WebApp par un load plus global
                 WebApp wa = new WebApp();
-                wa.id = UUID.randomUUID().toString();
                 ((WebAppSettingsGeneralFragment)sectionsPagerAdapter.getItem(0)).fillWebAppfromView(wa);
+                ((WebAppSettingsAdvancedFragment)sectionsPagerAdapter.getItem(1)).fillWebAppfromView(wa);
 
                 AppSettings settings = AppSettingsManager.LoadSettingsLocally(getApplicationContext());
-                settings.WebApps.add(wa);
+                settings.UpsertWebApp(wa);
                 AppSettingsManager manager = new AppSettingsManager(getApplicationContext());
                 manager.SaveSettingsLocally(settings);
 
