@@ -49,13 +49,6 @@
             android:entries="@array/pref_refreshevery_titles"
             android:entryValues="@array/pref_refreshevery_values"
             android:defaultValue="-1" />
-        <Preference android:title="@string/title_activity_google_drive_settings">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="CREATE"
-                android:targetClass="fr.coding.yourandroidwebapp.GoogleDriveSettingsActivity"
-                android:targetPackage="fr.coding.yourandroidwebapp" />
-        </Preference>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_header_import_export_local"
