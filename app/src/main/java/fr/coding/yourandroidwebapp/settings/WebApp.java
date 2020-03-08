@@ -60,6 +60,15 @@ public class WebApp {
     public int pinchZoomMode;
 
 
+    // default values
+    public WebApp() {
+        id = UUID.randomUUID().toString();
+        allowedSSlActivated = true;
+        autoAuth = true;
+        reloadOnConnectionChange = false;
+    }
+
+
     public String toString() {
         return name;
     }

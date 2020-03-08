@@ -34,6 +34,12 @@ public class WebAppDetail extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
+        String webAppId = getIntent().getStringExtra("webappid");
+        if (webAppId != null) {
+            AppSettings settings = AppSettingsManager.LoadSettingsLocally(this);
+            sectionsPagerAdapter.setWebApp(settings.getWebAppById(webAppId));
+        }
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

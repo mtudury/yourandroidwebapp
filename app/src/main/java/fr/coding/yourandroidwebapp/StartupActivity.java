@@ -18,7 +18,7 @@ import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
-public class StartupActivity extends AppCompatActivity implements MyWebAppRecyclerViewAdapter.OnListFragmentInteractionListener {
+public class StartupActivity extends AppCompatActivity implements WebAppRecyclerViewAdapter.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class StartupActivity extends AppCompatActivity implements MyWebAppRecycl
 
         List<WebApp> webapps = new ArrayList<>(settings.WebApps);
         RecyclerView recyclerView = findViewById(R.id.list);
-        recyclerView.setAdapter(new MyWebAppRecyclerViewAdapter(webapps, this));
+        recyclerView.setAdapter(new WebAppRecyclerViewAdapter(webapps, this));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 

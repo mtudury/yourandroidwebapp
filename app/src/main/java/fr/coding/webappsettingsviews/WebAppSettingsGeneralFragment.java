@@ -21,6 +21,7 @@ import fr.coding.yourandroidwebapp.settings.WebApp;
 public class WebAppSettingsGeneralFragment extends Fragment {
 
     private WebAppSettingsGeneralViewModel mViewModel;
+    private WebApp wa;
 
     public static WebAppSettingsGeneralFragment newInstance() {
         return new WebAppSettingsGeneralFragment();
@@ -36,13 +37,8 @@ public class WebAppSettingsGeneralFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(WebAppSettingsGeneralViewModel.class);
-
-        String webAppId = getActivity().getIntent().getStringExtra("webappid");
-        if (webAppId != null) {
-            AppSettings settings = AppSettingsManager.LoadSettingsLocally(getActivity());
-            if (mViewModel.setWebApp(settings.getWebAppById(webAppId))) {
-                fillFragment();
-            }
+        if (mViewModel.setWebApp(wa)) {
+            fillFragment();
         }
     }
 
@@ -59,4 +55,7 @@ public class WebAppSettingsGeneralFragment extends Fragment {
         ((TextView)getView().findViewById(R.id.webapp_iconurl)).setText(wa.iconUrl);
     }
 
+    public void setWebApp(WebApp weba) {
+        wa = weba;
+    }
 }

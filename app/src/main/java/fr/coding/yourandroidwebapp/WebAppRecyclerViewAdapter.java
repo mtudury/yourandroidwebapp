@@ -13,12 +13,12 @@ import java.util.List;
 import fr.coding.tools.DiskCacheImageViewUrl;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
-public class MyWebAppRecyclerViewAdapter extends RecyclerView.Adapter<MyWebAppRecyclerViewAdapter.ViewHolder> {
+public class WebAppRecyclerViewAdapter extends RecyclerView.Adapter<WebAppRecyclerViewAdapter.ViewHolder> {
 
     private final List<WebApp> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyWebAppRecyclerViewAdapter(List<WebApp> items, OnListFragmentInteractionListener listener) {
+    public WebAppRecyclerViewAdapter(List<WebApp> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }

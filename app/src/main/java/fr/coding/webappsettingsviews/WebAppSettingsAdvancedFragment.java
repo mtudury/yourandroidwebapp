@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import fr.coding.yourandroidwebapp.R;
+import fr.coding.yourandroidwebapp.settings.WebApp;
 
 public class WebAppSettingsAdvancedFragment extends Fragment {
 
     private WebAppSettingsAdvancedViewModel mViewModel;
+    private WebApp wa;
 
     public static WebAppSettingsAdvancedFragment newInstance() {
         return new WebAppSettingsAdvancedFragment();
@@ -32,7 +34,12 @@ public class WebAppSettingsAdvancedFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(WebAppSettingsAdvancedViewModel.class);
+
+
         // TODO: Use the ViewModel
     }
 
+    public void setWebApp(WebApp weba) {
+        wa = weba;
+    }
 }

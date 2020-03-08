@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import fr.coding.webappsettingsviews.WebAppSettingsAdvancedFragment;
 import fr.coding.webappsettingsviews.WebAppSettingsGeneralFragment;
 import fr.coding.yourandroidwebapp.R;
+import fr.coding.yourandroidwebapp.settings.AppSettings;
+import fr.coding.yourandroidwebapp.settings.WebApp;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -19,6 +21,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     WebAppSettingsAdvancedFragment advancedFragment = null;
     WebAppSettingsGeneralFragment settingsGeneralFragment = null;
+
+    WebApp wa = null;
 
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.webapp_general, R.string.pref_header_advancedsettings};
@@ -36,12 +40,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 if (advancedFragment == null) {
                     advancedFragment = WebAppSettingsAdvancedFragment.newInstance();
+                    advancedFragment.setWebApp(wa);
                 }
                 fr = advancedFragment;
                 break;
             default:
                 if (settingsGeneralFragment == null) {
                     settingsGeneralFragment = WebAppSettingsGeneralFragment.newInstance();
+                    settingsGeneralFragment.setWebApp(wa);
                 }
                 fr = settingsGeneralFragment;
         }
@@ -59,5 +65,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         // Show 2 total pages.
         return 2;
+    }
+
+    public void setWebApp(WebApp webApp) {
+        wa = webApp;
     }
 }
