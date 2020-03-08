@@ -71,4 +71,10 @@ public class WebAppDetail extends AppSettingsActivity {
 
         wa.StartWebApp(this);
     }
+
+    public void DeleteWebApp() {
+        AppSettings settings = getAppSettings();
+        settings.DeleteWebAppById(wa.id);
+        SaveSettings(settings);
+    }
 }

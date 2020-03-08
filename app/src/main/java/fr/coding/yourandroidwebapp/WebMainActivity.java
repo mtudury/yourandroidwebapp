@@ -458,7 +458,10 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         settings.getWebAppById(webAppId).allowedSSlActivated = true;
         AppSettingsManager.SaveSettingsLocally(this, settings);
 
+        finish();
         wa.StartWebApp(this);
+
+        Toast.makeText(this, "Restarting WebApp Loading...", Toast.LENGTH_LONG).show();
     }
 
     protected void SaveAcceptedHostAuth(final HostAuth arg) {
@@ -479,7 +482,10 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         settings.getWebAppById(webAppId).autoAuth = true;
         AppSettingsManager.SaveSettingsLocally(this, settings);
 
+        finish();
         wa.StartWebApp(this);
+
+        Toast.makeText(this, "Restarting WebApp Loading...", Toast.LENGTH_LONG).show();
     }
 
     @Override

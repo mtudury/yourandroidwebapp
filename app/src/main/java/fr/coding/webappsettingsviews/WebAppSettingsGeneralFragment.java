@@ -49,6 +49,12 @@ public class WebAppSettingsGeneralFragment extends Fragment {
         launch.setOnClickListener(view -> {
             ((WebAppDetail)getActivity()).LaunchWebApp();
         });
+
+        Button delete = getView().findViewById(R.id.webapp_delete);
+        delete.setOnClickListener(view -> {
+            ((WebAppDetail)getActivity()).DeleteWebApp();
+            getActivity().finish();
+        });
     }
 
     public void fillWebAppfromView(WebApp wa) {
