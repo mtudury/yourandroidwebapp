@@ -26,10 +26,10 @@
         <activity
             android:name=".settings.AdvancedSettingsActivity"
             android:label="@string/title_activity_advanced_settings"
-            android:parentActivityName=".settings.AppSettingsActivity">
+            android:parentActivityName=".SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.coding.yourandroidwebapp.settings.AppSettingsActivity" />
+                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
         </activity>
         <!-- this is required as some users still use http:// for websites -->
         <activity
