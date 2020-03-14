@@ -20,7 +20,7 @@
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="CREATE"
-                android:targetClass="fr.coding.yourandroidwebapp.AdvancedSettingsActivity"
+                android:targetClass="fr.coding.yourandroidwebapp.settings.AdvancedSettingsActivity"
                 android:targetPackage="fr.coding.yourandroidwebapp" />
         </Preference>
     </PreferenceCategory>
