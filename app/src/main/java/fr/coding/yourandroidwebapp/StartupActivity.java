@@ -17,6 +17,7 @@ import java.util.List;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
 import fr.coding.yourandroidwebapp.settings.WebApp;
+import fr.coding.yourandroidwebapp.ui.main.WebAppRecyclerViewAdapter;
 
 public class StartupActivity extends AppCompatActivity implements WebAppRecyclerViewAdapter.OnListFragmentInteractionListener {
 

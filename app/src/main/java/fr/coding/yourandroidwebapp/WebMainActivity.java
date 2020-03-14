@@ -212,7 +212,8 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
 
                             case DialogInterface.BUTTON_NEGATIVE:
                                 //No button clicked
-                                needLoad = true;
+                                url = "file:///android_asset/default.html";
+                                LoadWebView();
                                 break;
                         }
                     }
@@ -458,10 +459,8 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         settings.getWebAppById(webAppId).allowedSSlActivated = true;
         AppSettingsManager.SaveSettingsLocally(this, settings);
 
-        finish();
-        wa.StartWebApp(this);
-
-        Toast.makeText(this, "Restarting WebApp Loading...", Toast.LENGTH_LONG).show();
+        LoadWebViewSettings(settings);
+        LoadWebView();
     }
 
     protected void SaveAcceptedHostAuth(final HostAuth arg) {
@@ -482,10 +481,8 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
         settings.getWebAppById(webAppId).autoAuth = true;
         AppSettingsManager.SaveSettingsLocally(this, settings);
 
-        finish();
-        wa.StartWebApp(this);
-
-        Toast.makeText(this, "Restarting WebApp Loading...", Toast.LENGTH_LONG).show();
+        LoadWebViewSettings(settings);
+        LoadWebView();
     }
 
     @Override

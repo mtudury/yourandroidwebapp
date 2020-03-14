@@ -6,14 +6,14 @@
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="CREATE"
-                android:targetClass="fr.coding.yourandroidwebapp.SSLSettingListActivity"
+                android:targetClass="fr.coding.yourandroidwebapp.CertsActivity"
                 android:targetPackage="fr.coding.yourandroidwebapp" />
         </Preference>
         <Preference android:title="@string/pref_title_hostauth_settings">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="CREATE"
-                android:targetClass="fr.coding.yourandroidwebapp.HostAuthSettingsListActivity"
+                android:targetClass="fr.coding.yourandroidwebapp.HostAuthActivity"
                 android:targetPackage="fr.coding.yourandroidwebapp" />
         </Preference>
         <Preference android:title="@string/title_activity_advanced_settings">

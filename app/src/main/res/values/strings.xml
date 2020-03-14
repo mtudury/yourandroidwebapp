@@ -2,6 +2,7 @@
     <string name="app_name">YourAndroidWebApp</string>
     <string name="title_webapp_list">WebApps</string>
     <string name="title_webapp_detail">WebApp Detail</string>
+    <string name="title_activity_hostauth">Authentication Settings</string>
     <string name="webapp_name">WebApp Name :</string>
     <string name="webapp_save_button">Save</string>
     <string name="webapp_create_shortcut">Create Shortcut</string>

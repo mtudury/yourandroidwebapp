@@ -22,7 +22,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"><!-- this is required as some users still use http:// for websites -->
+        android:usesCleartextTraffic="true">
+        <!-- this is required as some users still use http:// for websites -->
         <activity
             android:name=".WebAppDetail"
             android:label="@string/title_activity_web_app_detail"
@@ -52,19 +53,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".StartupActivity" />
         </activity>
-
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
-
-        <activity
-            android:name=".GoogleDriveSettingsActivity"
-            android:label="@string/title_activity_google_drive_settings"
-            android:parentActivityName=".SettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
-        </activity>
         <activity
             android:name=".StartupActivity"
             android:label="@string/title_activity_startup"
@@ -78,6 +66,17 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
+        </activity>
+        <activity
+            android:name=".HostAuthActivity"
+            android:label="@string/title_activity_hostauth"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".CertsActivity"
+            android:label="@string/title_activity_ssl_settings"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <provider

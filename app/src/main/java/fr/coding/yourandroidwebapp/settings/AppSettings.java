@@ -126,4 +126,23 @@ public class AppSettings {
         return jsonobj;
     }
 
+    public void DeleteHostAuthById(String id) {
+        for (int i = 0; i < HostAuths.size(); i++) {
+            HostAuth ha = HostAuths.get(i);
+            if (ha.id.equals(id)) {
+                HostAuths.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void DeleteCertById(String id) {
+        for (int i = 0; i < SslByPasses.size(); i++) {
+            SslByPass sb = SslByPasses.get(i);
+            if (sb.id.equals(id)) {
+                SslByPasses.remove(i);
+                return;
+            }
+        }
+    }
 }

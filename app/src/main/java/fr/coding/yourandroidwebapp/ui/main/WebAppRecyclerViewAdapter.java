@@ -1,4 +1,4 @@
-package fr.coding.yourandroidwebapp;
+package fr.coding.yourandroidwebapp.ui.main;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +14,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import fr.coding.tools.DiskCacheImageViewUrl;
+import fr.coding.yourandroidwebapp.R;
+import fr.coding.yourandroidwebapp.WebAppDetail;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 
 public class WebAppRecyclerViewAdapter extends RecyclerView.Adapter<WebAppRecyclerViewAdapter.ViewHolder> {
