@@ -1,0 +1,60 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/syncsettings_category_download_url">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="sync_download_enable"
+            android:title="@string/syncsettings_download_enable" />
+
+        <Preference
+            android:key="sync_download_now"
+            android:title="@string/syncsettings_download_now"
+            />
+
+
+        <EditTextPreference
+            app:key="sync_download_url"
+            app:title="@string/syncsettings_download_url"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/syncsettings_default_url" />
+
+
+        <EditTextPreference
+            app:key="sync_downloadheaderkey"
+            app:title="@string/syncsettings_download_headerkey"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/syncsettings_headerkey_default" />
+
+        <EditTextPreference
+            app:key="sync_downloadheadervalue"
+            app:title="@string/syncsettings_download_headervalue"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="Basic BASE64STRING" />
+
+    </PreferenceCategory>
+
+
+
+
+    <PreferenceCategory
+        android:title="@string/pref_header_syncsettings_import_export"
+        android:key="general_settings"
+        >
+        <Preference
+            android:key="local_import"
+            android:title="@string/pref_title_local_import"
+            android:summary="@string/pref_description_local_import"
+            android:defaultValue="false"
+            />
+        <Preference
+            android:key="local_export"
+            android:title="@string/pref_title_local_export"
+            android:summary="@string/pref_description_local_export"
+            android:defaultValue="false"
+            />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

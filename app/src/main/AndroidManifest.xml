@@ -24,14 +24,21 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".websync.SyncActivity"
+            android:label="@string/title_activity_sync"
+            android:parentActivityName=".SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
+        </activity>
+        <activity
             android:name=".settings.AdvancedSettingsActivity"
             android:label="@string/title_activity_advanced_settings"
             android:parentActivityName=".SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.coding.yourandroidwebapp.SettingsActivity" />
-        </activity>
-        <!-- this is required as some users still use http:// for websites -->
+        </activity> <!-- this is required as some users still use http:// for websites -->
         <activity
             android:name=".WebAppDetail"
             android:label="@string/title_activity_web_app_detail"
@@ -79,12 +86,12 @@
             android:name=".HostAuthActivity"
             android:label="@string/title_activity_hostauth"
             android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CertsActivity"
             android:label="@string/title_activity_ssl_settings"
             android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

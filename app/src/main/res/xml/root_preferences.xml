@@ -51,6 +51,19 @@
             android:defaultValue="-1" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:title="@string/pref_header_sync_settings"
+        android:key="general_settings"
+        >
+        <Preference android:title="@string/pref_title_websync">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="CREATE"
+                android:targetClass="fr.coding.yourandroidwebapp.websync.SyncActivity"
+                android:targetPackage="fr.coding.yourandroidwebapp" />
+        </Preference>
+
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="@string/pref_header_import_export_local"
         android:key="general_settings"
         >
