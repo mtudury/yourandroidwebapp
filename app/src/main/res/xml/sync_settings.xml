@@ -1,13 +1,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/syncsettings_category_download_url">
+    <PreferenceCategory app:title="@string/syncsettings_download_enable_title">
 
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="sync_download_enable"
             android:title="@string/syncsettings_download_enable" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/syncsettings_category_download_url">
         <Preference
             android:key="sync_download_now"
             android:title="@string/syncsettings_download_now"
@@ -25,7 +28,7 @@
             app:key="sync_downloadheaderkey"
             app:title="@string/syncsettings_download_headerkey"
             app:useSimpleSummaryProvider="true"
-            app:defaultValue="@string/syncsettings_headerkey_default" />
+            app:defaultValue="@string/syncsettings_default_headerkey" />
 
         <EditTextPreference
             app:key="sync_downloadheadervalue"
@@ -39,22 +42,49 @@
 
 
     <PreferenceCategory
-        android:title="@string/pref_header_syncsettings_import_export"
+        android:title="@string/syncsettings_category_upload_url"
         android:key="general_settings"
         >
         <Preference
-            android:key="local_import"
-            android:title="@string/pref_title_local_import"
-            android:summary="@string/pref_description_local_import"
-            android:defaultValue="false"
-            />
-        <Preference
-            android:key="local_export"
-            android:title="@string/pref_title_local_export"
-            android:summary="@string/pref_description_local_export"
-            android:defaultValue="false"
+            android:key="sync_upload_now"
+            android:title="@string/syncsettings_upload_now"
             />
 
+
+        <EditTextPreference
+            app:key="sync_upload_url"
+            app:title="@string/syncsettings_upload_url"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/syncsettings_default_url" />
+
+
+        <EditTextPreference
+            app:key="sync_uploadheaderkey"
+            app:title="@string/syncsettings_download_headerkey"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/syncsettings_default_headerkey" />
+
+        <EditTextPreference
+            app:key="sync_uploadheadervalue"
+            app:title="@string/syncsettings_download_headervalue"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/syncsettings_default_headervalue" />
+        <ListPreference
+            android:defaultValue="PUT"
+            android:entries="@array/http_upload_methods"
+            android:entryValues="@array/http_upload_methods"
+            android:key="sync_upload_httpmethod"
+            android:title="HTTP Method" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="sync_upload_downloadsettings_exclude"
+            android:title="@string/sync_upload_downloadsettings_exclude" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="sync_upload_uploadsettings_exclude"
+            android:title="@string/sync_upload_uploadsettings_exclude" />
     </PreferenceCategory>
 
 </PreferenceScreen>

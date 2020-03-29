@@ -9,6 +9,7 @@ import java.util.List;
 
 import fr.coding.tools.model.HostAuth;
 import fr.coding.tools.model.SslByPass;
+import fr.coding.yourandroidwebapp.websync.SyncSettings;
 
 /**
  * Created by Matthieu on 31/10/2015.
@@ -21,6 +22,7 @@ public class AppSettings {
     public List<HostAuth> HostAuths;
 
     public AdvancedAppSettings Advanced;
+    public SyncSettings Sync;
 
     public AppSettings()
     {
@@ -95,6 +97,10 @@ public class AppSettings {
         {
             appSettings.Advanced = AdvancedAppSettings.JSONobjToWebApp(jsonobj.getJSONObject("advanced"));
         }
+        if (jsonobj.has("sync"))
+        {
+            appSettings.Sync = SyncSettings.JSONobjToWebApp(jsonobj.getJSONObject("sync"));
+        }
 
         return appSettings;
     }
@@ -121,6 +127,10 @@ public class AppSettings {
 
         if (Advanced != null) {
             jsonobj.put("advanced", Advanced.toJSONobj());
+        }
+
+        if (Sync != null) {
+            jsonobj.put("sync", Sync.toJSONobj());
         }
 
         return jsonobj;

@@ -113,14 +113,18 @@
 
     <!-- SyncSettings Preferences -->
     <string name="syncsettings_category_download_url">Download Settings</string>
-    <string name="syncsettings_download_enable">Enable download Sync (once a day)</string>
+    <string name="syncsettings_download_enable">Download once a day</string>
     <string name="syncsettings_download_now">Download Now</string>
     <string name="syncsettings_download_url">Download Url</string>
     <string name="syncsettings_default_url">https://mywebserver/remote.php/webdav/forsample</string>
     <string name="syncsettings_download_headerkey">HTTP header</string>
-    <string name="syncsettings_headerkey_default">Authorization</string>
+    <string name="syncsettings_default_headerkey">Authorization</string>
+    <string name="syncsettings_default_headervalue">Basic BASE64STRING</string>
     <string name="syncsettings_download_headervalue">HTTP header value</string>
-    <string name="syncsettings_upload_url">Url</string>
-    <string name="pref_header_syncsettings_import_export">Import/Export SyncSettings</string>
-
+    <string name="syncsettings_category_upload_url">Upload Settings</string>
+    <string name="syncsettings_download_enable_title">AutoDownload settings</string>
+    <string name="syncsettings_upload_now">Upload now</string>
+    <string name="syncsettings_upload_url">Upload Url</string>
+    <string name="sync_upload_downloadsettings_exclude">Exclude DownloadSettings</string>
+    <string name="sync_upload_uploadsettings_exclude">Exclude UploadSettings</string>
 </resources>

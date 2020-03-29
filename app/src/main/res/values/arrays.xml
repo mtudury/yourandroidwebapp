@@ -9,4 +9,5 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+    <string-array name="http_upload_methods"><item>PUT</item><item>POST</item></string-array>
 </resources>

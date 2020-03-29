@@ -14,6 +14,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+import fr.coding.yourandroidwebapp.R;
+
 
 /**
  * Created by Matthieu on 13/09/2015.
@@ -187,5 +189,64 @@ public class AppSettingsManager {
     public static long AutoRefreshRate(Activity activity) {
         SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         return Long.parseLong(prefs.getString(AutoRefresh, "-1"));
+    }
+
+
+
+    public static String getSettingDownloadUrl(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String setting = prefs.getString("sync_download_url", null);
+        if (setting == null)
+            return null;
+        if (context.getString(R.string.syncsettings_default_url).contentEquals(setting))
+            return null;
+        return setting;
+    }
+
+    public static String getSettingUploadUrl(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String setting = prefs.getString("sync_upload_url", null);
+        if (setting == null)
+            return null;
+        if (context.getString(R.string.syncsettings_default_url).contentEquals(setting))
+            return null;
+        return setting;
+    }
+
+
+    public static String getSettingDownloadHeaderKey(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return prefs.getString("sync_downloadheaderkey", null);
+    }
+
+    public static String getSettingDownloadHeaderValue(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String setting = prefs.getString("sync_downloadheadervalue", null);
+        if (setting == null)
+            return null;
+        if (context.getString(R.string.syncsettings_default_headervalue).contentEquals(setting))
+            return null;
+        return setting;
+    }
+
+    public static String getSettingUploadHeaderKey(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return prefs.getString("sync_uploadheaderkey", null);
+    }
+
+    public static String getSettingUploadHeaderValue(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String setting = prefs.getString("sync_uploadheadervalue", null);
+        if (setting == null)
+            return null;
+        if (context.getString(R.string.syncsettings_default_headervalue).contentEquals(setting))
+            return null;
+        return setting;
+    }
+
+
+    public static String getSettingUploadMethod(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        return prefs.getString("sync_upload_httpmethod", null);
     }
 }
