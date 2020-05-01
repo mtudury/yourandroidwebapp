@@ -190,10 +190,15 @@ public class WebApp {
         shortcutIntent.setAction("android.intent.action.WEBMAIN");
         shortcutIntent.putExtra("webappid", app.id);
 
+        String shortcutname = app.name;
+        if ((shortcutname == null)||(shortcutname.isEmpty())) {
+            shortcutname = "NoName WebApp";
+        }
+
 
         ShortcutManager scm = (ShortcutManager)appContext.getSystemService(Context.SHORTCUT_SERVICE);
         ShortcutInfo.Builder scib = new ShortcutInfo.Builder(appContext, app.id)
-                .setShortLabel(app.name)
+                .setShortLabel(shortcutname)
                 .setIntent(shortcutIntent);
         if (theBitmap != null) {
             scib.setIcon(Icon.createWithBitmap(theBitmap));
