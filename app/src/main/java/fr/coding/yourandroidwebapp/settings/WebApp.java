@@ -164,7 +164,7 @@ public class WebApp {
         if ((app.iconUrl != null) && (!app.iconUrl.isEmpty())) {
             Uri icon = Uri.parse(app.iconUrl);
             try {
-                if (icon.getScheme().equalsIgnoreCase("file")||icon.getScheme().equalsIgnoreCase("content")) {
+                if ((icon.getScheme() != null) && (icon.getScheme().equalsIgnoreCase("file")||icon.getScheme().equalsIgnoreCase("content"))) {
                     theBitmap = BitmapFactory.decodeFile(icon.getPath());
                 } else {
                     byte[] img = new DiskCacheRetrieveHttpFile(appContext).execute(app.iconUrl).get();

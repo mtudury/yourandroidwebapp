@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.URLUtil;
+
 import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -92,8 +94,8 @@ public class SyncActivity extends AppCompatActivity {
                 public void run() {
                     String url = AppSettingsManager.getSettingUploadUrl(getContext());
 
-                    if (url == null) {
-                        Snackbar.make(getView(), "ERROR: set at least an URL", Snackbar.LENGTH_LONG)
+                    if ((url == null)||(url.isEmpty())||(!URLUtil.isValidUrl(url))) {
+                        Snackbar.make(getView(), "ERROR: set a valid URL", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
 
                         hideProgressDialog();
@@ -171,9 +173,9 @@ public class SyncActivity extends AppCompatActivity {
             public void run() {
                 String url = AppSettingsManager.getSettingDownloadUrl(context);
 
-                if (url == null) {
+                if ((url == null)||(url.isEmpty())||(!URLUtil.isValidUrl(url))) {
                     View rootView = ((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);
-                    Snackbar.make(rootView, "ERROR: set at least an URL", Snackbar.LENGTH_LONG)
+                    Snackbar.make(rootView, "ERROR: set a valid URL", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
                     hideProgressDialog();
