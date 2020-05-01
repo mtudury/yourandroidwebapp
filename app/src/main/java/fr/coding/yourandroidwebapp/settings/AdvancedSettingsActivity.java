@@ -1,6 +1,7 @@
 package fr.coding.yourandroidwebapp.settings;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,15 @@ public class AdvancedSettingsActivity extends AppSettingsActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
@@ -39,6 +49,7 @@ public class AdvancedSettingsActivity extends AppSettingsActivity {
 
             CheckBoxPreference setplaybackrg = (CheckBoxPreference)findPreference("webview_disable_playback_require_gesture");
             if (setplaybackrg != null) {
+                setplaybackrg.setChecked(advSettings.disableMediasRequireUserGesture);
                 setplaybackrg.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -49,11 +60,11 @@ public class AdvancedSettingsActivity extends AppSettingsActivity {
                     }
 
                 });
-                setplaybackrg.setChecked(advSettings.disableMediasRequireUserGesture);
             }
 
             CheckBoxPreference forceDownloadViewerChooser = (CheckBoxPreference)findPreference("webview_force_downloadviewer_chooser");
             if (forceDownloadViewerChooser != null) {
+                forceDownloadViewerChooser.setChecked(advSettings.forceDownloadViewerChooser);
                 forceDownloadViewerChooser.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -64,11 +75,11 @@ public class AdvancedSettingsActivity extends AppSettingsActivity {
                     }
 
                 });
-                forceDownloadViewerChooser.setChecked(advSettings.forceDownloadViewerChooser);
             }
 
             CheckBoxPreference allowgeolocPref = (CheckBoxPreference)findPreference("webview_allow_geoloc");
             if (allowgeolocPref != null) {
+                allowgeolocPref.setChecked(advSettings.allowGeoloc);
                 allowgeolocPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -79,11 +90,12 @@ public class AdvancedSettingsActivity extends AppSettingsActivity {
                     }
 
                 });
-                allowgeolocPref.setChecked(advSettings.allowGeoloc);
             }
 
             EditTextPreference prefuseragent = (EditTextPreference)findPreference("webview_user_agent");
             if (prefuseragent != null) {
+                prefuseragent.setText(advSettings.userAgent);
+                prefuseragent.setSummary(advSettings.userAgent);
                 prefuseragent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -96,8 +108,6 @@ public class AdvancedSettingsActivity extends AppSettingsActivity {
                     }
 
                 });
-                prefuseragent.setText(advSettings.userAgent);
-                prefuseragent.setSummary(advSettings.userAgent);
             }
         }
     }

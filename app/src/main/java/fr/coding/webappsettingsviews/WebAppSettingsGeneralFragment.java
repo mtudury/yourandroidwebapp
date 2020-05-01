@@ -55,6 +55,18 @@ public class WebAppSettingsGeneralFragment extends Fragment {
             ((WebAppDetail)getActivity()).DeleteWebApp();
             getActivity().finish();
         });
+
+        Button duplicate = getView().findViewById(R.id.webapp_duplicate);
+        duplicate.setOnClickListener(view -> {
+            ((WebAppDetail)getActivity()).DuplicateWebApp();
+            getActivity().finish();
+        });
+
+        Button createshortcut = getView().findViewById(R.id.webapp_create_shortcut);
+        createshortcut.setOnClickListener(view -> {
+            ((WebAppDetail)getActivity()).CreateShortcutWebApp();
+            getActivity().finish();
+        });
     }
 
     public void fillWebAppfromView(WebApp wa) {

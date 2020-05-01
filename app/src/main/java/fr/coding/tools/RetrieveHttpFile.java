@@ -19,6 +19,7 @@ public class RetrieveHttpFile extends AsyncTask<String, Void, byte[]> {
         try {
             URL url = new URL(urls[0]);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(3000);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];

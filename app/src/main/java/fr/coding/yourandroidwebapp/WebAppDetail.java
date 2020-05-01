@@ -77,4 +77,18 @@ public class WebAppDetail extends AppSettingsActivity {
         settings.DeleteWebAppById(wa.id);
         SaveSettings(settings);
     }
+
+    public void CreateShortcutWebApp() {
+        SaveWebApp();
+
+        wa.LauncherShortcut(this);
+    }
+
+    public void DuplicateWebApp() {
+        SaveWebApp();
+
+        AppSettings settings = getAppSettings();
+        settings.UpsertWebApp(wa.Duplicate());
+        SaveSettings(settings);
+    }
 }

@@ -1,6 +1,9 @@
 package fr.coding.yourandroidwebapp;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +38,25 @@ public class HostAuthActivity  extends AppSettingsActivity implements HostAuthRe
         RecyclerView recyclerView = findViewById(R.id.list);
         recyclerView.setAdapter(new HostAuthRecyclerViewAdapter(webapps, this));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+
+        if (webapps.size() == 0) {
+            Snackbar.make(findViewById(android.R.id.content), "This list is empty until you save an authentication while browsing a website", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     @Override
     public void onListFragmentInteraction(HostAuth item) {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void DeleteHostAuth(String id) {

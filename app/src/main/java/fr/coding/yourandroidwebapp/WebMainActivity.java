@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.net.URLConnection;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,6 +45,7 @@ import fr.coding.tools.networks.Wifi;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.WebApp;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
+import fr.coding.yourandroidwebapp.websync.SyncActivity;
 
 
 public class WebMainActivity extends Activity implements NetworkChangeEvent {
@@ -63,6 +65,7 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
     private AppSettingsManager settingsManager;
 
     private static final String TAG = "WebMainActivity";
+    private static boolean DoNotAskForGeoloc = false;
 
     protected NetworkChangeReceiver networkChangeReceiver = null;
 
@@ -142,17 +145,13 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
 
         settings = AppSettingsManager.LoadSettingsLocally(this);
 
-        if (settings.Advanced.disableMediasRequireUserGesture){
-            mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
-        }
+        mWebView.getSettings().setMediaPlaybackRequiresUserGesture(!settings.Advanced.disableMediasRequireUserGesture);
 
         if ((settings.Advanced.userAgent != null)&&(!settings.Advanced.userAgent.isEmpty())) {
             mWebView.getSettings().setUserAgentString(settings.Advanced.userAgent);
         }
 
-        if (settings.Advanced.disableMediasRequireUserGesture){
-            mWebView.getSettings().setGeolocationEnabled(settings.Advanced.disableMediasRequireUserGesture);
-        }
+        mWebView.getSettings().setGeolocationEnabled(settings.Advanced.allowGeoloc);
 
         mWebView.setDownloadListener((String url, String userAgent,
                                         String contentDisposition, String mimetype,
@@ -315,8 +314,21 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
 
 
         if (!Perms.checkGPSPermissions(this)) {
-            Toast.makeText(this, "From latest android version I need Location Permission to get Wifi SSID", Toast.LENGTH_LONG).show();
-            Perms.requestGPSPermissions(this, QUERY_PERMS_GPS);
+            if (DoNotAskForGeoloc)
+                return false;
+            new AlertDialog.Builder(this)
+                    .setTitle("Location Permission required")
+                    .setMessage("In order to get SSID of wifi (for alternate context) you need to allow Location permission")
+                    .setPositiveButton("ALLOW", (dialog, which) -> {
+                        Perms.requestGPSPermissions(this, QUERY_PERMS_GPS);
+                        dialog.dismiss();
+                    }).setNegativeButton("NEVER", (dialog, which) -> {
+                        DoNotAskForGeoloc = true;
+                        dialog.dismiss();
+                    })
+                    .create()
+                    .show();
+            return false;
         }
 
         return Wifi.isOnlineAndWifi(this) && Wifi.isInSSIDList(this, webapp.alternateSSIDs);
@@ -396,7 +408,22 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
             mWebView.onResume();
             mWebView.resumeTimers();
         }
+        if (wvc != null) {
+            wvc.setShowErrors(true);
+        }
         reloadIfNeeded();
+
+        if (AppSettingsManager.getSyncAutoDownload(this)&&(AppSettingsManager.GetLastUpdatedFromWebSync(this) < new Date().getTime()-(24*60*60*1000))) {
+            AppSettingsManager.SetLastUpdatedFromWebSync(this);
+            SyncActivity.download(this);
+        }
+
+        // TODO:
+        /*
+        CONNECTIVITY_ACTION
+        This constant was deprecated in API level 28. apps should use the more versatile requestNetwork(NetworkRequest, PendingIntent), registerNetworkCallback(NetworkRequest, PendingIntent) or registerDefaultNetworkCallback(ConnectivityManager.NetworkCallback) functions instead for faster and more detailed updates about the network changes they care about.
+        https://developer.android.com/reference/android/net/ConnectivityManager
+         */
 
         IntentFilter connectivityChange = new IntentFilter();
         connectivityChange.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -418,6 +445,9 @@ public class WebMainActivity extends Activity implements NetworkChangeEvent {
      */
     @Override
     protected void onPause() {
+        if (wvc != null) {
+            wvc.setShowErrors(false);
+        }
         if (mWebView != null) {
             mWebView.onPause();
             mWebView.pauseTimers();

@@ -5,7 +5,7 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="sync_download_enable"
+            android:key="sync_autodownload_enable"
             android:title="@string/syncsettings_download_enable" />
 
     </PreferenceCategory>
@@ -43,7 +43,7 @@
 
     <PreferenceCategory
         android:title="@string/syncsettings_category_upload_url"
-        android:key="general_settings"
+        android:key="sync_upload_settings"
         >
         <Preference
             android:key="sync_upload_now"
@@ -76,7 +76,13 @@
             android:key="sync_upload_httpmethod"
             android:title="HTTP Method" />
 
-        <CheckBoxPreference
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/syncsettings_category_excludes"
+        android:key="sync_exclude_settings"
+        >
+
+    <CheckBoxPreference
             android:defaultValue="false"
             android:key="sync_upload_downloadsettings_exclude"
             android:title="@string/sync_upload_downloadsettings_exclude" />

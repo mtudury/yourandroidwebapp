@@ -4,22 +4,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import fr.coding.yourandroidwebapp.R;
@@ -49,6 +44,15 @@ public class SyncActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -72,6 +76,12 @@ public class SyncActivity extends AppCompatActivity {
                 });
             }
 
+        }
+
+        public void FillFragment(SyncSettings settings) {
+            Intent intent = getActivity().getIntent();
+            getActivity().finish();
+            startActivity(intent);
         }
 
 
@@ -102,6 +112,10 @@ public class SyncActivity extends AppCompatActivity {
                     }
 
                     AppSettings settings = AppSettingsManager.LoadSettingsLocally(getContext());
+                    // add sync settings now
+                    SyncSettings sync = new SyncSettings();
+                    sync.FillFromSettings(getContext());
+                    settings.Sync = sync;
 
                     RequestBody body = null;
                     try {
@@ -200,6 +214,16 @@ public class SyncActivity extends AppCompatActivity {
                     RequestBody body = null;
                     try {
                         AppSettings settings = AppSettings.JSONobjToAppSettings(new JSONObject(response.body().string()));
+                        if (settings.Sync != null) {
+                            settings.Sync.setPrefs(context);
+                            if (context instanceof SyncActivity) {
+                                Fragment fr = ((SyncActivity) context).getSupportFragmentManager().findFragmentById(R.id.settings);
+                                if (fr instanceof SettingsFragment) {
+                                    ((SettingsFragment) fr).FillFragment(settings.Sync);
+                                }
+
+                            }
+                        }
                         AppSettingsManager.SaveSettingsLocally(context, settings);
                     } catch (JSONException err) {
                         Snackbar.make(rootView, "ERROR: parsing downloaded settings", Snackbar.LENGTH_LONG)

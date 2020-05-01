@@ -14,11 +14,11 @@
     <string name="webapp_shortcutcreated_toast">Shortcut created !</string>
     <string name="webapp_iconurl">Icon Url : </string>
     <string name="webapp_ssl_settings">SSL Settings</string>
-    <string name="title_activity_ssl_settings">SslSettingsActivity</string>
+    <string name="title_activity_ssl_settings">SSL Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_sslsetting_list">SSLSettings</string>
-    <string name="title_sslsetting_detail">SSLSetting Detail</string>
+    <string name="title_sslsetting_list">SSL Settings</string>
+    <string name="title_sslsetting_detail">SSL Setting Detail</string>
     <string name="webapp_url_hint">http://www.google.com</string>
     <string name="sslsetting_detail_activated">Allowed</string>
     <string name="sslsetting_save_button">Save</string>
@@ -80,7 +80,7 @@
         <item>Zoom with Controls</item>
     </string-array>
     <string name="title_activity_startup">YourAndroidWebApp</string>
-    <string name="title_statup">Startup</string>
+    <string name="title_statup">WebApp List</string>
     <string name="dialog_title_init_gdrive_account">Replace local settings</string>
     <string name="dialog_message_init_gdrive_account">Try to load settings from google drive and replace local settings (x) apps will be lost ?</string>
     <string name="title_activity_settings">Settings</string>
@@ -125,6 +125,7 @@
     <string name="syncsettings_download_enable_title">AutoDownload settings</string>
     <string name="syncsettings_upload_now">Upload now</string>
     <string name="syncsettings_upload_url">Upload Url</string>
+    <string name="syncsettings_category_excludes">Exclude from Sync</string>
     <string name="sync_upload_downloadsettings_exclude">Exclude DownloadSettings</string>
     <string name="sync_upload_uploadsettings_exclude">Exclude UploadSettings</string>
 </resources>

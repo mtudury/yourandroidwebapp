@@ -21,6 +21,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import fr.coding.tools.Perms;
 import fr.coding.yourandroidwebapp.settings.AppSettings;
 import fr.coding.yourandroidwebapp.settings.AppSettingsManager;
+import fr.coding.yourandroidwebapp.websync.SyncSettings;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -73,7 +74,14 @@ public class SettingsActivity extends AppCompatActivity {
             Uri uri = data.getData();
 
             //just as an example, I am writing a String to the Uri I received from the user:
-            AppSettingsManager.ExportSettingsToExternalStorage(this, AppSettingsManager.LoadSettingsLocally(this), uri);
+
+            AppSettings settings = AppSettingsManager.LoadSettingsLocally(this);
+            // add sync settings now
+            SyncSettings sync = new SyncSettings();
+            sync.FillFromSettings(this);
+            settings.Sync = sync;
+
+            AppSettingsManager.ExportSettingsToExternalStorage(this, settings, uri);
             Snackbar.make(findViewById(android.R.id.content), "Settings exported", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
@@ -85,6 +93,9 @@ public class SettingsActivity extends AppCompatActivity {
             //just as an example, I am writing a String to the Uri I received from the user:
             AppSettings settings = AppSettingsManager.LoadSettingsFromExternalStorage (this, uri);
             AppSettingsManager.SaveSettingsLocally(this, settings);
+            if (settings.Sync != null) {
+                settings.Sync.setPrefs(this);
+            }
             Snackbar.make(findViewById(android.R.id.content), "Settings imported", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }

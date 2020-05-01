@@ -18,7 +18,7 @@
     <shortcut
         android:shortcutId="startup"
         android:enabled="true"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
         android:shortcutShortLabel="@string/title_statup"
         >
         <intent

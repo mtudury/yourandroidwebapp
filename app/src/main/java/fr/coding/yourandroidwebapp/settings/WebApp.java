@@ -190,35 +190,19 @@ public class WebApp {
         shortcutIntent.setAction("android.intent.action.WEBMAIN");
         shortcutIntent.putExtra("webappid", app.id);
 
-        if (SDK_INT >= 26) {
-            ShortcutManager scm = (ShortcutManager)appContext.getSystemService(Context.SHORTCUT_SERVICE);
-            ShortcutInfo.Builder scib = new ShortcutInfo.Builder(appContext, app.id)
-                    .setShortLabel(app.name)
-                    .setIntent(shortcutIntent);
-            if (theBitmap != null) {
-                scib.setIcon(Icon.createWithBitmap(theBitmap));
-            } else {
-                scib.setIcon(Icon.createWithBitmap(BitmapFactory.decodeResource(appContext.getResources(), R.mipmap.ic_launcher)));
-            }
 
-            scm.requestPinShortcut(scib.build(), null);
+        ShortcutManager scm = (ShortcutManager)appContext.getSystemService(Context.SHORTCUT_SERVICE);
+        ShortcutInfo.Builder scib = new ShortcutInfo.Builder(appContext, app.id)
+                .setShortLabel(app.name)
+                .setIntent(shortcutIntent);
+        if (theBitmap != null) {
+            scib.setIcon(Icon.createWithBitmap(theBitmap));
         } else {
-
-
-            Intent addIntent = new Intent();
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, app.name);
-            if (theBitmap == null) {
-                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(appContext, R.mipmap.ic_launcher));
-            } else {
-                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, theBitmap);
-            }
-
-            addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-            // requires android permission :
-            // <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-            appContext.sendBroadcast(addIntent);
+            scib.setIcon(Icon.createWithBitmap(BitmapFactory.decodeResource(appContext.getResources(), R.mipmap.ic_launcher)));
         }
+
+        scm.requestPinShortcut(scib.build(), null);
+
     }
 
 

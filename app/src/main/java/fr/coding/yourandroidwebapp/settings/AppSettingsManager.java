@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+import androidx.preference.PreferenceManager;
 import fr.coding.yourandroidwebapp.R;
 
 
@@ -24,18 +25,20 @@ public class AppSettingsManager {
 
     public static final String PREFSFILE = "yourandroidwebappconfig.json";
 
-    public static final String PREFS = "fr.coding.yourandroidwebapp_preferences";
-
-    public static final String PREFS_CUSTOMDRIVEID = "google_drive_customid";
-    public static final String PREFS_USECUSTOMDRIVEID = "google_drive_use_custom";
-    public static final String PREFS_CUSTOMDRIVEIDDESC = "google_drive_customiddesc";
-    private static final String UseGDrive = "google_drive_usage";
     private static  final String RemoteDebugging = "webview_debug_mode";
     private static  final String KeepScreenOn = "webview_keepscreen_on";
     private static final String FullScreenMode = "webview_fullscreen_mode";
     private static final String ProgressBar = "webview_progress";
     public static final String AutoRefresh = "webview_refreshevery";
-    private static final String PREFS_GDRIVELASTUPDATED = "google_drive_last_updated";
+    private static final String PREFS_WEBSYNCLASTUPDATED = "google_drive_last_updated";
+    public static final String SYNC_AUTODOWNLOAD_ENABLE = "sync_autodownload_enable";
+    public static final String SYNC_DOWNLOAD_URL = "sync_download_url";
+    public static final String SYNC_DOWNLOADHEADERKEY = "sync_downloadheaderkey";
+    public static final String SYNC_DOWNLOADHEADERVALUE = "sync_downloadheadervalue";
+    public static final String SYNC_UPLOADHEADERKEY = "sync_uploadheaderkey";
+    public static final String SYNC_UPLOADHEADERVALUE = "sync_uploadheadervalue";
+    public static final String SYNC_UPLOAD_HTTPMETHOD = "sync_upload_httpmethod";
+    public static final String SYNC_UPLOAD_URL = "sync_upload_url";
 
     private static void SaveExternaly(String path, String jsonval) throws IOException {
         FileOutputStream fileout = new FileOutputStream (new File(path));
@@ -161,41 +164,52 @@ public class AppSettingsManager {
     }
 
     public static boolean IsRemoteDebuggingActivated(Activity activity) {
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean(RemoteDebugging, false);
     }
 
     public static boolean ImmersiveFullscreenMode(Activity activity) {
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean(FullScreenMode, false);
     }
 
     public static boolean KeepTheScreenOn(Activity activity) {
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean(KeepScreenOn, false);
     }
 
     public static boolean ShowProgressBar(Activity activity) {
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean(ProgressBar, false);
     }
 
-    public static Date GetLastUpdatedFromGDrive(Activity activity) {
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+    public static Long GetLastUpdatedFromWebSync(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getLong(PREFS_WEBSYNCLASTUPDATED, 0);
+    }
+
+    public static void SetLastUpdatedFromWebSync(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         Date datedef = new Date();
-        return new Date(prefs.getLong(PREFS_GDRIVELASTUPDATED, datedef.getTime()));
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(PREFS_WEBSYNCLASTUPDATED, datedef.getTime());
+        editor.commit();
     }
 
     public static long AutoRefreshRate(Activity activity) {
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return Long.parseLong(prefs.getString(AutoRefresh, "-1"));
     }
 
 
+    public static boolean getSyncAutoDownload(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(SYNC_AUTODOWNLOAD_ENABLE, false);
+    }
 
     public static String getSettingDownloadUrl(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        String setting = prefs.getString("sync_download_url", null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String setting = prefs.getString(SYNC_DOWNLOAD_URL, null);
         if (setting == null)
             return null;
         if (context.getString(R.string.syncsettings_default_url).contentEquals(setting))
@@ -204,8 +218,8 @@ public class AppSettingsManager {
     }
 
     public static String getSettingUploadUrl(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        String setting = prefs.getString("sync_upload_url", null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String setting = prefs.getString(SYNC_UPLOAD_URL, null);
         if (setting == null)
             return null;
         if (context.getString(R.string.syncsettings_default_url).contentEquals(setting))
@@ -215,13 +229,13 @@ public class AppSettingsManager {
 
 
     public static String getSettingDownloadHeaderKey(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        return prefs.getString("sync_downloadheaderkey", null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(SYNC_DOWNLOADHEADERKEY, null);
     }
 
     public static String getSettingDownloadHeaderValue(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        String setting = prefs.getString("sync_downloadheadervalue", null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String setting = prefs.getString(SYNC_DOWNLOADHEADERVALUE, null);
         if (setting == null)
             return null;
         if (context.getString(R.string.syncsettings_default_headervalue).contentEquals(setting))
@@ -230,13 +244,13 @@ public class AppSettingsManager {
     }
 
     public static String getSettingUploadHeaderKey(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        return prefs.getString("sync_uploadheaderkey", null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(SYNC_UPLOADHEADERKEY, null);
     }
 
     public static String getSettingUploadHeaderValue(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        String setting = prefs.getString("sync_uploadheadervalue", null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String setting = prefs.getString(SYNC_UPLOADHEADERVALUE, null);
         if (setting == null)
             return null;
         if (context.getString(R.string.syncsettings_default_headervalue).contentEquals(setting))
@@ -246,7 +260,17 @@ public class AppSettingsManager {
 
 
     public static String getSettingUploadMethod(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        return prefs.getString("sync_upload_httpmethod", null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(SYNC_UPLOAD_HTTPMETHOD, null);
+    }
+
+    public static boolean getSyncSettingDownloadExclude(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("sync_upload_downloadsettings_exclude", false);
+    }
+
+    public static boolean getSyncSettingUploadExclude(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("sync_upload_uploadsettings_exclude", false);
     }
 }

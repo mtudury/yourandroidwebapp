@@ -3,6 +3,7 @@ package fr.coding.yourandroidwebapp.ui.main;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +23,15 @@ public class WebAppRecyclerViewAdapter extends RecyclerView.Adapter<WebAppRecycl
 
     private final List<WebApp> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private boolean visible = false;
 
     public WebAppRecyclerViewAdapter(List<WebApp> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+    }
+
+    public void setVisible() {
+        visible = true;
     }
 
     @Override
@@ -39,9 +45,11 @@ public class WebAppRecyclerViewAdapter extends RecyclerView.Adapter<WebAppRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         if (!TextUtils.isEmpty(holder.mItem.iconUrl)) {
-            new DiskCacheImageViewUrl(holder.mView.getContext(), holder.mImageView).execute(holder.mItem.iconUrl);
+            new DiskCacheImageViewUrl(holder.mView.getContext(), holder.mImageView).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, holder.mItem.iconUrl);
         }
         holder.mContentView.setText(holder.mItem.name);
+        if (visible)
+            holder.mEditButton.setVisibility(View.VISIBLE);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
